@@ -111,6 +111,12 @@ export function createHandSceneState(): HandSceneState {
     // Hover offsets — zero at init
     upperHoverX: 0,  upperHoverY: 0,
     lowerHoverX: 0,  lowerHoverY: 0,
+
+    // Handshake asset-swap (unused/inactive) — defaults
+    handsOpacity:     1.0,
+    handshakeOpacity: 0.0,
+    handshakeScale:   1.0,
+
     dissolve:     0.0,
     brightness:   0.88,
 
