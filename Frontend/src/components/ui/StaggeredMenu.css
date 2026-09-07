@@ -128,8 +128,9 @@
   -webkit-backdrop-filter: blur(12px);
   display: flex;
   flex-direction: column;
-  padding: 7em 3em 3em 3em;
+  padding: 7em 3em 4em 3em;
   overflow-y: auto;
+  overflow-x: hidden;
   z-index: 10;
   pointer-events: auto;
   opacity: 0;
@@ -173,14 +174,17 @@
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+  min-height: 0;
 }
 
 .sm-socials {
-  margin-top: auto;
-  padding-top: 2rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255,255,255,0.08);
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+  flex-shrink: 0;
 }
 
 .sm-socials-title {
@@ -253,10 +257,10 @@
   color: #ffffff;
   font-family: var(--font-montserrat), 'Montserrat', sans-serif;
   font-weight: 800;
-  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-size: clamp(1.5rem, 3vw, 2.4rem);
   cursor: pointer;
   line-height: 1.05;
-  letter-spacing: -1.5px;
+  letter-spacing: -1px;
   text-transform: uppercase;
   transition: color 0.25s;
   display: inline-block;
@@ -283,9 +287,9 @@
   content: counter(smItem, decimal-leading-zero);
   position: absolute;
   top: 0.15em;
-  right: 0.4em;
+  right: -0.2em;
   font-family: var(--font-ibm-plex-sans), 'IBM Plex Sans', sans-serif;
-  font-size: 16px;
+  font-size: 13px;
   font-weight: 400;
   color: var(--sm-accent, #c3ed00);
   letter-spacing: 0;

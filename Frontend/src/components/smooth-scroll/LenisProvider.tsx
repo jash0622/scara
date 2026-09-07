@@ -21,14 +21,14 @@ export default function LenisProvider({ children }: LenisProviderProps) {
     // A low lerp (0.06) gives long, silky inertia; the eased duration model
     // is dropped because mixing duration + lerp fights itself.
     const lenis = new Lenis({
-      lerp: 0.06,                 // lower = smoother, longer glide
+      lerp: 0.10,                 // 0.10 = smooth but responsive
       wheelMultiplier: 0.9,
       touchMultiplier: 1.5,
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      syncTouch: true,            // smooth touch inertia too
-      syncTouchLerp: 0.075,
+      syncTouch: true,
+      syncTouchLerp: 0.10,
     });
 
     // Sync ScrollTrigger to Lenis on every scroll frame

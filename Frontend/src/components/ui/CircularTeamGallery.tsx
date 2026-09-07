@@ -144,23 +144,23 @@ export default function CircularTeamGallery() {
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
         onWheel={handleWheel}
-        className="relative w-full h-[480px] sm:h-[540px] overflow-hidden rounded-2xl border border-scara-grey/20 bg-scara-card-dark/50 backdrop-blur-md flex items-center justify-center cursor-grab active:cursor-grabbing"
+        className="relative w-full h-[480px] sm:h-[540px] overflow-hidden rounded-2xl border border-scara-grey/20 bg-scara-card-dark/50 backdrop-blur-md flex items-center justify-center cursor-grab active:cursor-grabbing isolate"
         style={{ perspective: '1100px', perspectiveOrigin: '50% 50%' }}
       >
-        {/* Interactive React Bits CursorGrid Background */}
-        <div className="absolute inset-0 pointer-events-none z-0">
+        {/* CursorGrid Background — z:-1 so it sits behind ALL cards always */}
+        <div className="absolute inset-0" style={{ zIndex: -1, pointerEvents: 'none' }}>
           <CursorGrid
             ref={cursorGridRef}
             cellSize={40}
             color="#C3ED00"
-            radius={180}
+            radius={320}
             falloff="smooth"
             holdTime={500}
             fadeDuration={800}
             lineWidth={1}
-            maxOpacity={0.22}
-            fillOpacity={0.06}
-            gridOpacity={0.03}
+            maxOpacity={0.12}
+            fillOpacity={0.03}
+            gridOpacity={0.04}
             cellRadius={0}
             clickPulse={false}
             pulseSpeed={700}
@@ -168,8 +168,8 @@ export default function CircularTeamGallery() {
         </div>
 
         <div
-          className="relative flex items-center justify-center w-full h-full z-10"
-          style={{ transformStyle: 'preserve-3d' }}
+          className="relative flex items-center justify-center w-full h-full"
+          style={{ transformStyle: 'preserve-3d', zIndex: 1 }}
         >
           {SCARA_TEAM.map((member, i) => {
             // Infinite Modulo Wrapping Math
@@ -187,13 +187,20 @@ export default function CircularTeamGallery() {
             return (
               <div
                 key={member.name}
-                className="absolute w-[250px] sm:w-[280px] rounded-2xl border border-scara-grey/25 bg-scara-card-dark p-4 shadow-2xl transition-colors duration-300 hover:border-scara-green/60 hover:shadow-[0_0_25px_rgba(195,237,0,0.2)] group/card"
+                className="absolute w-[250px] sm:w-[280px] rounded-2xl border border-scara-grey/25 bg-[#0d0f0a] p-4 shadow-2xl transition-colors duration-300 hover:border-scara-green/60 hover:shadow-[0_0_25px_rgba(195,237,0,0.2)] group/card"
                 style={{
                   transform: `translate3d(${itemX}px, ${translateY}px, ${translateZ}px) rotateY(${rotationY}deg) scale(${scale})`,
                   opacity,
                   transformStyle: 'preserve-3d',
                   willChange: 'transform, opacity',
                   zIndex: Math.round(100 - Math.abs(itemX) * 0.1),
+                }}
+                onMouseMove={(e) => {
+                  // Propagate mouse position to CursorGrid even when over a card
+                  if (containerRef.current && cursorGridRef.current) {
+                    const rect = containerRef.current.getBoundingClientRect();
+                    cursorGridRef.current.energize(e.clientX - rect.left, e.clientY - rect.top);
+                  }
                 }}
               >
                 {/* Full-Color Photo Container */}

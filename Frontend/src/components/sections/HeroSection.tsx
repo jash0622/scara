@@ -112,12 +112,11 @@ export default function HeroSection() {
         lightningRef.current.style.opacity = String(inEased * heroOpacity);
       }
 
-      // Decorative cross markers + accent line — fade OUT as hands converge
-      // (p 0.35→0.60), so the center composition is clean like the reference.
+      // Decorative cross markers — driven directly by hudOpacity from stateRef
+      // so they stay in sync with the circle/HUD and never reappear.
       const decor = document.getElementById('hero-decor');
       if (decor) {
-        const decorFade = 1 - Math.max(0, Math.min(1, (p - 0.35) / 0.25));
-        decor.style.opacity = String(decorFade * heroOpacity);
+        decor.style.opacity = String(Math.max(0, Math.min(1, s?.hudOpacity ?? 1)));
       }
 
       raf = requestAnimationFrame(tick);
@@ -217,7 +216,8 @@ export default function HeroSection() {
          * scroll progress in the RAF loop above: fades in as hands converge.
          * pointer-events-none so it never blocks interaction.
          */}
-        {mounted && webglReady && (
+        {/* Lightning disabled temporarily */}
+        {false && mounted && webglReady && (
           <div
             ref={lightningRef}
             className="absolute inset-0 pointer-events-none"
@@ -259,20 +259,61 @@ export default function HeroSection() {
           </div>
         )}
 
-        {/* Decorative cross markers + accent line — z-[2].
-            Fades out as hands converge (driven in the RAF loop via #hero-decor). */}
+        {/* Decorative cross markers + floating text labels — z-[0].
+            Fades with hudOpacity as content exits on scroll. */}
         {mounted && (
-          <div id="hero-decor" className="absolute inset-0 z-[2] pointer-events-none" style={{ willChange: 'opacity' }}>
+          <div id="hero-decor" className="absolute inset-0 z-[0] pointer-events-none" style={{ willChange: 'opacity' }}>
             <CrossMark className="top-[20%] left-[44%]" />
             <CrossMark className="top-[35%] left-[58%]" />
             <CrossMark className="top-[15%] right-[20%]" />
             <CrossMark className="top-[58%] right-[16%]" />
             <CrossMark className="bottom-[25%] right-[7%]" />
             <CrossMark className="top-[42%] right-[5%]" />
+
+            {/* ── Stacked words — just right of the vertical line (~46%) ── */}
+            <div className="absolute top-[14%] left-[47%] flex flex-col gap-[5px]">
+              {['CREATE', 'CONNECT', 'ENGAGE'].map((word, i) => (
+                <p
+                  key={word}
+                  className="font-sub font-bold uppercase"
+                  style={{
+                    fontSize: '8.5px',
+                    letterSpacing: '0.26em',
+                    color: i === 0 ? 'rgba(195,237,0,0.55)' : 'rgba(255,255,255,0.28)',
+                  }}
+                >
+                  {word}
+                </p>
+              ))}
+            </div>
+
+            {/* ── Right side stacked — beside the upper hand ── */}
             <div
-              className="absolute right-[22%] top-[12%] bottom-[35%] pointer-events-none"
-              style={{ width: '1px', background: 'linear-gradient(to bottom, transparent, rgba(195,237,0,0.25) 30%, rgba(195,237,0,0.25) 70%, transparent)' }}
-            />
+              className="absolute right-[4%] top-[18%] flex flex-col gap-[3px] text-right"
+            >
+              {['CULTURE', 'TRANSFORM', 'RESONATE'].map((word, i) => (
+                <p
+                  key={word}
+                  className="font-sub text-[7px] font-bold tracking-[0.28em] uppercase"
+                  style={{
+                    color: i === 0 ? 'rgba(195,237,0,0.55)' : 'rgba(255,255,255,0.22)',
+                    letterSpacing: '0.28em',
+                  }}
+                >
+                  {word}
+                </p>
+              ))}
+            </div>
+
+            {/* ── Bottom-right corner tag ── */}
+            <div className="absolute bottom-[14%] right-[5%]">
+              <p
+                className="font-sub text-[6.5px] font-semibold tracking-[0.32em] uppercase"
+                style={{ color: 'rgba(195,237,0,0.35)' }}
+              >
+                EXPERIENTIAL
+              </p>
+            </div>
           </div>
         )}
 

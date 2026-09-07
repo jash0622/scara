@@ -83,6 +83,13 @@ export default function Preloader({ onComplete }: { onComplete?: () => void }) {
   const tmTRef      = useRef<SVGPolygonElement>(null);
   const tmMRef      = useRef<SVGPolygonElement>(null);
 
+  // Construction line refs — one group per letter
+  const clineS   = useRef<SVGGElement>(null);
+  const clineC   = useRef<SVGGElement>(null);
+  const clineA1  = useRef<SVGGElement>(null);
+  const clineR   = useRef<SVGGElement>(null);
+  const clineA2  = useRef<SVGGElement>(null);
+
   const tlRef = useRef<gsap.core.Timeline | null>(null);
 
   useEffect(() => {
@@ -178,11 +185,65 @@ export default function Preloader({ onComplete }: { onComplete?: () => void }) {
       }, start);
     };
 
+    // ── Construction-line helper ────────────────────────────────────────
+    // Each letter group has several <line> elements.
+    // They all draw in together just before the letter, then fade after fill.
+    const animateConstructionLines = (
+      groupEl: SVGGElement | null,
+      letterStart: number,
+      letterEnd: number,
+    ) => {
+      if (!groupEl) return;
+      const lines = Array.from(groupEl.querySelectorAll('line'));
+      // Init: lines hidden via strokeDashoffset = full length, group opacity 0
+      lines.forEach((line) => {
+        const length = Math.hypot(
+          (line.x2.baseVal.value - line.x1.baseVal.value),
+          (line.y2.baseVal.value - line.y1.baseVal.value),
+        );
+        gsap.set(line, {
+          strokeDasharray: length || 100,
+          strokeDashoffset: length || 100,
+        });
+      });
+      // Group stays opacity:0 until we animate it in
+      gsap.set(groupEl, { opacity: 0 });
+
+      const drawDur  = (letterEnd - letterStart) * 0.55;
+      const fadeDur  = 0.30;
+      const fadeAt   = letterEnd - 0.05;
+      const lineStart = Math.max(0, letterStart - drawDur * 0.6);
+
+      tl
+        // Fade group to a subtle opacity (not full 1) so lines look delicate
+        .to(groupEl, { opacity: 0.30, duration: 0.12, ease: 'power2.out' }, lineStart)
+        .to(lines, {
+          strokeDashoffset: 0,
+          duration: drawDur,
+          stagger: 0.04,
+          ease: 'expo.inOut',
+        }, lineStart)
+        .to(groupEl, {
+          opacity: 0,
+          duration: fadeDur,
+          ease: 'power2.in',
+        }, fadeAt);
+    };
+
     // ── Sequence ────────────────────────────────────────────────────────
+    animateConstructionLines(clineS.current,  T.START, T.S_END);
     buildStrokeLetter(strokeSRef.current,  pathSRef.current,  T.START,  T.S_END);
+
+    animateConstructionLines(clineC.current,  T.S_END, T.C_END);
     buildClipLetter(clipCRef.current,   CLIP.C_w, T.S_END,  T.C_END);
+
+    animateConstructionLines(clineA1.current, T.C_END, T.A1_END);
     buildClipLetter(clipA1Ref.current,  CLIP.A_w, T.C_END,  T.A1_END);
+
+    animateConstructionLines(clineR.current,  T.A1_END, T.R_END);
     buildStrokeLetter(strokeRRef.current,  pathRRef.current,  T.A1_END, T.R_END);
+
+    animateConstructionLines(clineA2.current, T.R_END, T.A2_END);
     buildStrokeLetter(strokeA2Ref.current, pathA2Ref.current, T.R_END,  T.A2_END);
 
     // TM
@@ -255,7 +316,72 @@ export default function Preloader({ onComplete }: { onComplete?: () => void }) {
             </clipPath>
           </defs>
 
-          {/* S — opacity 0 initially, stroke draws it then fill locks */}
+          {/*
+            ════════════════════════════════════════════
+            CONSTRUCTION LINES — blueprint geometry guides
+            Draw before each letter, fade after fill.
+            stroke="#000" opacity controlled by GSAP.
+            All lines start with strokeDashoffset = full length (hidden).
+            ════════════════════════════════════════════
+          */}
+
+          {/* S construction lines — center: ~62, midY ~193 */}
+          <g ref={clineS} stroke="#000000" strokeWidth="0.5" fill="none" opacity="0">
+            {/* Horizontal mid line */}
+            <line x1="28"  y1="192.7" x2="100" y2="192.7" />
+            {/* Vertical center */}
+            <line x1="62.9" y1="154" x2="62.9" y2="230" />
+            {/* Top-right diagonal bracket */}
+            <line x1="78"  y1="158" x2="96"  y2="175" />
+            {/* Bottom-left diagonal bracket */}
+            <line x1="30"  y1="210" x2="48"  y2="227" />
+            {/* Top horizontal rule */}
+            <line x1="28"  y1="166.6" x2="100" y2="166.6" />
+            {/* Bottom horizontal rule */}
+            <line x1="28"  y1="218.8" x2="100" y2="218.8" />
+          </g>
+
+          {/* C construction lines — center: ~120, midY ~193 */}
+          <g ref={clineC} stroke="#000000" strokeWidth="0.5" fill="none" opacity="0">
+            <line x1="86"  y1="192.7" x2="158" y2="192.7" />
+            <line x1="120" y1="154"   x2="120" y2="230" />
+            <line x1="133" y1="158"   x2="151" y2="175" />
+            <line x1="88"  y1="210"   x2="106" y2="227" />
+            <line x1="86"  y1="166.6" x2="158" y2="166.6" />
+            <line x1="86"  y1="218.8" x2="158" y2="218.8" />
+          </g>
+
+          {/* A1 construction lines — center: ~173, midY ~193 */}
+          <g ref={clineA1} stroke="#000000" strokeWidth="0.5" fill="none" opacity="0">
+            <line x1="140" y1="192.7" x2="210" y2="192.7" />
+            <line x1="173" y1="154"   x2="173" y2="230" />
+            <line x1="186" y1="158"   x2="204" y2="175" />
+            <line x1="141" y1="210"   x2="159" y2="227" />
+            <line x1="140" y1="166.6" x2="210" y2="166.6" />
+            <line x1="140" y1="218.8" x2="210" y2="218.8" />
+          </g>
+
+          {/* R construction lines — center: ~229, midY ~193 */}
+          <g ref={clineR} stroke="#000000" strokeWidth="0.5" fill="none" opacity="0">
+            <line x1="195" y1="192.7" x2="268" y2="192.7" />
+            <line x1="229" y1="154"   x2="229" y2="230" />
+            <line x1="244" y1="158"   x2="262" y2="175" />
+            <line x1="197" y1="210"   x2="215" y2="227" />
+            <line x1="195" y1="166.6" x2="268" y2="166.6" />
+            <line x1="195" y1="218.8" x2="268" y2="218.8" />
+            {/* Extra diagonal for R's leg — matches reference */}
+            <line x1="245" y1="197.6" x2="262" y2="218.8" />
+          </g>
+
+          {/* A2 construction lines — center: ~287, midY ~193 */}
+          <g ref={clineA2} stroke="#000000" strokeWidth="0.5" fill="none" opacity="0">
+            <line x1="253" y1="192.7" x2="322" y2="192.7" />
+            <line x1="287" y1="154"   x2="287" y2="230" />
+            <line x1="302" y1="158"   x2="320" y2="175" />
+            <line x1="255" y1="210"   x2="273" y2="227" />
+            <line x1="253" y1="166.6" x2="322" y2="166.6" />
+            <line x1="253" y1="218.8" x2="322" y2="218.8" />
+          </g>
           <path
             ref={pathSRef}
             d={PATHS.S}

@@ -123,7 +123,13 @@ export default function ScrollExpand({
           style={{ opacity: postOpacity, transform: `translateX(-50%) translateY(${postY}px)` }}
         >
           {postTitle && (
-            <h2 className="scroll-expand-post-title">{postTitle}</h2>
+            <h2 className="scroll-expand-post-title">
+              {postTitle.split('\n').map((line, i) => (
+                <span key={i} style={i > 0 ? { color: '#C3ED00', display: 'block' } : { display: 'block' }}>
+                  {line}
+                </span>
+              ))}
+            </h2>
           )}
           {postSubtitle && (
             <p className="scroll-expand-post-subtitle">{postSubtitle}</p>

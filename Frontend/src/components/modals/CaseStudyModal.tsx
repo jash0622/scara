@@ -46,7 +46,7 @@ export default function CaseStudyModal({ caseStudy, onClose, onSelectNext }: Cas
   const nextCaseStudy = SCARA_CASE_STUDIES[(currentIndex + 1) % SCARA_CASE_STUDIES.length];
   const prevCaseStudy = SCARA_CASE_STUDIES[(currentIndex - 1 + SCARA_CASE_STUDIES.length) % SCARA_CASE_STUDIES.length];
 
-  // Combine hero image + gallery images into a list for DepthCarousel
+  // Combine hero image + gallery images for DepthCarousel
   const galleryImages = caseStudy
     ? [caseStudy.heroImage, ...(caseStudy.gallery || [])]
     : [];
@@ -55,7 +55,7 @@ export default function CaseStudyModal({ caseStudy, onClose, onSelectNext }: Cas
     <AnimatePresence mode="wait">
       {caseStudy && (
         <div className="fixed inset-0 z-[999] flex items-center justify-center p-3 sm:p-5 md:p-6 pt-20 sm:pt-24 select-none">
-          {/* Smooth Backdrop overlay */}
+          {/* Backdrop */}
           <motion.div
             key="modal-backdrop"
             initial={{ opacity: 0 }}
@@ -66,7 +66,7 @@ export default function CaseStudyModal({ caseStudy, onClose, onSelectNext }: Cas
             className="fixed inset-0 bg-scara-black/85 backdrop-blur-md"
           />
 
-          {/* Compact Popup Dialog Modal */}
+          {/* Modal Dialog */}
           <motion.div
             key={`modal-dialog-${caseStudy.id}`}
             initial={{ opacity: 0, scale: 0.94, y: 20 }}
@@ -78,7 +78,7 @@ export default function CaseStudyModal({ caseStudy, onClose, onSelectNext }: Cas
             aria-modal="true"
             aria-labelledby="modal-title"
           >
-            {/* Close button top right */}
+            {/* Close button */}
             <button
               onClick={onClose}
               className="absolute top-4 right-4 z-30 flex h-10 w-10 items-center justify-center rounded-full bg-scara-black/80 text-scara-white border border-scara-grey/30 backdrop-blur-md transition-all hover:bg-scara-green hover:text-scara-black hover:scale-110 shadow-lg"
@@ -87,13 +87,13 @@ export default function CaseStudyModal({ caseStudy, onClose, onSelectNext }: Cas
               <X className="h-5 w-5" />
             </button>
 
-            {/* Internal Scrollable Area with data-lenis-prevent for smooth mouse wheel scrolling */}
-            <div 
-              ref={modalContentRef} 
-              data-lenis-prevent 
+            {/* Scrollable content */}
+            <div
+              ref={modalContentRef}
+              data-lenis-prevent
               className="flex-1 overflow-y-auto p-5 sm:p-8 md:p-10 space-y-8 scrollbar-thin overscroll-contain"
             >
-              {/* 1. Compact Hero Header */}
+              {/* 1. Hero Header */}
               <div className="relative h-52 sm:h-64 md:h-72 w-full overflow-hidden rounded-xl bg-scara-black border border-scara-grey/20">
                 <img
                   src={caseStudy.heroImage}
@@ -101,7 +101,7 @@ export default function CaseStudyModal({ caseStudy, onClose, onSelectNext }: Cas
                   className="h-full w-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-scara-card-dark via-scara-card-dark/40 to-transparent" />
-                
+
                 <div className="absolute bottom-4 left-4 right-4 space-y-2">
                   <div className="flex flex-wrap items-center gap-2 font-sub text-[10px] sm:text-xs font-bold uppercase tracking-wider text-scara-green">
                     <span className="rounded-full bg-scara-green px-3 py-0.5 text-scara-black font-black">
@@ -125,7 +125,7 @@ export default function CaseStudyModal({ caseStudy, onClose, onSelectNext }: Cas
 
               {/* 2. Overview & Services Grid */}
               <div className="grid grid-cols-1 md:grid-cols-12 gap-6 border-b border-scara-grey/15 pb-8">
-                {/* Left Column: Capabilities */}
+                {/* Left: Services */}
                 <div className="md:col-span-4 space-y-3">
                   <h3 className="font-sub text-[11px] font-bold tracking-[0.2em] text-scara-green uppercase">
                     // CAPABILITIES & SERVICES
@@ -140,7 +140,7 @@ export default function CaseStudyModal({ caseStudy, onClose, onSelectNext }: Cas
                   </ul>
                 </div>
 
-                {/* Right Column: Project narrative */}
+                {/* Right: Campaign narrative */}
                 <div className="md:col-span-8 space-y-3">
                   <h3 className="font-sub text-[11px] font-bold tracking-[0.2em] text-scara-green uppercase">
                     // CAMPAIGN OVERVIEW
@@ -153,29 +153,27 @@ export default function CaseStudyModal({ caseStudy, onClose, onSelectNext }: Cas
                 </div>
               </div>
 
-              {/* 3. Key Impact Stat Grid */}
-              <div className="space-y-4">
-                <h3 className="font-sub text-[11px] font-bold tracking-[0.2em] text-scara-green uppercase">
-                  // KEY MEASURABLE IMPACT
-                </h3>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                  {caseStudy.stats.map((stat, i) => (
-                    <div
-                      key={i}
-                      className="flex flex-col justify-between rounded-xl border border-scara-green/30 bg-scara-black/50 p-4"
-                    >
-                      <span className="font-heading text-xl sm:text-2xl font-extrabold text-scara-green tracking-tight">
-                        {stat.value}
+              {/* 3. Press & Media Coverage (moved up, replaces Key Measurable Impact) */}
+              {caseStudy.pressOutlets && caseStudy.pressOutlets.length > 0 && (
+                <div className="space-y-3">
+                  <h3 className="font-sub text-[11px] font-bold tracking-[0.2em] text-scara-green uppercase">
+                    // PRESS & MEDIA COVERAGE
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {caseStudy.pressOutlets.map((outlet, i) => (
+                      <span
+                        key={i}
+                        className="flex items-center gap-1.5 rounded-full border border-scara-grey/30 bg-scara-black px-4 py-1.5 font-sub text-[11px] font-semibold text-scara-white/90 transition-colors hover:border-scara-green/50 hover:text-scara-white"
+                      >
+                        <span>{outlet}</span>
+                        <ExternalLink className="h-3 w-3 text-scara-green" />
                       </span>
-                      <span className="mt-1 font-sub text-[10px] font-medium text-scara-grey uppercase tracking-wider leading-tight">
-                        {stat.label}
-                      </span>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
 
-              {/* 4. React Bits 3D DepthCarousel Gallery Integration */}
+              {/* 4. Campaign Assets Gallery */}
               <div className="space-y-4 border-t border-scara-grey/15 pt-6">
                 <div className="flex items-center justify-between">
                   <h3 className="font-sub text-[11px] font-bold tracking-[0.2em] text-scara-green uppercase">
@@ -207,27 +205,7 @@ export default function CaseStudyModal({ caseStudy, onClose, onSelectNext }: Cas
                 </div>
               </div>
 
-              {/* 5. Press Coverage Pills */}
-              {caseStudy.pressOutlets && caseStudy.pressOutlets.length > 0 && (
-                <div className="space-y-3 border-t border-scara-grey/15 pt-6">
-                  <span className="font-sub text-[11px] font-bold tracking-[0.2em] text-scara-grey uppercase block">
-                    PRESS & MEDIA COVERAGE
-                  </span>
-                  <div className="flex flex-wrap gap-2">
-                    {caseStudy.pressOutlets.map((outlet, i) => (
-                      <span
-                        key={i}
-                        className="flex items-center gap-1.5 rounded-full border border-scara-grey/30 bg-scara-black px-3 py-1 font-sub text-[11px] text-scara-white/90"
-                      >
-                        <span>{outlet}</span>
-                        <ExternalLink className="h-3 w-3 text-scara-green" />
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* 6. Inner Modal Next / Prev Navigation */}
+              {/* 5. Next / Prev Navigation */}
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 border-t border-scara-grey/20 pt-6">
                 <button
                   onClick={() => onSelectNext(prevCaseStudy)}
@@ -250,7 +228,7 @@ export default function CaseStudyModal({ caseStudy, onClose, onSelectNext }: Cas
         </div>
       )}
 
-      {/* Lightbox for full screen viewing of clicked gallery image */}
+      {/* Lightbox */}
       <AnimatePresence>
         {selectedLightboxImage && (
           <motion.div
@@ -277,4 +255,3 @@ export default function CaseStudyModal({ caseStudy, onClose, onSelectNext }: Cas
     </AnimatePresence>
   );
 }
-

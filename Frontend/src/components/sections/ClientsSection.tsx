@@ -1,6 +1,6 @@
 'use client';
 
-import { SCARA_PRESS, SCARA_CLIENT_LOGOS } from '@/data/scaraData';
+import { SCARA_CLIENT_LOGOS } from '@/data/scaraData';
 import LogoLoop from '@/components/ui/LogoLoop';
 
 export default function ClientsSection() {
@@ -65,28 +65,8 @@ export default function ClientsSection() {
           </div>
         </div>
 
-        {/* 3. As Seen In Press Strip */}
-        <div className="rounded-2xl border border-scara-grey/20 bg-scara-card-dark p-8 md:p-12 space-y-6">
-          <div className="flex items-center justify-between border-b border-scara-grey/15 pb-4">
-            <span className="font-sub text-xs font-bold tracking-[0.2em] text-scara-green uppercase">
-              AS SEEN IN // PRESS NETWORK
-            </span>
-            <span className="font-sub text-xs text-scara-grey uppercase">
-              14+ MEDIA OUTLETS
-            </span>
-          </div>
+        {/* Press strip removed — moved/hidden per site restructure */}
 
-          <div className="flex flex-wrap items-center justify-between gap-6 pt-2">
-            {SCARA_PRESS.map((outlet, i) => (
-              <span
-                key={i}
-                className="font-heading text-sm md:text-base font-extrabold uppercase text-scara-grey/70 hover:text-scara-white hover:scale-105 transition-all cursor-default"
-              >
-                {outlet}
-              </span>
-            ))}
-          </div>
-        </div>
 
       </div>
     </section>

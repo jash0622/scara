@@ -5,6 +5,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUpRight, ChevronDown, CheckCircle2, Sparkles, ShieldCheck } from 'lucide-react';
 import { SCARA_SERVICES, ServiceItem } from '@/data/scaraData';
 import ArchitectureCards from '@/components/ui/ArchitectureCards';
+import dynamic from 'next/dynamic';
+
+const SplashCursor = dynamic(() => import('@/components/ui/SplashCursor'), { ssr: false });
 
 // Extended service detail specifications for rich dropdown drawers
 const SERVICE_DETAILS: Record<string, { category: string; loadouts: string[]; highlight: string }> = {
@@ -92,7 +95,7 @@ const SERVICE_DETAILS: Record<string, { category: string; loadouts: string[]; hi
 
 export default function ServicesSection() {
   const [hoveredService, setHoveredService] = useState<ServiceItem | null>(null);
-  const [expandedNumber, setExpandedNumber] = useState<string | null>('01'); // Default open 01 for great first impression
+  const [expandedNumber, setExpandedNumber] = useState<string | null>('01');
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
   const handleMouseMove = (e: React.MouseEvent) => {
@@ -343,39 +346,9 @@ export default function ServicesSection() {
           })}
         </div>
 
-        {/* Reuters Pull-Quote Banner */}
-        <div className="rounded-2xl border border-scara-grey/20 bg-scara-card-dark p-8 md:p-12 relative overflow-hidden">
-          <div className="absolute top-0 right-0 h-40 w-40 bg-scara-green/5 rounded-full blur-3xl" />
-          <div className="relative z-10 max-w-4xl space-y-4">
-            <span className="font-sub text-xs font-bold tracking-[0.2em] text-scara-green uppercase">
-              REUTERS MARKET INSIGHT
-            </span>
-            <blockquote className="font-heading text-xl sm:text-2xl md:text-3xl font-extrabold uppercase text-scara-white leading-snug">
-              "Digital campaigns now represent 72% of total ad revenue worldwide — and effective creative integration across channels is critical to capturing this growth."
-            </blockquote>
-            <p className="font-sub text-xs text-scara-grey uppercase">
-              SOURCE: REUTERS GLOBAL MEDIA REPORT
-            </p>
-          </div>
-        </div>
-
-        {/* How Scara Is Structured Sub-Block */}
-        <div className="space-y-8">
-          <div>
-            <span className="font-sub text-xs font-bold tracking-[0.2em] text-scara-green uppercase">
-              // SCARA ARCHITECTURE
-            </span>
-            <h3 className="font-heading text-3xl font-bold uppercase text-scara-white mt-1">
-              How Scara Is Structured
-            </h3>
-          </div>
-
-          {/* Cards fan out from behind the center card on scroll */}
-          <ArchitectureCards />
-        </div>
+        {/* Architecture cards moved to AboutSection */}
 
       </div>
     </section>
   );
 }
-

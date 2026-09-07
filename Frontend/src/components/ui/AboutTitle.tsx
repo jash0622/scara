@@ -1,309 +1,354 @@
 'use client';
 
-/**
- * AboutTitle — pinned, scroll-linked cinematic narrative block.
- *
- * The block PINS to the viewport center and the entire choreography is driven
- * by scroll progress (scrub), so it reverses cleanly on scroll-up and never
- * breaks between sections.
- *
- * Timeline (progress 0→1 across the pinned scroll distance):
- *   0.00–0.12  Title pops up from below into screen center (translateY + fade)
- *   0.12–0.34  Line 1 fill wipes left→right
- *   0.34–0.56  Line 2 fill wipes left→right
- *   0.50–0.68  Line 1 fill wipes back OUT (empty stroke) — only line 2 filled
- *   0.68–0.90  Paragraph reveals word-by-word (fade + de-blur, rising)
- *   0.90–1.00  Hold — everything stays centered until pin releases
- *
- * The whole block stays centered the entire time (it's pinned), so the
- * content below never appears until the pin releases.
- *
- * Fully responsive: font size scales via viewBox + clamp width.
- */
+// ─────────────────────────────────────────────────────────────────────────────
+// AboutTitle — two-column About hero.
+//
+// LEFT  : 4-line Anton heading animated with SplitText (GSAP char-by-char).
+//         Lines 1-2 → stroke/outline style.
+//         Lines 3-4 → solid #C3ED00 fill.
+//         Last word "PHYSICALLY" ends with a blinking _ cursor.
+// RIGHT : 3 structured body paragraphs, each fades up on scroll via CSS.
+// BG    : subtle green radial glow behind the left column.
+// ─────────────────────────────────────────────────────────────────────────────
 
-import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import React from 'react';
+import dynamic from 'next/dynamic';
 
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger);
-}
+// SplitText uses GSAP which must be client-only
+const SplitText = dynamic(() => import('./SplitText'), { ssr: false });
 
-interface BBox { x: number; y: number; width: number; height: number; }
+// ── Types ─────────────────────────────────────────────────────────────────────
 
-// Desktop: 2 long lines. Mobile: 4 short lines (each fills the narrow width
-// → text renders much bigger). Group A = fill-then-empty. Group B = fill-and-stay.
-const DESKTOP_GROUP_A = ['CULTURE TODAY IS EXPERIENCED DIGITALLY'];
-const DESKTOP_GROUP_B = ['BUT REMEMBERED PHYSICALLY'];
-const MOBILE_GROUP_A  = ['CULTURE TODAY', 'IS EXPERIENCED', 'DIGITALLY'];
-const MOBILE_GROUP_B  = ['BUT REMEMBERED PHYSICALLY'];
-
-const FONT_SIZE = 84;
-const STROKE_W  = 1.6;
-
-interface LineProps {
+export interface TextSegment {
   text: string;
-  strokeColor: string;
-  fillColor: string;
-  wipeRef: React.RefObject<SVGRectElement>;
-  isMobile?: boolean;
+  bold?: boolean;
 }
 
-function TitleLine({ text, strokeColor, fillColor, wipeRef, isMobile = false }: LineProps) {
-  const strokeRef = useRef<SVGTextElement>(null);
-  const [box, setBox] = useState<BBox | null>(null);
-  const rawId = useId();
-  const clipId = `at-clip-${rawId.replace(/[^a-zA-Z0-9_-]/g, '')}`;
+export interface ParagraphBlock {
+  segments: TextSegment[];
+  dim?: boolean;
+}
 
-  const fontStyle = useMemo(
-    () => ({ fontSize: `${FONT_SIZE}px`, fontWeight: 900, letterSpacing: '-2px' }),
-    []
-  );
+export interface AboutTitleProps {
+  paragraphs: ParagraphBlock[];
+}
 
-  useLayoutEffect(() => {
-    const measure = () => {
-      const node = strokeRef.current;
-      if (!node) return;
-      let bb: DOMRect;
-      try { bb = node.getBBox(); } catch { return; }
-      if (!bb || !bb.width) return;
-      const pad = Math.max(STROKE_W, FONT_SIZE * 0.08);
-      setBox({ x: bb.x - pad, y: bb.y - pad, width: bb.width + pad * 2, height: bb.height + pad * 2 });
-    };
-    measure();
-    if (typeof document !== 'undefined' && document.fonts?.ready) {
-      document.fonts.ready.then(measure).catch(() => {});
-    }
-  }, [text]);
+// ── Paragraph renderer ────────────────────────────────────────────────────────
 
-  const viewBox = box ? `${box.x} ${box.y} ${box.width} ${box.height}` : `0 ${-FONT_SIZE} 1000 ${FONT_SIZE * 1.2}`;
-
+function RichParagraph({ block, animClass }: { block: ParagraphBlock; animClass: string }) {
+  const baseColor = block.dim ? 'rgba(255,255,255,0.42)' : 'rgba(255,255,255,0.62)';
   return (
-    <svg
-      className="block w-full"
-      // Mobile: bigger per-line height (short lines fill width → large text).
-      // Desktop: unchanged.
-      style={{ height: isMobile ? 'clamp(44px, 13vw, 80px)' : 'clamp(34px, 7vw, 92px)' }}
-      viewBox={viewBox}
-      preserveAspectRatio="xMidYMid meet"
-      aria-hidden="true"
+    <p
+      className={animClass}
+      style={{
+        fontFamily: 'var(--font-poppins), Poppins, sans-serif',
+        fontSize: 'clamp(13px, 1.15vw, 15px)',
+        lineHeight: '1.75',
+        color: baseColor,
+        margin: 0,
+      }}
     >
-      <defs>
-        <clipPath id={clipId} clipPathUnits="userSpaceOnUse">
-          <rect ref={wipeRef} x={box ? box.x : 0} y={box ? box.y : 0} width="0" height={box ? box.height : 200} />
-        </clipPath>
-      </defs>
-      <text
-        ref={strokeRef}
-        x="0" y="0"
-        fill="none"
-        stroke={strokeColor}
-        strokeWidth={STROKE_W}
-        strokeLinejoin="round"
-        strokeLinecap="round"
-        style={fontStyle}
-      >
-        {text}
-      </text>
-      <text
-        x="0" y="0"
-        fill={fillColor}
-        stroke="none"
-        style={fontStyle}
-        clipPath={`url(#${clipId})`}
-      >
-        {text}
-      </text>
-    </svg>
+      {block.segments.map((seg, i) =>
+        seg.bold ? (
+          <strong key={i} style={{ color: '#ffffff', fontWeight: 700 }}>
+            {seg.text}
+          </strong>
+        ) : (
+          <React.Fragment key={i}>{seg.text}</React.Fragment>
+        )
+      )}
+    </p>
   );
 }
 
-interface Props {
-  paragraph: string;
-}
+// ── Component ─────────────────────────────────────────────────────────────────
 
-export default function AboutTitle({ paragraph }: Props) {
-  const pinRef   = useRef<HTMLDivElement>(null);   // the tall scroll track
-  const stageRef = useRef<HTMLDivElement>(null);   // the pinned centered stage
-  const titleRef = useRef<HTMLDivElement>(null);
-  const paraRef  = useRef<HTMLParagraphElement>(null);
+export default function AboutTitle({ paragraphs }: AboutTitleProps) {
+  // Shared inline style props passed to SplitText for the heading lines
+  const headingStyle: React.CSSProperties = {
+    fontFamily: 'var(--font-anton), Anton, sans-serif',
+    textTransform: 'uppercase',
+    letterSpacing: '-0.02em',
+    lineHeight: '0.96',
+    display: 'block',
+    width: '100%',
+    textAlign: 'left',
+  };
 
-  // Responsive line sets
-  const [isMobile, setIsMobile] = useState(false);
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 767px)');
-    const update = () => setIsMobile(mq.matches);
-    update();
-    mq.addEventListener('change', update);
-    return () => mq.removeEventListener('change', update);
-  }, []);
-
-  const groupA = isMobile ? MOBILE_GROUP_A : DESKTOP_GROUP_A;
-  const groupB = isMobile ? MOBILE_GROUP_B : DESKTOP_GROUP_B;
-
-  // One wipe ref per line (group A first, then group B)
-  const wipeARefs = useRef<React.RefObject<SVGRectElement>[]>([]);
-  const wipeBRefs = useRef<React.RefObject<SVGRectElement>[]>([]);
-  if (wipeARefs.current.length !== groupA.length) {
-    wipeARefs.current = groupA.map(() => ({ current: null }));
-  }
-  if (wipeBRefs.current.length !== groupB.length) {
-    wipeBRefs.current = groupB.map(() => ({ current: null }));
-  }
-
-  const words = useMemo(() => paragraph.split(/(\s+)/), [paragraph]);
-
-  useEffect(() => {
-    const pin   = pinRef.current;
-    const stage = stageRef.current;
-    const title = titleRef.current;
-    const para  = paraRef.current;
-    if (!pin || !stage || !title || !para) return;
-
-    const wordEls = Array.from(para.querySelectorAll<HTMLElement>('.at-word'));
-
-    const svgUnit = (r: React.RefObject<SVGRectElement>, which: 'w' | 'x') => {
-      const rect = r.current;
-      const svg = rect?.ownerSVGElement;
-      if (!svg) return 0;
-      return which === 'w' ? svg.viewBox.baseVal.width : svg.viewBox.baseVal.x;
-    };
-    const setWipe = (r: React.RefObject<SVGRectElement>, frac: number) => {
-      if (!r.current) return;
-      r.current.setAttribute('x', String(svgUnit(r, 'x')));
-      r.current.setAttribute('width', String(svgUnit(r, 'w') * frac));
-    };
-
-    // Pre-pin entry fade: fade the stage in quickly as the section rises,
-    // so it's visible well before the pin engages — minimises any black gap.
-    const entry = ScrollTrigger.create({
-      trigger: pin,
-      start: 'top bottom',      // section top enters from viewport bottom
-      end:   'top 55%',         // fully visible by the time it's just past mid — fast
-      scrub: 1,
-      onUpdate: (self) => {
-        stage.style.opacity = String(self.progress);
-      },
-    });
-
-    const st = ScrollTrigger.create({
-      trigger: pin,
-      start: 'top top',
-      end:   '+=220%',      // scroll distance the block stays pinned
-      pin:   stage,
-      scrub: 1,
-      anticipatePin: 1,     // smooths the pin engage/release — no jerk
-      pinReparent: false,
-      onUpdate: (self) => {
-        const p = self.progress;
-
-        // ── Title pop-up (0–0.12): rise from below + fade in ────────
-        const rise  = Math.min(1, p / 0.12);
-        const riseE = rise * rise * (3 - 2 * rise);
-        const ty    = (1 - riseE) * 70;
-        title.style.transform = `translateY(${ty}px)`;
-        title.style.opacity   = String(Math.min(1, p / 0.10));
-
-        // ── Group A fill: in 0.12–0.34, OUT 0.50–0.68 (fill then empty) ─
-        const aIn  = Math.max(0, Math.min(1, (p - 0.12) / 0.22));
-        const aOut = Math.max(0, Math.min(1, (p - 0.50) / 0.18));
-        const aFrac = Math.max(0, aIn - aOut);
-        // ── Group B fill: in 0.34–0.56, then STAYS ──────────────────────
-        const bFrac = Math.max(0, Math.min(1, (p - 0.34) / 0.22));
-
-        // Stagger the fill across the lines within each group
-        const nA = wipeARefs.current.length;
-        wipeARefs.current.forEach((r, i) => {
-          const s0 = (i / Math.max(nA, 1)) * 0.5;
-          const local = Math.max(0, Math.min(1, (aFrac - s0) / (1 - s0 || 1)));
-          setWipe(r, nA > 1 ? local : aFrac);
-        });
-        const nB = wipeBRefs.current.length;
-        wipeBRefs.current.forEach((r, i) => {
-          const s0 = (i / Math.max(nB, 1)) * 0.5;
-          const local = Math.max(0, Math.min(1, (bFrac - s0) / (1 - s0 || 1)));
-          setWipe(r, nB > 1 ? local : bFrac);
-        });
-
-        // ── Paragraph reveal (0.68–0.92): word-by-word fade + deblur ─
-        const pStart = 0.68, pEnd = 0.92;
-        const pProg = Math.max(0, Math.min(1, (p - pStart) / (pEnd - pStart)));
-        const n = wordEls.length;
-        wordEls.forEach((el, i) => {
-          const wStart = (i / n) * 0.7;             // stagger across 70% of window
-          const wLocal = Math.max(0, Math.min(1, (pProg - wStart) / 0.3));
-          const e = wLocal * wLocal * (3 - 2 * wLocal);
-          el.style.opacity = String(0.12 + e * 0.88);
-          el.style.filter  = `blur(${(1 - e) * 6}px)`;
-        });
-        // Paragraph container fades in overall
-        para.style.opacity = String(Math.min(1, Math.max(0, (p - 0.64) / 0.1)));
-      },
-    });
-
-    return () => { st.kill(); entry.kill(); };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isMobile]);
+  // GSAP from/to for the char animation
+  const fromStroke = { opacity: 0, y: 36, skewX: 6 };
+  const toStroke   = { opacity: 1, y: 0,  skewX: 0 };
+  const fromFill   = { opacity: 0, y: 28, skewX: 4 };
+  const toFill     = { opacity: 1, y: 0,  skewX: 0 };
 
   return (
-    // Tall scroll track — the pinned stage stays centered while we scroll through it
-    <div ref={pinRef} className="relative w-full">
+    <section
+      style={{
+        position: 'relative',
+        width: '100%',
+        backgroundColor: '#0a0a0a',
+        color: '#ffffff',
+        overflow: 'hidden',
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+      }}
+    >
+      {/* Ambient green glow */}
       <div
-        ref={stageRef}
-        className="relative flex min-h-screen w-full items-center justify-center px-6 md:px-12"
-        style={{ opacity: 0, willChange: 'opacity' }}
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background:
+            'radial-gradient(ellipse 60% 60% at 18% 55%, rgba(195,237,0,0.09) 0%, rgba(195,237,0,0.03) 50%, transparent 70%)',
+          pointerEvents: 'none',
+          zIndex: 0,
+        }}
+      />
+
+      {/* Content */}
+      <div
+        style={{
+          position: 'relative',
+          zIndex: 1,
+          padding: '80px clamp(24px, 5vw, 88px)',
+        }}
       >
-        {/* Centered stack — title is the vertical anchor, paragraph sits below */}
-        <div className="relative flex w-full max-w-5xl flex-col items-center">
-          {/* Title — group A (fill→empty) then group B (fill→stay) */}
-          <div
-            ref={titleRef}
-            className="w-full flex flex-col items-center will-change-transform"
-            style={{ opacity: 0 }}
-          >
-            {groupA.map((line, i) => (
-              <TitleLine
-                key={`a-${line}`}
-                text={line}
-                strokeColor="#C3ED00"
-                fillColor="#FFFFFF"
-                wipeRef={wipeARefs.current[i]}
-                isMobile={isMobile}
+        <div
+          className="about-grid"
+          style={{ display: 'grid', width: '100%', gap: 'clamp(32px, 4vw, 56px)', alignItems: 'center' }}
+        >
+
+          {/* ── LEFT: heading ─────────────────────────────────────────── */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+
+            {/* Line 1 — stroke */}
+            <SplitText
+              tag="span"
+              text="CULTURE TODAY IS"
+              splitType="chars"
+              delay={22}
+              duration={0.7}
+              ease="power3.out"
+              from={fromStroke}
+              to={toStroke}
+              threshold={0.1}
+              rootMargin="0px"
+              textAlign="left"
+              className="about-heading about-stroke text-stroke-lime-fallback"
+              style={headingStyle}
+            />
+
+            {/* Line 2 — stroke */}
+            <SplitText
+              tag="span"
+              text="EXPERIENCED DIGITALLY"
+              splitType="chars"
+              delay={18}
+              duration={0.7}
+              ease="power3.out"
+              from={fromStroke}
+              to={toStroke}
+              threshold={0.1}
+              rootMargin="0px"
+              textAlign="left"
+              className="about-heading about-stroke text-stroke-lime-fallback"
+              style={headingStyle}
+            />
+
+            {/* Line 3 — fill */}
+            <SplitText
+              tag="span"
+              text="BUT REMEMBERED"
+              splitType="chars"
+              delay={20}
+              duration={0.65}
+              ease="power4.out"
+              from={fromFill}
+              to={toFill}
+              threshold={0.1}
+              rootMargin="0px"
+              textAlign="left"
+              className="about-heading about-fill"
+              style={headingStyle}
+            />
+
+            {/* Line 4 — fill + blinking cursor */}
+            <span style={{ display: 'block', lineHeight: '0.96' }}>
+              <SplitText
+                tag="span"
+                text="PHYSICALLY"
+                splitType="chars"
+                delay={20}
+                duration={0.65}
+                ease="power4.out"
+                from={fromFill}
+                to={toFill}
+                threshold={0.1}
+                rootMargin="0px"
+                textAlign="left"
+                className="about-heading about-fill"
+                style={{ ...headingStyle, display: 'inline' }}
               />
-            ))}
-            {groupB.map((line, i) => (
-              <TitleLine
-                key={`b-${line}`}
-                text={line}
-                strokeColor="#C3ED00"
-                fillColor="#C3ED00"
-                wipeRef={wipeBRefs.current[i]}
-                isMobile={isMobile}
-              />
-            ))}
+              {/* Blinking terminal cursor — replaces the full stop */}
+              <span className="about-cursor" aria-hidden="true">_</span>
+            </span>
           </div>
 
-          {/*
-           * Paragraph — absolutely positioned below the title so it does NOT
-           * shift the title off-center. Reveals after the title choreography.
-           */}
-          <p
-            ref={paraRef}
-            className="absolute top-full mt-8 left-1/2 -translate-x-1/2 w-full max-w-3xl text-center font-body text-base md:text-lg leading-relaxed text-scara-white/85"
-            style={{ opacity: 0 }}
+          {/* ── RIGHT: paragraphs ─────────────────────────────────────── */}
+          <div
+            className="about-right-col"
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '22px',
+              paddingLeft: 'clamp(24px, 3vw, 48px)',
+            }}
           >
-            {words.map((w, i) =>
-              w.match(/^\s+$/) ? (
-                w
-              ) : (
-                <span key={i} className="at-word inline-block" style={{ opacity: 0.12, filter: 'blur(6px)' }}>
-                  {w}
-                </span>
-              )
-            )}
-          </p>
+            {paragraphs[0] && <RichParagraph block={paragraphs[0]} animClass="about-para about-para-1" />}
+            {paragraphs[1] && <RichParagraph block={paragraphs[1]} animClass="about-para about-para-2" />}
+            {paragraphs[2] && <RichParagraph block={paragraphs[2]} animClass="about-para about-para-3" />}
+          </div>
+
         </div>
       </div>
-    </div>
+
+      {/* Scroll indicator */}
+      <div
+        style={{
+          position: 'absolute',
+          bottom: 'clamp(24px, 4vw, 40px)',
+          right: 'clamp(24px, 5vw, 88px)',
+          zIndex: 2,
+        }}
+      >
+        <span
+          className="animate-scroll-blink"
+          style={{
+            fontFamily: 'var(--font-ibm-plex-sans), "IBM Plex Sans", sans-serif',
+            fontSize: '10px',
+            fontWeight: 600,
+            letterSpacing: '0.28em',
+            textTransform: 'uppercase',
+            color: 'rgba(255,255,255,0.45)',
+            userSelect: 'none',
+          }}
+        >
+          [ SCROLL TO CONTINUE ]
+        </span>
+      </div>
+
+      <style>{`
+        /* Heading size */
+        .about-heading {
+          font-size: clamp(44px, 6.4vw, 104px) !important;
+        }
+
+        /* Stroke lines — transparent + lime outline */
+        .about-stroke {
+          color: transparent !important;
+          -webkit-text-stroke: 1.5px #C3ED00 !important;
+        }
+
+        /* Fill lines — solid lime */
+        .about-fill {
+          color: #C3ED00 !important;
+          -webkit-text-stroke: 0px transparent !important;
+        }
+
+        /* Blinking terminal cursor */
+        .about-cursor {
+          display: inline-block;
+          font-family: var(--font-anton), Anton, sans-serif;
+          font-size: clamp(44px, 6.4vw, 104px);
+          line-height: 0.96;
+          color: #C3ED00;
+          letter-spacing: -0.02em;
+          animation: aboutCursorBlink 0.9s step-start infinite;
+          margin-left: 1px;
+          vertical-align: baseline;
+        }
+        @keyframes aboutCursorBlink {
+          0%, 100% { opacity: 1; }
+          50%       { opacity: 0; }
+        }
+
+        /* Paragraph scroll-fade-up via CSS animation + IntersectionObserver-friendly
+           approach: use @keyframes triggered by the .in-view class added by GSAP
+           ScrollTrigger scroll position. We simply use CSS animation-delay stagger. */
+        .about-para {
+          opacity: 0;
+          transform: translateY(22px);
+          animation: aboutParaReveal 0.7s cubic-bezier(0.16,1,0.3,1) forwards;
+          animation-play-state: paused;
+        }
+        .about-para.is-visible {
+          animation-play-state: running;
+        }
+        .about-para-1 { animation-delay: 0s;    }
+        .about-para-2 { animation-delay: 0.12s; }
+        .about-para-3 { animation-delay: 0.24s; }
+        @keyframes aboutParaReveal {
+          to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Desktop two-column */
+        @media (min-width: 1024px) {
+          .about-grid { grid-template-columns: 55fr 45fr; }
+          .about-right-col { border-left: 1px solid rgba(255,255,255,0.09); }
+        }
+
+        /* Mobile */
+        @media (max-width: 1023px) {
+          .about-grid { grid-template-columns: 1fr; }
+          .about-right-col { padding-left: 0 !important; border-left: none; }
+          .about-heading { font-size: clamp(44px, 10vw, 72px) !important; }
+          .about-cursor  { font-size: clamp(44px, 10vw, 72px) !important; }
+        }
+
+        /* Firefox fallback for -webkit-text-stroke */
+        @supports not (-webkit-text-stroke: 1px) {
+          .text-stroke-lime-fallback {
+            color: transparent !important;
+            text-shadow:
+               1px  0   0 #C3ED00, -1px  0   0 #C3ED00,
+               0    1px 0 #C3ED00,  0   -1px 0 #C3ED00,
+               1px  1px 0 #C3ED00, -1px -1px 0 #C3ED00,
+               1px -1px 0 #C3ED00, -1px  1px 0 #C3ED00;
+          }
+        }
+      `}</style>
+
+      {/* Paragraph visibility trigger — uses IntersectionObserver to add .is-visible */}
+      <ParagraphReveal />
+    </section>
   );
+}
+
+// ── Small client component: triggers CSS paragraph animation via IO ────────────
+
+function ParagraphReveal() {
+  React.useEffect(() => {
+    const paras = document.querySelectorAll<HTMLElement>('.about-para');
+    if (!paras.length) return;
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            io.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.15, rootMargin: '-40px' }
+    );
+
+    paras.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, []);
+
+  return null;
 }

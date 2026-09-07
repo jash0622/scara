@@ -20,7 +20,9 @@ import dynamic from 'next/dynamic';
 import HandParticles from './HandParticles';
 import EnergyCore    from './EnergyCore';
 import HudOverlay    from './HudOverlay';
+import FingertipArc  from './FingertipArc';
 
+const Lightning  = dynamic(() => import('@/components/ui/Lightning'), { ssr: false });
 const Effects = dynamic(() => import('./Effects'), { ssr: false });
 
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
@@ -285,6 +287,52 @@ function Cam({ stateRef }: { stateRef: React.RefObject<HandSceneState> }) {
   return null;
 }
 
+// ─── Fingertip Lightning overlay ─────────────────────────────────────────────
+// Lightning shader in a rotated div. mask-image elliptical radial gradient
+// completely fades the rectangular edges — zero box artifact.
+function FingertipLightning({ stateRef }: { stateRef: React.RefObject<HandSceneState> }) {
+  const wrapRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    let raf = 0;
+    const tick = () => {
+      const el = wrapRef.current;
+      if (el) {
+        const glow  = stateRef.current?.tipGlow ?? 0;
+        const alpha = Math.max(0, Math.min(1, (glow - 0.62) / 0.20));
+        el.style.opacity = String(alpha);
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [stateRef]);
+
+  return (
+    <div
+      ref={wrapRef}
+      className="absolute pointer-events-none"
+      style={{
+        left:      '49%',
+        top:       '50%',
+        width:     '48px',
+        height:    '100px',
+        opacity:   0,
+        transform: 'translate(-50%, -50%) rotate(-35deg)',
+        zIndex:    0,
+        willChange: 'opacity',
+        // Radial elliptical mask — center is fully visible, all 4 edges fade to transparent.
+        // This eliminates the rectangular box artifact completely.
+        WebkitMaskImage: 'radial-gradient(ellipse 40% 48% at 50% 50%, black 30%, transparent 100%)',
+        maskImage:       'radial-gradient(ellipse 40% 48% at 50% 50%, black 30%, transparent 100%)',
+      }}
+      aria-hidden="true"
+    >
+      <Lightning hue={78} xOffset={0} speed={2.5} intensity={2.8} size={0.4} />
+    </div>
+  );
+}
+
 // ─── Main scene ───────────────────────────────────────────────────────────────
 export default function ParticleHandScene({
   stateRef,
@@ -297,6 +345,9 @@ export default function ParticleHandScene({
     <div className={`relative w-full h-full ${className}`} style={{ pointerEvents: 'none' }}>
       {/* HudOverlay receives stateRef so it can fade in stage 5 */}
       <HudOverlay stateRef={stateRef} />
+
+      {/* Fingertip arc — Lightning with radial mask, no box edges */}
+      <FingertipLightning stateRef={stateRef} />
 
       <Canvas
         style={{ position: 'absolute', inset: 0, background: 'transparent', pointerEvents: 'none' }}

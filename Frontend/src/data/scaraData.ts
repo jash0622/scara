@@ -2,15 +2,14 @@ export interface CaseStudy {
   id: string;
   slug: string;
   title: string;
+  client: string;
   year: string;
   market: string;
   category: 'Gaming' | 'Sports' | 'Live' | 'Culture';
   shortDesc: string;
   fullDesc: string[];
   heroImage: string;
-  previewStat: string;
-  previewStatLabel: string;
-  stats: { value: string; label: string }[];
+  talent: string[];           // shown as pills under "Talent Used" on card
   services: string[];
   gallery: string[];
   pressOutlets: string[];
@@ -41,99 +40,84 @@ export interface InsightArticle {
 }
 
 export const SCARA_CASE_STUDIES: CaseStudy[] = [
+
+  // ── GAMING — INDIA ───────────────────────────────────────────────────────────
+
   {
-    id: 'konami-efootball-2026',
-    slug: 'konami-efootball-2026',
-    title: 'KONAMI eFootball™ — World Cup Momentum',
-    year: '2026',
-    market: 'India',
-    category: 'Gaming',
-    shortDesc: 'Nationwide CTV and mobile full-funnel campaign driving football gaming dominance across football-loving Indian hubs.',
-    fullDesc: [
-      'Ahead of major international football fever, Scara orchestrated an immersive nationwide media and creator campaign across key Indian football strongholds including Kerala, West Bengal, Tamil Nadu, and the North East.',
-      'Integrating Connected TV (CTV) programmatic high-impact ads with mobile retargeting and community tournaments, the campaign established eFootball™ as the top digital football experience in South Asia.'
-    ],
-    heroImage: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1600&auto=format&fit=crop',
-    previewStat: '28M+',
-    previewStatLabel: 'Total Impressions',
-    stats: [
-      { value: '28M+', label: 'Total Campaign Impressions' },
-      { value: '11M', label: 'Unique Users Reached' },
-      { value: '4 Key Regions', label: 'Kerala, WB, TN & North East' },
-      { value: '94%', label: 'Video Completion Rate on CTV' }
-    ],
-    services: [
-      'Full-Funnel Media Strategy',
-      'CTV & Programmatic Placement',
-      'Regional Content Localization',
-      'Community Activation'
-    ],
-    gallery: [
-      'https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=800&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?q=80&w=800&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1518609878373-06d740f60d8b?q=80&w=800&auto=format&fit=crop'
-    ],
-    pressOutlets: ['IGN India', 'Times of India', 'Animation Xpress', 'CNBC TV18']
-  },
-  {
-    id: 'konami-messi-card',
-    slug: 'konami-messi-card',
-    title: 'KONAMI eFootball™ — Messi Card Launch',
-    year: '2026',
-    market: 'India',
-    category: 'Gaming',
-    shortDesc: 'Creator-led multi-tier influencer assault shattering engagement targets for the iconic Messi in-game card drop.',
-    fullDesc: [
-      'Scara orchestrated a celebrity and micro-creator hybrid launch strategy across India, pairing mainstream sporting icons with high-tier gaming influencers across Kerala and West Bengal.',
-      'By turning the card drop into a cultural event with unboxing reaction videos, custom gameplay challenges, and community giveaways, Scara smashed all organic reach expectations.'
-    ],
-    heroImage: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=1600&auto=format&fit=crop',
-    previewStat: '15.7M',
-    previewStatLabel: 'Creator Views',
-    stats: [
-      { value: '15.7M', label: 'Total Creator Views' },
-      { value: '109M+', label: 'PR & Organic Reach' },
-      { value: '2,371', label: 'UGC Submissions' },
-      { value: '165%', label: 'Celebrity Target Exceeded' }
-    ],
-    services: [
-      'Celebrity & Creator Marketing',
-      'Influencer Talent Sourcing',
-      'UGC Challenge System',
-      'PR Amplification'
-    ],
-    gallery: [
-      'https://images.unsplash.com/photo-1579373903781-fd5c0c30c4cd?q=80&w=800&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=800&auto=format&fit=crop'
-    ],
-    pressOutlets: ['IGN India', 'Sports Mint', 'TalkEsport']
-  },
-  {
-    id: 'konami-celebration-spirit',
-    slug: 'konami-celebration-spirit',
-    title: 'KONAMI — One Celebration One Spirit',
+    id: 'efootball-holi-25',
+    slug: 'efootball-holi-25',
+    title: "eFootball Holi '25",
+    client: 'KONAMI',
     year: '2025',
     market: 'India',
-    category: 'Live',
-    shortDesc: 'Blending Independence Day & Diwali cultural moments with national icons, Discord hubs, and a viral Mumbai Meet & Greet.',
+    category: 'Gaming',
+    shortDesc: 'Cultural Holi campaign with Indian football captain Gurpreet Singh Sandhu and top gaming creator Jonathan Gaming, driving downloads, UGC and tournament engagement.',
     fullDesc: [
-      'Connecting festive patriotism with digital fandom, Scara onboarded Indian football legend Sunil Chhetri, cricket star KL Rahul, actor Ahan Shetty, and cricketer Nitish Kumar Reddy.',
-      'The campaign bridged online community growth with physical fandom, culminating in a 380+ fan live Meet & Greet event in Mumbai.'
+      "To celebrate Holi, we partnered with Indian football captain Gurpreet Singh Sandhu and leading gaming creator Jonathan Gaming, amplified by 5 additional gaming influencers through localized content, social storytelling and community participation, driving awareness, downloads, UGC and tournament engagement."
+    ],
+    heroImage: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?q=80&w=1600&auto=format&fit=crop',
+    talent: ['Gurpreet Singh Sandhu', 'Jonathan Gaming'],
+    services: [
+      'In-Game Cosmetics',
+      'Localization Strategy',
+      'Influencer Management',
+      'Offline Community Engagement'
+    ],
+    gallery: [
+      'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=800&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=800&auto=format&fit=crop'
+    ],
+    pressOutlets: ['IGN India', 'Animation Xpress', 'Adgully']
+  },
+
+  {
+    id: 'moba-legends-cosplay',
+    slug: 'moba-legends-cosplay',
+    title: 'MOBA Legends 5V5 Cosplay',
+    client: 'Vizta Games',
+    year: '2025',
+    market: 'India',
+    category: 'Gaming',
+    shortDesc: "End-to-end cosplay activation bringing MLBB's Fanny to life — from talent sourcing to publishing across Instagram for the 2025 anniversary campaign.",
+    fullDesc: [
+      "To bring MLBB's Fanny to life, Scara activated a curated network of cosplay creators, managing the end-to-end activation from talent sourcing and shortlisting to briefing, negotiations, content coordination and publishing across Instagram. The campaign delivered character-led, authentic content that extended the 2025 anniversary campaign beyond the game."
+    ],
+    heroImage: 'https://images.unsplash.com/photo-1563089145-599997674d42?q=80&w=1600&auto=format&fit=crop',
+    talent: ['Cosplay Creators Network'],
+    services: [
+      'Cosplayer Sourcing',
+      'Talent Management',
+      'Content Coordination',
+      'Social Amplification'
+    ],
+    gallery: [
+      'https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=800&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=800&auto=format&fit=crop'
+    ],
+    pressOutlets: ['TalkEsport', 'IGN India']
+  },
+
+  {
+    id: 'efootball-independence-diwali-25',
+    slug: 'efootball-independence-diwali-25',
+    title: "eFootball Independence Day & Diwali '25",
+    client: 'KONAMI',
+    year: '2025',
+    market: 'India',
+    category: 'Gaming',
+    shortDesc: 'Integrated Independence Day & Diwali campaign blending celebrity content, nationwide tournaments, Discord community building, PR and a large-scale offline Meet & Greet.',
+    fullDesc: [
+      "We led the expansion of eFootball™ in India by tapping into high-impact cultural moments — Independence Day and Diwali — to move beyond a core gaming audience and engage mainstream football fans and casual sports viewers.",
+      "The campaign blended celebrity-led content, nationwide online tournaments, Discord-first community building, PR amplification, and a large-scale offline Meet & Greet. This integrated approach drove scale, participation, and long-term community retention."
     ],
     heroImage: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=1600&auto=format&fit=crop',
-    previewStat: '32.6M',
-    previewStatLabel: 'Video Views',
-    stats: [
-      { value: '32.6M', label: 'Campaign Views (vs 25.9M target)' },
-      { value: '418.5M', label: 'Total PR Reach' },
-      { value: '14,840', label: 'Tournament Registrations' },
-      { value: '18,366', label: 'Discord Members Onboarded' }
-    ],
+    talent: ['Sunil Chhetri', 'KL Rahul', 'Ahan Shetty', 'Nitish Kumar Reddy'],
     services: [
-      'Mainstream Athlete & Talent Strategy',
-      'Discord Community Infrastructure',
-      'Physical Live Event Execution',
-      'PR & National Media Outreach'
+      'In-Game Marketing',
+      'Community Building',
+      'Celebrity Management',
+      'PR and Offline Activation',
+      'In-game Jersey Design'
     ],
     gallery: [
       'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=800&auto=format&fit=crop',
@@ -141,289 +125,241 @@ export const SCARA_CASE_STUDIES: CaseStudy[] = [
     ],
     pressOutlets: ['The Times of India', 'The Hindu', 'exchange4media']
   },
+
   {
-    id: 'konami-holi-2025',
-    slug: 'konami-holi-2025',
-    title: 'KONAMI eFootball™ — Festive Holi Campaign',
-    year: '2025',
+    id: 'efootball-messi-26',
+    slug: 'efootball-messi-26',
+    title: "eFootball Lionel Messi Campaign '26",
+    client: 'KONAMI',
+    year: '2026',
     market: 'India',
     category: 'Gaming',
-    shortDesc: 'Vibrant cultural campaign featuring India football captain Gurpreet Singh Sandhu & Jonathan Gaming.',
+    shortDesc: 'Creator-led launch of the Lionel Messi Card combining celebrity awareness with micro-influencers across Kerala and West Bengal, UGC challenges and regional PR.',
     fullDesc: [
-      'Leveraging India’s festival of colors, Scara fused gaming culture with regional pride, partnering national football captain Gurpreet Singh Sandhu alongside top-tier gaming creator Jonathan Gaming and 5 key regional influencers.',
-      'The vibrant campaign resulted in explosive organic engagement and a massive spike in tournament signups.'
+      "To launch the Lionel Messi Card in eFootball™, we built a creator-led campaign to drive downloads, gameplay and participation. The campaign combined celebrity-led awareness with micro-influencers across Kerala and West Bengal, driving audiences to play with the Messi card and participate in a UGC challenge.",
+      "Regional PR, digital media and creator content further amplified the launch across mainstream football communities."
     ],
-    heroImage: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?q=80&w=1600&auto=format&fit=crop',
-    previewStat: '+55%',
-    previewStatLabel: 'Views Over Target',
-    stats: [
-      { value: '55% Higher', label: 'Views Beyond Target' },
-      { value: '40x', label: 'Higher Reach Multiplier' },
-      { value: '39.46%', label: 'Increase in Registrations' },
-      { value: '100%', label: 'Cultural Relevance Score' }
-    ],
+    heroImage: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=1600&auto=format&fit=crop',
+    talent: ['Regional Micro-Influencers'],
     services: [
-      'Cultural Insight & Creative Direction',
-      'Gaming & Sports Talent Sourcing',
-      'Social Video Production',
-      'Tournament Growth'
+      'Celebrity & Influencer Marketing',
+      'Regional Content & Localization',
+      'PR & Media Amplification',
+      'UGC & Community Engagement',
+      'Campaign Strategy & Execution'
     ],
     gallery: [
-      'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=800&auto=format&fit=crop'
+      'https://images.unsplash.com/photo-1579373903781-fd5c0c30c4cd?q=80&w=800&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?q=80&w=800&auto=format&fit=crop'
     ],
-    pressOutlets: ['IGN', 'Animation Xpress', 'Adgully']
+    pressOutlets: ['IGN India', 'Sports Mint', 'TalkEsport']
   },
+
   {
-    id: 'konami-jersey-designs',
-    slug: 'konami-jersey-designs',
-    title: 'KONAMI In-Game Cultural Jersey Design',
-    year: '2025',
-    market: 'Global',
-    category: 'Culture',
-    shortDesc: 'Bridging haute couture, textile heritage (Assamese Gamusa), and in-game digital items with Shantanu Hazarika.',
-    fullDesc: [
-      'Scara managed the full pipeline: Cultural Insight → Creative Concept → Artist Collaboration → In-Game Digital Item Design → Global Campaign Amplification.',
-      'Special editions included the Holi Jersey, Diwali Jersey, and 30th Anniversary x Shantanu Hazarika Gamusa textile design, worn virtually by millions of players worldwide.'
-    ],
-    heroImage: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?q=80&w=1600&auto=format&fit=crop',
-    previewStat: '3 In-Game',
-    previewStatLabel: 'Cultural Jerseys',
-    stats: [
-      { value: '3 Kits', label: 'Holi, Diwali & 30th Anniversary' },
-      { value: 'Artist Collab', label: 'Shantanu Hazarika' },
-      { value: 'Textile Heritage', label: 'Assamese Gamusa Motif' },
-      { value: 'Global', label: 'Millions of Downloads' }
-    ],
-    services: [
-      'In-Game Brand & Item Integration',
-      'Artistic Talent Collaboration',
-      'Cultural Heritage Consulting',
-      'Global Asset Production'
-    ],
-    gallery: [
-      'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?q=80&w=800&auto=format&fit=crop'
-    ],
-    pressOutlets: ['ET BrandEquity', 'The Hindu', 'IGN India']
-  },
-  {
-    id: 'mlbb-fanny-cosplay',
-    slug: 'mlbb-fanny-cosplay',
-    title: 'Mobile Legends: Bang Bang™ — Fanny Cosplay',
-    year: '2025',
+    id: 'efootball-world-cup-26',
+    slug: 'efootball-world-cup-26',
+    title: "eFootball FIFA World Cup Campaign '26",
+    client: 'KONAMI',
+    year: '2026',
     market: 'India',
     category: 'Gaming',
-    shortDesc: 'End-to-end cosplayer talent sourcing, custom costume fabrication, and viral Instagram Reels activation for Moonton.',
+    shortDesc: 'Nationwide CTV + mobile full-funnel campaign for eFootball™ across Kerala, West Bengal, Tamil Nadu and the North East ahead of FIFA World Cup 2026.',
     fullDesc: [
-      'To celebrate the Indian release of Mobile Legends: Bang Bang (MLBB), Scara sourced, curated, and produced custom high-detail cosplay armor for character Fanny.',
-      'Accompanied by professional short-form film production and social stories, the activation dominated gaming feeds across Instagram.'
+      "To build momentum for the FIFA World Cup 2026, we executed a nationwide CTV + mobile campaign for KONAMI eFootball™, using a full-funnel strategy across key football markets.",
+      "Through regional targeting and continuous creative, media and performance optimisation, the campaign drove strong reach, engagement and video completion across Kerala, West Bengal, Tamil Nadu and the North East."
     ],
-    heroImage: 'https://images.unsplash.com/photo-1563089145-599997674d42?q=80&w=1600&auto=format&fit=crop',
-    previewStat: '100% Custom',
-    previewStatLabel: 'Cosplay Activation',
-    stats: [
-      { value: 'End-to-End', label: 'Talent & Outfit Sourcing' },
-      { value: 'Viral Reels', label: 'High Engagement Short Form' },
-      { value: 'Moonton', label: 'Official Publisher Partnership' }
-    ],
+    heroImage: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1600&auto=format&fit=crop',
+    talent: [],
     services: [
-      'Cosplay & Niche Talent Management',
-      'Short-Form Video Production',
-      'Community Activation'
+      'Nationwide Performance Media',
+      'Content Localization',
+      'Media Advisory',
+      'Campaign Strategy & Execution',
+      'Measurement & Reporting'
     ],
     gallery: [
-      'https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=800&auto=format&fit=crop'
+      'https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=800&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1518609878373-06d740f60d8b?q=80&w=800&auto=format&fit=crop'
     ],
-    pressOutlets: ['TalkEsport', 'IGN India']
+    pressOutlets: ['IGN India', 'Times of India', 'Animation Xpress', 'CNBC TV18']
   },
+
+  // ── GAMING — TURKEY ──────────────────────────────────────────────────────────
+
+  {
+    id: 'supercell-brawlstars-turkey-25',
+    slug: 'supercell-brawlstars-turkey-25',
+    title: "Supercell Brawl Stars Turkey '25",
+    client: 'Supercell',
+    year: '2025',
+    market: 'Turkey',
+    category: 'Gaming',
+    shortDesc: 'Always-on influencer and Brand Ambassador Programs for Supercell Brawl Stars across Turkey.',
+    fullDesc: [
+      "Always on influencer & Brand Ambassador Programs — a sustained, performance-driven creator strategy that kept Brawl Stars consistently top-of-mind across Turkish gaming communities."
+    ],
+    heroImage: 'https://images.unsplash.com/photo-1541888946425-d0fbb186a5b3?q=80&w=1600&auto=format&fit=crop',
+    talent: ['Turkish Brand Ambassadors'],
+    services: [
+      'Celebrity & Influencer Marketing',
+      'Campaign Strategy & Execution',
+      'Sustained Community Engagement'
+    ],
+    gallery: [
+      'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?q=80&w=800&auto=format&fit=crop'
+    ],
+    pressOutlets: ['IGN Turkey', 'Insider Sport']
+  },
+
+  {
+    id: 'efootball-influencer-turkey-25',
+    slug: 'efootball-influencer-turkey-25',
+    title: "eFootball Influencer Campaign Turkey '25",
+    client: 'KONAMI',
+    year: '2025',
+    market: 'Turkey',
+    category: 'Gaming',
+    shortDesc: 'OOH & influencer campaigns across Istanbul, driving eFootball brand visibility in key urban gaming hubs.',
+    fullDesc: [
+      "OOH & influencer campaigns across Istanbul — combining high-impact out-of-home placements with a curated network of Turkish gaming influencers to drive eFootball brand visibility and player acquisition across the city's key urban hubs."
+    ],
+    heroImage: 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?q=80&w=1600&auto=format&fit=crop',
+    talent: ['Istanbul Gaming Influencers'],
+    services: [
+      'Celebrity & Influencer Marketing',
+      'Campaign Strategy & Execution'
+    ],
+    gallery: [
+      'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?q=80&w=800&auto=format&fit=crop'
+    ],
+    pressOutlets: ['IGN Turkey', 'exchange4media']
+  },
+
+  {
+    id: 'efootball-ramadan-turkey-25',
+    slug: 'efootball-ramadan-turkey-25',
+    title: "eFootball Ramadan Campaign Turkey '25",
+    client: 'KONAMI',
+    year: '2025',
+    market: 'Turkey',
+    category: 'Gaming',
+    shortDesc: 'Limited-edition eFootball Ramadan gift box — Ramadan jersey, signed team kit and personalised codes — created with Turkish designers for the community.',
+    fullDesc: [
+      "For Ramadan, we collaborated with Turkish designers to create a special, limited-edition eFootball™ Ramadan box. Each box included a Ramadan jersey, a signed team kit, and personalized notes featuring unique codes tailored for each recipient.",
+      "The campaign resonated deeply with the community, generating strong organic unboxing content and story views across Turkish social platforms."
+    ],
+    heroImage: 'https://images.unsplash.com/photo-1532375810709-75b1da00537c?q=80&w=1600&auto=format&fit=crop',
+    talent: ['Turkish Designers', 'Community Creators'],
+    services: [
+      'Special Gift Box',
+      'Content Production'
+    ],
+    gallery: [
+      'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=800&auto=format&fit=crop'
+    ],
+    pressOutlets: ['IGN Turkey', 'Insider Sport']
+  },
+
+  {
+    id: 'supercell-coc-brawlstars-turkey-25',
+    slug: 'supercell-coc-brawlstars-turkey-25',
+    title: "Supercell Clash of Clans & Brawl Stars Growth Campaign Turkey '25",
+    client: 'Supercell',
+    year: '2025',
+    market: 'Turkey',
+    category: 'Gaming',
+    shortDesc: 'Performance-driven gaming growth at scale for Clash of Clans and Brawl Stars across Turkey.',
+    fullDesc: [
+      "Performance driven gaming growth at scale — a data-first user acquisition strategy for Supercell's Clash of Clans and Brawl Stars, optimising CPI and reaching high-intent players across Turkey through targeted performance marketing."
+    ],
+    heroImage: 'https://images.unsplash.com/photo-1560253023-3ec5d502959f?q=80&w=1600&auto=format&fit=crop',
+    talent: [],
+    services: [
+      'User Acquisition',
+      'Performance Marketing'
+    ],
+    gallery: [
+      'https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=800&auto=format&fit=crop'
+    ],
+    pressOutlets: ['IGN Turkey', 'Insider Sport']
+  },
+
+  {
+    id: 'efootball-influencer-vs-influencer-turkey-25',
+    slug: 'efootball-influencer-vs-influencer-turkey-25',
+    title: "eFootball Influencer vs Influencer Campaign Turkey '25",
+    client: 'KONAMI',
+    year: '2025',
+    market: 'Turkey',
+    category: 'Gaming',
+    shortDesc: 'Unique competitive format — three influencers battling through in-game challenges, with participant counts determining prize pools for their followers.',
+    fullDesc: [
+      "For our June eFootball™ campaign, we created a unique competitive format where three influencers battled it out through in-game challenges, with each creator's participant count directly determining the number of prizes they could unlock and give back to their followers.",
+      "The format drove intense community participation, fostering rival fan bases and generating millions of video views across Turkish platforms."
+    ],
+    heroImage: 'https://images.unsplash.com/photo-1542751110-97427bbecf20?q=80&w=1600&auto=format&fit=crop',
+    talent: ['3 Turkish Gaming Influencers'],
+    services: [
+      'In-Game Advisory',
+      'Influencer Marketing'
+    ],
+    gallery: [
+      'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?q=80&w=800&auto=format&fit=crop'
+    ],
+    pressOutlets: ['IGN Turkey', 'exchange4media']
+  },
+
+  // ── LIVE ─────────────────────────────────────────────────────────────────────
+
   {
     id: 'pwr-pickleball-league',
     slug: 'pwr-pickleball-league',
-    title: 'PWR Pickleball League — Times Group',
+    title: 'PWR Pickleball League',
+    client: 'Times Group',
     year: '2025',
     market: 'Global',
-    category: 'Sports',
-    shortDesc: 'End-to-end broadcast, talent management & live production with 9-camera setup, net cameras & EVS replays.',
+    category: 'Live',
+    shortDesc: 'Seamlessly executed the end-to-end broadcast and production for the PWR Pickleball League for Times Group.',
     fullDesc: [
-      'Scara delivered the world-class live production infrastructure for the premier PWR Pickleball League by the Times Group.',
-      'Featuring a multi-angle 9-camera live broadcast setup including ultra-close net cameras, instant EVS replays, multilingual commentary teams, and international broadcast feeds.'
+      "Scara seamlessly executed the end-to-end broadcast and production for the Pickleball League for Times Group.",
+      "Featuring a multi-angle live broadcast setup, instant replays, multilingual commentary teams, and international broadcast feeds — delivering a world-class viewer experience."
     ],
     heroImage: 'https://images.unsplash.com/photo-1626248801379-51a0748a5f96?q=80&w=1600&auto=format&fit=crop',
-    previewStat: '9-Camera',
-    previewStatLabel: 'Live Broadcast Setup',
-    stats: [
-      { value: '9 Cameras', label: 'Inc. Net Cameras & Slomo' },
-      { value: 'EVS Replays', label: 'Instant Sports Production' },
-      { value: 'Multilingual', label: 'Global Commentary Feed' },
-      { value: 'End-to-End', label: 'Live Broadcast & Talent' }
-    ],
+    talent: [],
     services: [
-      'Live Sports Broadcast Production',
-      'Multi-Camera Technical Engineering',
-      'Commentary & Talent Hosting',
-      'Global Distribution'
+      'Digital Broadcast',
+      'Broadcast Production'
     ],
     gallery: [
       'https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?q=80&w=800&auto=format&fit=crop'
     ],
     pressOutlets: ['The Times of India', 'CNBC TV18', 'Insider Sport']
   },
+
   {
-    id: 'visit-seattle-world-cup',
-    slug: 'visit-seattle-world-cup',
-    title: 'Visit Seattle — FIFA World Cup 2026',
-    year: '2026',
-    market: 'Global',
-    category: 'Sports',
-    shortDesc: 'Destination marketing pairing KL Rahul & Gurpreet Sandhu to position Seattle as the ultimate World Cup host city.',
-    fullDesc: [
-      'Ahead of the FIFA World Cup 2026, Visit Seattle partnered with Scara to execute a high-profile destination marketing campaign in South Asia.',
-      'Scara paired cricket legend KL Rahul and football captain Gurpreet Singh Sandhu with football creator storytelling and exclusive PR coverage via The Hindu.'
-    ],
-    heroImage: 'https://images.unsplash.com/photo-1502175353174-a7a70e73b362?q=80&w=1600&auto=format&fit=crop',
-    previewStat: '70M+',
-    previewStatLabel: 'Total Campaign Reach',
-    stats: [
-      { value: '70M+', label: 'Total Reach (65M PR + 5M Social)' },
-      { value: 'Star Athletes', label: 'KL Rahul & Gurpreet Sandhu' },
-      { value: 'The Hindu', label: 'Exclusive PR Anchor' }
-    ],
-    services: [
-      'Global Destination Marketing',
-      'Star Athlete Strategic Partnership',
-      'Editorial PR & Broadcast Outreach'
-    ],
-    gallery: [
-      'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=800&auto=format&fit=crop'
-    ],
-    pressOutlets: ['The Hindu', 'ET BrandEquity', 'Media Infoline']
-  },
-  {
-    id: 'supercell-turkey-expansion',
-    slug: 'supercell-turkey-expansion',
-    title: 'Supercell & KONAMI — Turkey Market Takeover',
+    id: 'run-for-fun-red-fort',
+    slug: 'run-for-fun-red-fort',
+    title: 'Run For Fun — Red Fort Terriers Silver Jubilee',
+    client: 'ADGPI - Indian Army',
     year: '2025',
-    market: 'Turkey',
-    category: 'Gaming',
-    shortDesc: 'Supercell Brawl Stars & Clash of Clans growth (200M+ imps, CPI $0.10) + KONAMI Istanbul OOH & Ramadan drops.',
-    fullDesc: [
-      'Scara’s Istanbul team spearheaded publisher expansion across Türkiye and MENA, executing performance creator campaigns for Supercell’s Brawl Stars & Clash of Clans.',
-      'Additionally, Scara executed KONAMI’s high-visibility Istanbul OOH billboards, a custom Ramadan creator gift-box (1M+ story views), and a June influencer battle (2M+ video views).'
-    ],
-    heroImage: 'https://images.unsplash.com/photo-1541888946425-d0fbb186a5b3?q=80&w=1600&auto=format&fit=crop',
-    previewStat: '200M+',
-    previewStatLabel: 'Impressions in Turkey',
-    stats: [
-      { value: '200M+', label: 'Total Impressions' },
-      { value: '1M+', label: 'Users Acquired' },
-      { value: '$0.10-$0.15', label: 'Ultra-efficient CPI' },
-      { value: '1M+ Views', label: 'Ramadan Story Unboxings' }
-    ],
-    services: [
-      'Publisher Growth & CPI Optimization',
-      'Istanbul OOH & Billboard Takeovers',
-      'MENA & Turkish Creator Network',
-      'Festive Gift Box Activations'
-    ],
-    gallery: [
-      'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?q=80&w=800&auto=format&fit=crop'
-    ],
-    pressOutlets: ['IGN Turkey', 'Insider Sport', 'exchange4media']
-  },
-  {
-    id: 'emerging-ip-mandates-2026',
-    slug: 'emerging-ip-mandates-2026',
-    title: 'Emerging IP Mandates — Legends 90 & Tape Ball',
-    year: '2026',
-    market: 'Global',
-    category: 'Sports',
-    shortDesc: 'Building international sports ecosystems: Legends 90 (100+ cricket legends) & Tape Ball Asia Cup / World Cup.',
-    fullDesc: [
-      'Scara is co-building the next generation of global sports properties.',
-      '1. **Legends 90 (L90) League**: 90-ball international cricket featuring 100+ legendary players across 6 franchised teams.',
-      '2. **Tape Ball Global Ecosystem**: Professionalizing grassroots cricket through the Tape Ball League, Tape Ball Asia Cup (6 nations, 35 matches, Sept–Oct 2026), and Tape Ball World Cup.'
-    ],
-    heroImage: 'https://images.unsplash.com/photo-1531415074968-036ba1b575da?q=80&w=1600&auto=format&fit=crop',
-    previewStat: '100+',
-    previewStatLabel: 'Cricket Legends onboarded',
-    stats: [
-      { value: '100+ Legends', label: 'L90 International Cricket' },
-      { value: '6 Franchises', label: 'Global Team Ownership' },
-      { value: '6 Nations', label: 'Tape Ball Asia Cup 2026' },
-      { value: '35 Matches', label: 'Live Broadcast Schedule' }
-    ],
-    services: [
-      'IP Conceptualization & Franchising',
-      'Broadcast Rights & Operations',
-      'Sponsorship & Commercialization'
-    ],
-    gallery: [
-      'https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?q=80&w=800&auto=format&fit=crop'
-    ],
-    pressOutlets: ['CNBC TV18', 'The Times of India', 'Insider Sport']
-  },
-  {
-    id: 'pixelpulse-ip',
-    slug: 'pixelpulse-ip',
-    title: 'PixelPulse — Global Sports & Gaming Conclave',
-    year: '2026',
-    market: 'Global',
-    category: 'Culture',
-    isFeaturedIP: true,
-    shortDesc: 'Proprietary IP: 15,000+ attendee festival fusing music, gaming, fashion, and culinary culture.',
-    fullDesc: [
-      'PixelPulse is Scara’s flagship proprietary global conclave and festival.',
-      'Designed to scale across Mumbai, Istanbul, and Dubai, PixelPulse brings together 15,000+ passionate youth, featuring live esports arenas, streetwear pop-ups, music headliners, and industry visionaries.'
-    ],
-    heroImage: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=1600&auto=format&fit=crop',
-    previewStat: '15,000+',
-    previewStatLabel: 'Festival Attendees',
-    stats: [
-      { value: '15,000+', label: 'Target Youth Attendees' },
-      { value: '4 Verticals', label: 'Music, Gaming, Fashion, Food' },
-      { value: 'Multi-City', label: 'Mumbai, Istanbul & Dubai' }
-    ],
-    services: [
-      'Proprietary IP Ownership',
-      'Festival Production & Booking',
-      'Sponsor Integration',
-      'Ticketing & Crowd Management'
-    ],
-    gallery: [
-      'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=800&auto=format&fit=crop'
-    ],
-    pressOutlets: ['Outlook Respawn', 'MediaBrief', 'Adgully']
-  },
-  {
-    id: 'beyond-the-game-ip',
-    slug: 'beyond-the-game-ip',
-    title: 'Beyond The Game — Flagship Culture Festival',
-    year: '2026',
-    market: 'Global',
+    market: 'India',
     category: 'Live',
-    isFeaturedIP: true,
-    shortDesc: '3-day flagship festival gathering sports stars, gaming icons, global talent, and deep fan communities.',
+    shortDesc: 'Conceptualised and executed a special marathon event celebrating the Silver Jubilee of the Red Fort Terriers Regiment, bringing together regiment personnel and families.',
     fullDesc: [
-      'Beyond The Game is a 3-day immersive cultural gathering engineered for deep fandom.',
-      'Placing fans directly in dialogue with global athletes, top gaming creators, and cultural leaders through live panels, interactive challenges, and exclusive merchandise drops.'
+      "Scara conceptualised and executed the Run for Fun, a special marathon event celebrating the Silver Jubilee of the Red Fort Terriers Regiment.",
+      "Designed as a celebration of camaraderie and family, the event brought together regiment personnel and their families for a fun, engaging fitness experience, honouring 25 years of service while creating memorable moments of togetherness."
     ],
-    heroImage: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=1600&auto=format&fit=crop',
-    previewStat: '3 Days',
-    previewStatLabel: 'Immersive Culture IP',
-    stats: [
-      { value: '3-Day IP', label: 'Flagship Cultural Event' },
-      { value: 'Global Talent', label: 'Sports & Gaming Leaders' },
-      { value: 'Deep Fandom', label: 'Unrivalled Fan Participation' }
-    ],
+    heroImage: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=1600&auto=format&fit=crop',
+    talent: [],
     services: [
-      'Festival Experience Engineering',
-      'Talent Curation & Keynotes',
-      'Brand Ecosystem Partnership'
+      'End-to-end Event Execution'
     ],
     gallery: [
-      'https://images.unsplash.com/photo-1501386761578-eac5c94b800a?q=80&w=800&auto=format&fit=crop'
+      'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?q=80&w=800&auto=format&fit=crop'
     ],
-    pressOutlets: ['The Times of India', 'CNBC TV18', 'ET BrandEquity']
+    pressOutlets: ['India TV', 'Dainik Bhaskar']
   }
+
 ];
 
 export const SCARA_SERVICES: ServiceItem[] = [
@@ -547,7 +483,28 @@ export const SCARA_TEAM: TeamMember[] = [
     bio: 'Pioneering host and talent operations across broadcast esports and culture fests.',
     image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=600&auto=format&fit=crop',
     linkedinUrl: 'https://www.linkedin.com'
-  }
+  },
+  {
+    name: 'Laurent Dumeau',
+    role: 'Senior Advisor',
+    bio: 'Board advisor bringing deep expertise in global media, sports rights, and strategic growth.',
+    image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=600&auto=format&fit=crop',
+    linkedinUrl: 'https://www.linkedin.com',
+  },
+  {
+    name: 'Harry T',
+    role: 'Strategic Advisor',
+    bio: 'Strategic counsel across brand partnerships, investor relations, and market expansion.',
+    image: 'https://images.unsplash.com/photo-1519345182560-3f2917c472ef?q=80&w=600&auto=format&fit=crop',
+    linkedinUrl: 'https://www.linkedin.com',
+  },
+  {
+    name: 'Jayaganesh Sabapathy',
+    role: 'Advisor',
+    bio: 'Industry advisor with a track record in technology, digital ecosystems, and emerging markets.',
+    image: 'https://images.unsplash.com/photo-1504257432389-52343af06ae3?q=80&w=600&auto=format&fit=crop',
+    linkedinUrl: 'https://www.linkedin.com',
+  },
 ];
 
 export const SCARA_ADVISORS = [
@@ -593,8 +550,8 @@ export const SCARA_CLIENT_LOGOS = [
 ];
 
 export const SCARA_PRESS = [
-  'IGN', 'The Times of India', 'The Hindu', 'Dailyhunt', 'TalkEsport', 
-  'Insider Sport', 'CNBC TV18', 'exchange4media', 'India TV', 
+  'IGN', 'The Times of India', 'The Hindu', 'Dailyhunt', 'TalkEsport',
+  'Insider Sport', 'CNBC TV18', 'exchange4media', 'India TV',
   'Dainik Bhaskar', 'Animation Xpress', 'Adgully', 'Malayalam Express News', 'ET BrandEquity'
 ];
 
@@ -628,7 +585,7 @@ export const SCARA_INSIGHTS: InsightArticle[] = [
     date: '2025'
   },
   {
-    title: 'KONAMI eFootball™ Campaign Reaches 28M+ Indian Football Fans Ahead of World Cup',
+    title: 'KONAMI eFootball Campaign Reaches 28M+ Indian Football Fans Ahead of World Cup',
     outlet: 'CNBC TV18',
     category: 'Campaign Coverage',
     url: 'https://cnbctv18.com',

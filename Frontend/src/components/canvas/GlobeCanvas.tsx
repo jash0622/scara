@@ -18,11 +18,11 @@ interface LocationHub {
 // Exact Mercator coordinates aligned to map2.png
 const LOCATION_HUBS: LocationHub[] = [
   {
-    id: 'istanbul',
-    name: 'ISTANBUL HUB',
+    id: 'turkey',
+    name: 'TURKEY HUB',
     code: 'IST',
-    country: 'TÜRKIYE',
-    type: 'EUROPE & TÜRKIYE HUB',
+    country: 'TURKEY',
+    type: 'EUROPE & TURKEY HUB',
     leftPercent: 58.1,
     topPercent: 37.2,
     labelSide: 'top',
@@ -38,15 +38,25 @@ const LOCATION_HUBS: LocationHub[] = [
     labelSide: 'left',
   },
   {
-    id: 'mumbai',
-    name: 'MUMBAI HQ',
+    id: 'india',
+    name: 'INDIA',
     code: 'BOM',
     country: 'INDIA',
     type: 'GLOBAL HEADQUARTERS',
     leftPercent: 70.2,
     topPercent: 52.8,
-    isHQ: true,
+    isHQ: false,
     labelSide: 'right',
+  },
+  {
+    id: 'africa',
+    name: 'AFRICA HUB',
+    code: 'AFR',
+    country: 'AFRICA',
+    type: 'AFRICA HUB',
+    leftPercent: 52.5,
+    topPercent: 62.0,
+    labelSide: 'left',
   },
 ];
 
@@ -121,7 +131,7 @@ export default function GlobeCanvas() {
             </linearGradient>
           </defs>
 
-          {/* Arc 1: Istanbul -> Dubai */}
+          {/* Arc 1: Turkey -> Dubai */}
           <path
             d="M 58.1% 37.2% Q 61.5% 41.0% 65.4% 48.0%"
             fill="none"
@@ -131,9 +141,29 @@ export default function GlobeCanvas() {
             className="animate-dash"
           />
 
-          {/* Arc 2: Dubai -> Mumbai */}
+          {/* Arc 2: Dubai -> India */}
           <path
             d="M 65.4% 48.0% Q 67.8% 49.5% 70.2% 52.8%"
+            fill="none"
+            stroke="url(#scaraLineGrad)"
+            strokeWidth="1.5"
+            strokeDasharray="4 4"
+            className="animate-dash"
+          />
+
+          {/* Arc 3: Turkey -> Africa */}
+          <path
+            d="M 58.1% 37.2% Q 55.5% 48.0% 52.5% 62.0%"
+            fill="none"
+            stroke="url(#scaraLineGrad)"
+            strokeWidth="1.5"
+            strokeDasharray="4 4"
+            className="animate-dash"
+          />
+
+          {/* Arc 4: Dubai -> Africa */}
+          <path
+            d="M 65.4% 48.0% Q 59.0% 54.0% 52.5% 62.0%"
             fill="none"
             stroke="url(#scaraLineGrad)"
             strokeWidth="1.5"

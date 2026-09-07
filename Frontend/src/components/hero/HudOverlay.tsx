@@ -18,19 +18,201 @@ function HudCanvas() {
   useEffect(() => {
     const canvas = ref.current;
     if (!canvas) return;
+
     const draw = () => {
-      const W = canvas.width  = canvas.offsetWidth;
-      const H = canvas.height = canvas.offsetHeight;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const W = canvas.offsetWidth;
+      const H = canvas.offsetHeight;
+      canvas.width  = W * dpr;
+      canvas.height = H * dpr;
       const ctx = canvas.getContext('2d');
       if (!ctx) return;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, W, H);
-      const cx = W * 0.65; const cy = H * 0.50; const radius = H * 0.30;
+
+      // ─────────────────────────────────────────────────────────────────
+      // REFERENCE ANALYSIS (pixel-measured from the reference image):
+      //
+      //  Circle center : ~x:67%  y:48%
+      //  Circle radius : ~H * 0.365  (fits neatly on screen, right edge clips slightly)
+      //  Glow origin   : ~x:63%  y:48%  (slightly left of circle center)
+      //
+      //  Box / rect    : top ~y:8%, bottom ~y:88%, left ~x:44%, right ~x:88%
+      //                  (4 thin lines forming one rectangle around the composition)
+      //
+      //  Diagonal line : from ~(28%,15%) → ~(63%,48%)  thin lime, fades in/out
+      //                  with 3 "node" spots along it where it brightens + thickens
+      //
+      //  Vertical bar  : x~46%, y:14%→44%  bright lime (tallish)
+      //  Vertical bar  : x~92%, y:42%→68%  dimmer
+      //
+      //  Small squares : scattered top-right area
+      //  Bottom line   : y~88% full-width faint
+      // ─────────────────────────────────────────────────────────────────
+
+      const circleCX = W * 0.672;
+      const circleCY = H * 0.480;
+      const radius   = H * 0.365;
+
+      // ── 1. STRUCTURAL LINES — removed (box/L-shape removed per user request)
+      // No horizontal or vertical construction lines.
+
+      // ── 2. CIRCLE with 2 thick glow segments — NW and SE ────────────
+      // As shown in the hand-drawn reference: only 2 spots on the circle
+      // are thick/bright — top-left (north-west) and bottom-right (south-east).
+      // Rest of the ring is thin and dim.
+
+      // Base thin ring
+      const ringGrad = ctx.createLinearGradient(
+        circleCX - radius, circleCY - radius,
+        circleCX + radius, circleCY + radius,
+      );
+      ringGrad.addColorStop(0.0,  'rgba(180,220,0,0.06)');
+      ringGrad.addColorStop(0.35, 'rgba(195,237,0,0.35)');
+      ringGrad.addColorStop(0.65, 'rgba(195,237,0,0.30)');
+      ringGrad.addColorStop(1.0,  'rgba(180,220,0,0.07)');
+
       ctx.beginPath();
-      ctx.arc(cx, cy, radius, 0, Math.PI * 2);
-      ctx.strokeStyle = 'rgba(180,220,0,0.13)';
-      ctx.lineWidth   = 0.9;
+      ctx.arc(circleCX, circleCY, radius, 0, Math.PI * 2);
+      ctx.strokeStyle = ringGrad;
+      ctx.lineWidth   = 1.15;
       ctx.stroke();
+
+      // NW segment: angle = -Math.PI * 0.75  (225° from east = top-left of circle)
+      // SE segment: angle = Math.PI * 0.25   (45° from east = bottom-right)
+      // arcSpan controls how wide each thick segment is
+      const thickNodes = [
+        { angle: -Math.PI * 0.78, span: 0.38 },  // NW — top-left
+        { angle:  Math.PI * 0.22, span: 0.38 },  // SE — bottom-right
+      ];
+
+      thickNodes.forEach(({ angle, span }) => {
+        const nx = circleCX + Math.cos(angle) * radius;
+        const ny = circleCY + Math.sin(angle) * radius;
+
+        // Outer glow arc (widest, most transparent)
+        ctx.beginPath();
+        ctx.arc(circleCX, circleCY, radius, angle - span * 1.4, angle + span * 1.4);
+        ctx.strokeStyle = 'rgba(195,237,0,0.12)';
+        ctx.lineWidth = 7;
+        ctx.stroke();
+
+        // Mid glow arc
+        ctx.beginPath();
+        ctx.arc(circleCX, circleCY, radius, angle - span, angle + span);
+        ctx.strokeStyle = 'rgba(205,245,0,0.40)';
+        ctx.lineWidth = 3.5;
+        ctx.stroke();
+
+        // Inner bright arc (sharpest)
+        ctx.beginPath();
+        ctx.arc(circleCX, circleCY, radius, angle - span * 0.5, angle + span * 0.5);
+        ctx.strokeStyle = 'rgba(215,255,0,0.80)';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // Tiny radial glow dot at the center of the node
+        const glowR = ctx.createRadialGradient(nx, ny, 0, nx, ny, 6);
+        glowR.addColorStop(0.0, 'rgba(230,255,100,0.50)');
+        glowR.addColorStop(1.0, 'rgba(195,237,0,0.0)');
+        ctx.beginPath();
+        ctx.arc(nx, ny, 6, 0, Math.PI * 2);
+        ctx.fillStyle = glowR;
+        ctx.fill();
+      });
+
+      // ── 3. DIAGONAL LINE — plain thin line, no nodes ─────────────────
+      // Reference: one straight thin line from upper-left to glow center.
+      // No thick spots on the line itself — thickness only on the circle.
+      const lx0 = W * 0.280;
+      const ly0 = H * 0.148;
+      const lx1 = W * 0.630;
+      const ly1 = H * 0.482;
+
+      {
+        const g = ctx.createLinearGradient(lx0, ly0, lx1, ly1);
+        g.addColorStop(0.0,  'rgba(195,237,0,0.0)');
+        g.addColorStop(0.12, 'rgba(195,237,0,0.28)');
+        g.addColorStop(0.85, 'rgba(195,237,0,0.55)');
+        g.addColorStop(1.0,  'rgba(195,237,0,0.68)');
+        ctx.beginPath();
+        ctx.moveTo(lx0, ly0);
+        ctx.lineTo(lx1, ly1);
+        ctx.strokeStyle = g;
+        ctx.lineWidth   = 1;
+        ctx.stroke();
+      }
+
+      // ── 4. VERTICAL LIGHT BAR — left (bright) ────────────────────────
+      {
+        const bx = W * 0.460;
+        const by0 = H * 0.140;
+        const by1 = H * 0.440;
+        const g = ctx.createLinearGradient(0, by0, 0, by1);
+        g.addColorStop(0.0,  'rgba(205,240,0,0.0)');
+        g.addColorStop(0.15, 'rgba(215,250,0,0.55)');
+        g.addColorStop(0.85, 'rgba(215,250,0,0.55)');
+        g.addColorStop(1.0,  'rgba(205,240,0,0.0)');
+        ctx.beginPath();
+        ctx.moveTo(bx, by0);
+        ctx.lineTo(bx, by1);
+        ctx.strokeStyle = g;
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+      }
+
+      // ── 5. VERTICAL LIGHT BAR — right edge (dim) ─────────────────────
+      {
+        const bx = W * 0.921;
+        const by0 = H * 0.420;
+        const by1 = H * 0.680;
+        const g = ctx.createLinearGradient(0, by0, 0, by1);
+        g.addColorStop(0.0,  'rgba(195,237,0,0.0)');
+        g.addColorStop(0.2,  'rgba(195,237,0,0.35)');
+        g.addColorStop(0.8,  'rgba(195,237,0,0.35)');
+        g.addColorStop(1.0,  'rgba(195,237,0,0.0)');
+        ctx.beginPath();
+        ctx.moveTo(bx, by0);
+        ctx.lineTo(bx, by1);
+        ctx.strokeStyle = g;
+        ctx.lineWidth = 1.3;
+        ctx.stroke();
+      }
+
+      // ── 6. SMALL YELLOW SQUARES ──────────────────────────────────────
+      // Reference has ~6 scattered glowing squares, mostly top-right area.
+      const squares = [
+        { x: W * 0.686, y: H * 0.052, s: 5,  a: 0.92 },  // bright top
+        { x: W * 0.726, y: H * 0.105, s: 3,  a: 0.60 },  // smaller right of it
+        { x: W * 0.630, y: H * 0.446, s: 6,  a: 0.95 },  // large left-of-glow
+        { x: W * 0.896, y: H * 0.780, s: 5,  a: 0.80 },  // bottom-right
+        { x: W * 0.812, y: H * 0.348, s: 3,  a: 0.42 },  // small mid-right
+        { x: W * 0.635, y: H * 0.588, s: 3,  a: 0.38 },  // faint below glow
+      ];
+      squares.forEach((sq) => {
+        ctx.fillStyle = `rgba(210,245,0,${sq.a})`;
+        ctx.fillRect(sq.x - sq.s / 2, sq.y - sq.s / 2, sq.s, sq.s);
+      });
+
+      // ── 7. SMALL SCATTERED DOTS (lime) ───────────────────────────────
+      // A few tiny dot glints in the upper-right region near the circle top.
+      const dots = [
+        { x: W * 0.760, y: H * 0.040, r: 1.5, a: 0.55 },
+        { x: W * 0.810, y: H * 0.090, r: 1.2, a: 0.42 },
+        { x: W * 0.870, y: H * 0.060, r: 1.0, a: 0.38 },
+        { x: W * 0.948, y: H * 0.120, r: 1.5, a: 0.48 },
+        { x: W * 0.970, y: H * 0.200, r: 1.2, a: 0.35 },
+        { x: W * 0.955, y: H * 0.290, r: 1.8, a: 0.50 },
+        { x: W * 0.920, y: H * 0.360, r: 1.0, a: 0.30 },
+      ];
+      dots.forEach((d) => {
+        ctx.beginPath();
+        ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(200,240,0,${d.a})`;
+        ctx.fill();
+      });
     };
+
     draw();
     const ro = new ResizeObserver(draw);
     ro.observe(canvas);
@@ -88,42 +270,24 @@ export default function HudOverlay({ stateRef }: Props) {
     <div
       ref={wrapRef}
       className="absolute inset-0 pointer-events-none overflow-hidden"
-      style={{ zIndex: 2 }}
+      style={{ zIndex: 0 }}
       aria-hidden="true"
     >
       <HudCanvas />
 
-      <div style={{
-        position: 'absolute', left: '45%', top: '6%', bottom: '6%', width: '1px',
-        background: 'linear-gradient(to bottom, transparent 0%, rgba(195,237,0,0.20) 20%, rgba(195,237,0,0.20) 80%, transparent 100%)',
-      }} />
-      <div style={{
-        position: 'absolute', left: '82%', top: '8%', bottom: '40%', width: '1px',
-        background: 'linear-gradient(to bottom, transparent 0%, rgba(195,237,0,0.15) 25%, rgba(195,237,0,0.15) 75%, transparent 100%)',
-      }} />
-
-      <Plus x="46%"  y="14%" size={10} color="rgba(255,255,255,0.22)" />
-      <Plus x="57%"  y="32%" size={10} color="rgba(195,237,0,0.30)" />
-      <Plus x="78%"  y="18%" size={11} color="rgba(255,255,255,0.18)" />
-      <Plus x="83%"  y="62%" size={9}  color="rgba(195,237,0,0.22)" />
-      <Plus x="92%"  y="75%" size={8}  color="rgba(255,255,255,0.14)" />
-      <Plus x="36%"  y="52%" size={8}  color="rgba(255,255,255,0.12)" />
-      <Plus x="91%"  y="42%" size={8}  color="rgba(195,237,0,0.18)" />
-
-      <div style={{
-        position: 'absolute', top: 0, bottom: 0, width: '1px',
-        background: 'linear-gradient(to bottom, transparent 0%, rgba(195,237,0,0.12) 45%, rgba(195,237,0,0.18) 50%, rgba(195,237,0,0.12) 55%, transparent 100%)',
-        animation: 'hudScan 8s linear infinite',
-      }} />
-
-      <style>{`
-        @keyframes hudScan {
-          0%   { left: -1px; opacity: 0; }
-          5%   { opacity: 1; }
-          95%  { opacity: 1; }
-          100% { left: 100%; opacity: 0; }
-        }
-      `}</style>
+      {/* Plus / crosshair markers — exact positions from reference:
+          - White "+" upper-left area ~(40%, 21%)
+          - Lime "+" just left of glow center ~(53%, 46%)
+          - White "+" right of glow ~(80%, 47%)
+          - Lime "+" lower-center ~(53%, 84%)
+          - White "+" far bottom-left ~(4%, 76%) and ~(5%, 85%)
+      */}
+      <Plus x="40%"  y="21%" size={12} color="rgba(255,255,255,0.60)" />
+      <Plus x="53%"  y="46%" size={11} color="rgba(195,237,0,0.55)" />
+      <Plus x="80%"  y="47%" size={12} color="rgba(255,255,255,0.35)" />
+      <Plus x="53%"  y="84%" size={10} color="rgba(195,237,0,0.40)" />
+      <Plus x="4%"   y="76%" size={11} color="rgba(195,237,0,0.65)" />
+      <Plus x="5%"   y="85%" size={11} color="rgba(255,255,255,0.40)" />
     </div>
   );
 }

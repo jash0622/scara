@@ -1,10 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Montserrat:wght@700;800;900&family=Poppins:wght@300;400;500;600;700&family=Rajdhani:wght@600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=IBM+Plex+Sans:wght@400;500;600;700&family=Montserrat:wght@700;800;900&family=Poppins:wght@300;400;500;600;700&family=Rajdhani:wght@600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
+  --font-anton: 'Anton', sans-serif;
   --font-montserrat: 'Montserrat', sans-serif;
   --font-ibm-plex-sans: 'IBM Plex Sans', sans-serif;
   --font-poppins: 'Poppins', sans-serif;
@@ -117,4 +118,46 @@ html.lenis, html.lenis body {
 
 .animate-dash {
   animation: dash 12s linear infinite;
+}
+
+/* About section — scroll indicator blink */
+@keyframes scrollBlink {
+  0%, 100% { opacity: 0.5; }
+  50%       { opacity: 1; }
+}
+
+.animate-scroll-blink {
+  animation: scrollBlink 2s ease-in-out infinite;
+}
+
+/*
+ * Firefox fallback for -webkit-text-stroke.
+ * We layer two text-shadows offset by 1px in all 4 diagonal directions
+ * to simulate a 1.5px outline stroke on browsers that lack -webkit-text-stroke.
+ */
+.text-stroke-lime-fallback {
+  /* WebKit (Chrome, Safari, Edge Chromium, etc.) */
+  -webkit-text-stroke: 1.5px #C3ED00;
+  color: transparent;
+  /* Firefox fallback via paint-order — only works when combined with stroke SVG,
+     but for a pure-CSS approximation we use text-shadow at 1px offsets.
+     Note: Firefox 116+ supports -webkit-text-stroke natively, so this is
+     a belt-and-suspenders fallback for older Firefox. */
+  text-shadow:
+    0 0 0 transparent; /* reset: real stroke handled by -webkit-text-stroke */
+}
+@supports not (-webkit-text-stroke: 1px) {
+  .text-stroke-lime-fallback {
+    /* Simulate stroke via multi-direction text-shadow */
+    color: transparent;
+    text-shadow:
+       1px  0   0 #C3ED00,
+      -1px  0   0 #C3ED00,
+       0    1px 0 #C3ED00,
+       0   -1px 0 #C3ED00,
+       1px  1px 0 #C3ED00,
+      -1px -1px 0 #C3ED00,
+       1px -1px 0 #C3ED00,
+      -1px  1px 0 #C3ED00;
+  }
 }

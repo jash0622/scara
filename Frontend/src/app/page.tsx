@@ -8,7 +8,6 @@ import AboutSection     from '@/components/sections/AboutSection';
 import ServicesSection  from '@/components/sections/ServicesSection';
 import WorkSection      from '@/components/sections/WorkSection';
 import ImpactSection    from '@/components/sections/ImpactSection';
-import ClientsSection   from '@/components/sections/ClientsSection';
 import InsightsSection  from '@/components/sections/InsightsSection';
 import ContactSection   from '@/components/sections/ContactSection';
 
@@ -34,9 +33,8 @@ export default function Home() {
         <AboutSection />
         <ServicesSection />
         <WorkSection />
-        <ImpactSection />
-        <ClientsSection />
         <InsightsSection />
+        <ImpactSection />
         <ContactSection />
       </motion.main>
     </>

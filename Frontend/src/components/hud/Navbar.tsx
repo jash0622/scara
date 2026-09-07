@@ -15,8 +15,6 @@ const MENU_ITEMS: StaggeredMenuItem[] = [
   { label: 'About',    ariaLabel: 'Learn about Scara',  link: '#about' },
   { label: 'Services', ariaLabel: 'View our services',  link: '#services' },
   { label: 'Work',     ariaLabel: 'See our work',       link: '#work' },
-  { label: 'Impact',   ariaLabel: 'Our impact',         link: '#impact' },
-  { label: 'Clients',  ariaLabel: 'Our clients',        link: '#clients' },
   { label: 'Insights', ariaLabel: 'Read our insights',  link: '#insights' },
 ];
 
@@ -88,8 +86,8 @@ export default function Navbar() {
         accentColor="#C3ED00"
         colors={['#1a2e05', '#C3ED00']}
         menuButtonColor="#FFFFFF"
-        openMenuButtonColor="#000000"
-        changeMenuColorOnOpen
+        openMenuButtonColor="#FFFFFF"
+        changeMenuColorOnOpen={false}
       />
     </>
   );

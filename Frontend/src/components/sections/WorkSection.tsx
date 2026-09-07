@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowRight, Filter, Sparkles } from 'lucide-react';
+import { ArrowRight, Sparkles } from 'lucide-react';
 import { CaseStudy, SCARA_CASE_STUDIES } from '@/data/scaraData';
 import CaseStudyModal from '@/components/modals/CaseStudyModal';
 
@@ -10,13 +10,12 @@ export default function WorkSection() {
   const [activeFilter, setActiveFilter] = useState<string>('All');
   const [selectedCaseStudy, setSelectedCaseStudy] = useState<CaseStudy | null>(null);
 
-  const filterOptions = ['All', 'Gaming', 'Sports', 'Live', 'India', 'Turkey', 'Global'];
+  const filterOptions = ['All', 'Gaming', 'Live', 'India', 'Global'];
 
   const filteredCaseStudies = SCARA_CASE_STUDIES.filter((item) => {
     if (activeFilter === 'All') return true;
     if (activeFilter === 'India') return item.market === 'India';
-    if (activeFilter === 'Turkey') return item.market === 'Turkey';
-    if (activeFilter === 'Global') return item.market === 'Global';
+    if (activeFilter === 'Global') return item.market !== 'India';  // Turkey + Global both show
     return item.category === activeFilter;
   });
 
@@ -33,7 +32,7 @@ export default function WorkSection() {
       />
 
       <div className="mx-auto max-w-7xl px-6 md:px-12 space-y-12">
-        
+
         {/* Section Header & Category Filters */}
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8">
           <div className="space-y-3">
@@ -100,15 +99,24 @@ export default function WorkSection() {
                     )}
                   </div>
 
-                  {/* Preview Stat Badge */}
-                  <div className="absolute bottom-4 left-4">
-                    <span className="font-heading text-2xl font-bold text-scara-green">
-                      {caseStudy.previewStat}
-                    </span>
-                    <span className="block font-sub text-[10px] font-medium text-scara-grey uppercase">
-                      {caseStudy.previewStatLabel}
-                    </span>
-                  </div>
+                  {/* Talent Used — bottom-left of image */}
+                  {caseStudy.talent && caseStudy.talent.length > 0 && (
+                    <div className="absolute bottom-4 left-4 space-y-1.5">
+                      <span className="block font-sub text-[11px] font-bold uppercase tracking-wider text-scara-green">
+                        Talent Used
+                      </span>
+                      <div className="flex flex-wrap gap-1.5">
+                        {caseStudy.talent.map((name, i) => (
+                          <span
+                            key={i}
+                            className="rounded-full border border-scara-green/40 bg-scara-black/70 px-2.5 py-0.5 font-sub text-[10px] font-semibold text-scara-white backdrop-blur-sm"
+                          >
+                            {name}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* Body Content */}

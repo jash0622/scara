@@ -98,6 +98,13 @@ void main() {
 }
 `;
 
+// ── Small electric arc between fingertips ────────────────────────────────────
+// Uses the Lightning WebGL shader in a tiny rotated div overlay.
+// Positioned at the fingertip gap, diagonal (thumb → index finger direction).
+// Rendered as a DOM overlay in ParticleHandScene — this component just
+// exports the visibility signal via stateRef.tipGlow.
+// NOTE: actual DOM rendering is in ParticleHandScene.tsx overlay div.
+
 interface Props {
   stateRef: React.RefObject<HandSceneState>;
 }

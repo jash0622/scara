@@ -22,6 +22,7 @@ const config: Config = {
         },
       },
       fontFamily: {
+        anton: ["var(--font-anton)", "Anton", "sans-serif"],
         heading: ["var(--font-montserrat)", "Montserrat", "sans-serif"],
         sub: ["var(--font-ibm-plex-sans)", "IBM Plex Sans", "sans-serif"],
         body: ["var(--font-poppins)", "Poppins", "sans-serif"],

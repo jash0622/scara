@@ -37,20 +37,22 @@ const CAM_X_CENTER = 3.00;
 const CAM_Z_INIT   = 5.60;
 const CAM_Z_CENTER = 4.80;
 
-// Hands close during scroll and STOP exactly at the touch frame:
-// upper hand's index finger just reaching the lower hand's thumb.
-// These totals are tuned so the hands do NOT overlap/cross past each other.
-const S3_UPPER_X = -0.26;   // upper drifts left toward center
-const S3_UPPER_Y = -0.46;   // upper drops down
-const S3_LOWER_X =  0.24;   // lower drifts right toward center
-const S3_LOWER_Y =  0.42;   // lower rises up
+// Hands close during scroll — DIAGONAL movement:
+// Upper hand comes from upper-right → moves left+down (diagonal)
+// Lower hand comes from lower-left → moves right+up (diagonal)
+// They stop JUST BEFORE TOUCH — index finger near thumb, not touching.
+const S3_UPPER_X = -0.14;   // left (reduced)
+const S3_UPPER_Y = -0.22;   // down (reduced)
+const S3_LOWER_X =  0.12;   // right (reduced)
+const S3_LOWER_Y =  0.20;   // up (reduced)
 
-// Stage 4 — small final nudge so fingertips just touch (no overlap)
-const S4_UPPER_X = -0.06;
-const S4_UPPER_Y = -0.12;
-const S4_LOWER_X =  0.05;
-const S4_LOWER_Y =  0.10;
-const CONTACT_ROT_Z = 0.03;
+// Stage 4 — tiny additional nudge to reach "about to touch" position
+// (much smaller — NO actual contact/overlap)
+const S4_UPPER_X = -0.02;
+const S4_UPPER_Y = -0.03;
+const S4_LOWER_X =  0.02;
+const S4_LOWER_Y =  0.02;
+const CONTACT_ROT_Z = 0.010;
 
 // ─────────────────────────────────────────────────────────────────────────────
 // HERO SCROLL — pins for 400vh, ends at pure black screen
@@ -94,7 +96,8 @@ export function setupHeroScroll(
       s.handScaleMult = 1.0;
       s.dissolve      = 0;
       s.orbitalDrift  = false;
-      s.hudOpacity    = 1.0;
+      // HUD fades out WITH content — p:0.20→0.38 (fast, matches content exit)
+      s.hudOpacity    = Math.max(0, 1.0 - (p - 0.20) / 0.18);
       s.bgOpacity     = 1.0;
       s.sparkBurst    = 0;
       s.tipGlow       = 0.35;
@@ -103,12 +106,14 @@ export function setupHeroScroll(
       s.energyX       = 2.38; s.energyY = -0.03; s.energyZ = 0.10;
     }
 
-    // ── STAGE 3: 45–65% hands grow + center + bg fades ───────────────
-    if (p > 0.45 && p <= 0.65) {
-      const t  = sm(sub(p, 0.45, 0.65));
-      const tQ = smQ(sub(p, 0.45, 0.65));
+    // ── STAGE 3: 45–72% hands grow diagonally toward near-touch ─────
+    if (p > 0.45 && p <= 0.72) {
+      const t  = sm(sub(p, 0.45, 0.72));
+      const tQ = smQ(sub(p, 0.45, 0.72));
 
-      s.handScaleMult  = lerp(1.0, 1.55, tQ);
+      s.handScaleMult  = lerp(1.0, 1.28, tQ);
+      // Diagonal: upper comes from upper-right (moves left+down)
+      //           lower comes from lower-left  (moves right+up)
       s.upperOffsetX   = lerp(0, S3_UPPER_X, tQ);
       s.upperOffsetY   = lerp(0, S3_UPPER_Y, tQ);
       s.upperOffsetZ   = 0;
@@ -120,22 +125,21 @@ export function setupHeroScroll(
       s.cameraX        = lerp(CAM_X_INIT, CAM_X_CENTER, t);
       s.cameraZ        = lerp(CAM_Z_INIT, CAM_Z_CENTER, t);
       s.bgOpacity      = lerp(1.0, 0.0, t);
-      s.hudOpacity     = lerp(1.0, 0.4, t);
+      s.hudOpacity     = 0.0;   // already faded with content in stage 2
       s.orbitalDrift   = true;
       s.dissolve       = 0;
       s.sparkBurst     = 0;
-      s.tipGlow        = lerp(0.35, 0.60, t);
-      s.energyX        = lerp(2.38, 3.19, t);
-      s.energyY        = lerp(-0.03, -0.05, t);
+      s.tipGlow        = lerp(0.35, 0.65, t);
+      s.energyX        = lerp(2.38, 3.10, t);
+      s.energyY        = lerp(-0.03, -0.06, t);
       s.energyZ        = 0.10;
     }
 
-    // ── STAGE 4: 65–100% fingertips MEET, then FREEZE at touch frame ──
-    // Full contact (index finger → thumb) is reached by p=0.80.
-    // From 0.80→1.0 the hands HOLD completely still — no further closing,
-    // no overlap, no dissolve, no spark. The scroll ends here.
-    if (p > 0.65) {
-      const t = sm(sub(p, 0.65, 0.80));  // full contact by p=0.80, frozen after
+    // ── STAGE 4: 72–100% hands freeze at "about to touch" position ───
+    // A small final nudge brings fingertip and thumb NEAR each other
+    // but NEVER touching. Holds frozen from p=0.85 onward.
+    if (p > 0.72) {
+      const t = sm(sub(p, 0.72, 0.85));  // eases to final pos by p=0.85, frozen after
 
       s.upperOffsetX   = S3_UPPER_X + lerp(0, S4_UPPER_X, t);
       s.upperOffsetY   = S3_UPPER_Y + lerp(0, S4_UPPER_Y, t);
@@ -145,17 +149,17 @@ export function setupHeroScroll(
       s.lowerOffsetZ   = 0;
       s.upperRotZDelta = lerp(0, -CONTACT_ROT_Z, t);
       s.lowerRotZDelta = lerp(0,  CONTACT_ROT_Z, t);
-      s.handScaleMult  = lerp(1.55, 1.58, t);
+      s.handScaleMult  = lerp(1.28, 1.30, t);
       s.cameraX        = CAM_X_CENTER;
       s.cameraZ        = CAM_Z_CENTER;
       s.bgOpacity      = 0;
-      s.hudOpacity     = lerp(0.4, 0.0, t);
+      s.hudOpacity     = 0.0;
       s.sparkBurst     = 0;
       s.dissolve       = 0;
-      s.tipGlow        = lerp(0.60, 0.90, t);  // gentle glow at the touch point
-      s.energyX        = 3.19;
-      s.energyY        = lerp(-0.05, -0.10, t);
-      s.energyZ        = lerp(0.10, 0.13, t);
+      s.tipGlow        = lerp(0.65, 0.85, t);  // glow builds near-touch
+      s.energyX        = lerp(3.10, 3.19, t);
+      s.energyY        = lerp(-0.06, -0.09, t);
+      s.energyZ        = lerp(0.10, 0.12, t);
       s.orbitalDrift   = true;
     }
 
