@@ -18,10 +18,10 @@ const MENU_ITEMS: StaggeredMenuItem[] = [
   { label: 'Insights', ariaLabel: 'Read our insights',  link: '#insights' },
 ];
 
+// Only Instagram & LinkedIn — rendered as SVG icon links below the menu
 const SOCIAL_ITEMS: StaggeredMenuSocialItem[] = [
   { label: 'Instagram', link: 'https://instagram.com' },
   { label: 'LinkedIn',  link: 'https://linkedin.com' },
-  { label: 'Twitter',   link: 'https://twitter.com' },
 ];
 
 export default function Navbar() {
