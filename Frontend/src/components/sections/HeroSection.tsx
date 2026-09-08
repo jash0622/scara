@@ -348,9 +348,12 @@ export default function HeroSection() {
               >
                 SHAPING <br />
                 <span className="text-scara-green drop-shadow-[0_0_30px_rgba(195,237,0,0.3)]">
-                  SPORTS, GAMING
+                  SPORTS, MUSIC,
                 </span>
                 <br />
+                <span className="text-scara-green drop-shadow-[0_0_30px_rgba(195,237,0,0.3)]">
+                  GAMING
+                </span>{' '}
                 &amp; CULTURE.
               </h1>
 
@@ -359,9 +362,8 @@ export default function HeroSection() {
                 className={`mt-5 font-body text-sm text-scara-white/70 leading-relaxed ${entry} ${trans}`}
                 style={{ transitionDelay: '260ms', maxWidth: '36ch' }}
               >
-                Scara is a culture-first creative force built for brands that play to win.
-                Turning fandom, communities, and moments into combat-ready experiences
-                people want to be part of.
+                Scara is a global creative force at the intersection of sports, gaming and culture.
+                Turning fandom, communities and moments into experiences people want to be part of.
               </p>
 
               <div
