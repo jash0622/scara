@@ -237,16 +237,16 @@ export default function SplashCursor({
       if (!RAINBOW_MODE) return hexToRGB(COLOR!);
       const c=HSVtoRGB(Math.random(),1,1); return {r:c.r*.15,g:c.g*.15,b:c.b*.15};
     }
-    function correctRadius(r: number) { const ar=canvas.width/canvas.height; return ar>1?r*ar:r; }
-    function correctDeltaX(d: number) { const ar=canvas.width/canvas.height; return ar<1?d*ar:d; }
-    function correctDeltaY(d: number) { const ar=canvas.width/canvas.height; return ar>1?d/ar:d; }
+    function correctRadius(r: number) { const ar=canvas!.width/canvas!.height; return ar>1?r*ar:r; }
+    function correctDeltaX(d: number) { const ar=canvas!.width/canvas!.height; return ar<1?d*ar:d; }
+    function correctDeltaY(d: number) { const ar=canvas!.width/canvas!.height; return ar>1?d/ar:d; }
 
     // ─── Fluid ops ────────────────────────────────────────────────────
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     function splat(x: number, y: number, dx: number, dy: number, color: any) {
       splatP.bind();
       gl.uniform1i(splatP.u.uTarget, velocity.read.attach(0));
-      gl.uniform1f(splatP.u.aspectRatio, canvas.width/canvas.height);
+      gl.uniform1f(splatP.u.aspectRatio, canvas!.width/canvas!.height);
       gl.uniform2f(splatP.u.point, x, y);
       gl.uniform3f(splatP.u.color, dx, dy, 0);
       gl.uniform1f(splatP.u.radius, correctRadius(SPLAT_RADIUS/100));
@@ -288,8 +288,8 @@ export default function SplashCursor({
     }
 
     function resizeCanvas() {
-      const w=scaleByPixelRatio(canvas.clientWidth), h=scaleByPixelRatio(canvas.clientHeight);
-      if (canvas.width!==w||canvas.height!==h) { canvas.width=w; canvas.height=h; return true; } return false;
+      const w=scaleByPixelRatio(canvas!.clientWidth), h=scaleByPixelRatio(canvas!.clientHeight);
+      if (canvas!.width!==w||canvas!.height!==h) { canvas!.width=w; canvas!.height=h; return true; } return false;
     }
 
     // ─── Pointer state ────────────────────────────────────────────────
@@ -310,14 +310,14 @@ export default function SplashCursor({
 
     // ─── Event handlers (container-scoped) ───────────────────────────
     function getPos(clientX: number, clientY: number) {
-      const rect = canvas.getBoundingClientRect();
+      const rect = canvas!.getBoundingClientRect();
       return { x: scaleByPixelRatio(clientX-rect.left), y: scaleByPixelRatio(clientY-rect.top) };
     }
 
     function onMouseMove(e: MouseEvent) {
       const {x,y} = getPos(e.clientX, e.clientY);
       ptr.prevX=ptr.texcoordX; ptr.prevY=ptr.texcoordY;
-      ptr.texcoordX=x/canvas.width; ptr.texcoordY=1-(y/canvas.height);
+      ptr.texcoordX=x/canvas!.width; ptr.texcoordY=1-(y/canvas!.height);
       ptr.deltaX=correctDeltaX(ptr.texcoordX-ptr.prevX);
       ptr.deltaY=correctDeltaY(ptr.texcoordY-ptr.prevY);
       if (Math.abs(ptr.deltaX)>0||Math.abs(ptr.deltaY)>0) {
@@ -328,7 +328,7 @@ export default function SplashCursor({
     function onMouseDown(e: MouseEvent) {
       const {x,y} = getPos(e.clientX, e.clientY);
       const c=generateColor(); c.r*=10; c.g*=10; c.b*=10;
-      ptr.texcoordX=x/canvas.width; ptr.texcoordY=1-(y/canvas.height);
+      ptr.texcoordX=x/canvas!.width; ptr.texcoordY=1-(y/canvas!.height);
       splat(ptr.texcoordX, ptr.texcoordY, 10*(Math.random()-.5), 30*(Math.random()-.5), c);
     }
 
@@ -336,7 +336,7 @@ export default function SplashCursor({
       const t=e.targetTouches[0];
       const {x,y} = getPos(t.clientX, t.clientY);
       ptr.prevX=ptr.texcoordX; ptr.prevY=ptr.texcoordY;
-      ptr.texcoordX=x/canvas.width; ptr.texcoordY=1-(y/canvas.height);
+      ptr.texcoordX=x/canvas!.width; ptr.texcoordY=1-(y/canvas!.height);
       ptr.deltaX=correctDeltaX(ptr.texcoordX-ptr.prevX);
       ptr.deltaY=correctDeltaY(ptr.texcoordY-ptr.prevY);
       splat(ptr.texcoordX, ptr.texcoordY, ptr.deltaX*SPLAT_FORCE, ptr.deltaY*SPLAT_FORCE, ptr.color);

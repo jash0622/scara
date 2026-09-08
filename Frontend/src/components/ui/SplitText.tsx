@@ -144,10 +144,9 @@ const SplitText = ({
     }
   );
 
-  const Tag = (tag || 'p') as keyof JSX.IntrinsicElements;
+  const Tag = (tag || 'p') as React.ElementType;
 
   return (
-    // @ts-expect-error — dynamic tag ref typing
     <Tag
       ref={ref}
       className={`split-parent ${className}`}
