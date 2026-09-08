@@ -6,8 +6,8 @@ import { Coffee, Users, Briefcase, Globe } from 'lucide-react';
 import ScrollExpand from '@/components/ui/ScrollExpand';
 import AboutTitle, { type ParagraphBlock } from '@/components/ui/AboutTitle';
 import { SCARA_CLIENT_LOGOS } from '@/data/scaraData';
-import CircularTeamGallery from '@/components/ui/CircularTeamGallery';
 import ArchitectureCards from '@/components/ui/ArchitectureCards';
+import CircularTeamGallery from '@/components/ui/CircularTeamGallery';
 import LogoLoop from '@/components/ui/LogoLoop';
 
 const GlobeCanvas = dynamic(() => import('@/components/canvas/GlobeCanvas'), {
@@ -310,10 +310,10 @@ export default function AboutSection() {
                 </h3>
               </div>
               <p className="font-body text-sm text-scara-grey leading-relaxed">
-                Operating live hubs across <strong>India (HQ)</strong>, <strong>Turkey</strong>, <strong>UAE (Dubai)</strong>, and <strong>Africa</strong>, connecting brands across South Asia, MENA, and high-growth global markets.
+                Operating live offices across <strong>India</strong>, <strong>Turkey</strong>, <strong>Dubai & MENA</strong>, and <strong>Africa</strong>, connecting brands across South Asia, MENA, and high-growth global markets.
               </p>
               <div className="pt-4 border-t border-scara-grey/15 flex flex-wrap gap-2">
-                {['INDIA', 'TURKEY', 'DUBAI & UAE', 'AFRICA'].map((loc) => (
+                {['INDIA', 'TURKEY', 'DUBAI & MENA', 'AFRICA'].map((loc) => (
                   <span
                     key={loc}
                     className="font-sub text-[10px] font-bold tracking-[0.18em] uppercase border border-scara-green/40 text-scara-green bg-scara-green/5 rounded-full px-3 py-1"

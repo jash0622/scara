@@ -110,12 +110,7 @@ export default function CircularTeamGallery() {
   return (
     <div className="space-y-6 w-full select-none" onMouseLeave={handleMouseUp}>
       {/* Controls Bar */}
-      <div className="flex items-center justify-between font-sub text-xs text-scara-grey uppercase">
-        <span className="flex items-center gap-2">
-          <span className="h-2 w-2 rounded-full bg-scara-green animate-ping" />
-          <span>INFINITE 3D GALLERY // DRAG OR ARROWS ({SCARA_TEAM.length} MEMBERS)</span>
-        </span>
-
+      <div className="flex items-center justify-end font-sub text-xs text-scara-grey uppercase">
         <div className="flex items-center gap-3">
           <button
             onClick={handlePrev}

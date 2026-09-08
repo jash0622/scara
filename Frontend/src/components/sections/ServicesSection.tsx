@@ -95,7 +95,7 @@ const SERVICE_DETAILS: Record<string, { category: string; loadouts: string[]; hi
 
 export default function ServicesSection() {
   const [hoveredService, setHoveredService] = useState<ServiceItem | null>(null);
-  const [expandedNumber, setExpandedNumber] = useState<string | null>('01');
+  const [expandedNumber, setExpandedNumber] = useState<string | null>(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
   const handleMouseMove = (e: React.MouseEvent) => {

@@ -18,7 +18,7 @@ const ITEMS = [...TICKER_ITEMS, ...TICKER_ITEMS];
 
 export default function ImpactSection() {
   return (
-    <section id="impact" className="relative w-full overflow-hidden bg-scara-black border-t border-b border-scara-green/15 py-5">
+    <section id="impact" className="relative w-full overflow-hidden bg-scara-black border-t border-b border-scara-green/15 py-5 mb-16 md:mb-24">
       <div
         className="flex gap-0 whitespace-nowrap"
         style={{

@@ -233,64 +233,16 @@ export default function ContactSection() {
         </div>
 
         {/* Footer Display Section with Motion.so style Cropped Massive Logo */}
-        <div className="relative border-t border-scara-grey/15 pt-16 overflow-hidden">
-          
-          {/* Motion.so style Footer Navigation Columns */}
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 pb-2 font-sub text-xs uppercase">
-            <div className="space-y-3">
-              <span className="font-bold text-scara-green tracking-wider">// SOLUTIONS</span>
-              <ul className="space-y-2 text-scara-grey font-medium">
-                <li><a href="#services" className="hover:text-scara-white transition-colors">Digital Discovery</a></li>
-                <li><a href="#services" className="hover:text-scara-white transition-colors">Gaming Integration</a></li>
-                <li><a href="#services" className="hover:text-scara-white transition-colors">Physical Fandom</a></li>
-              </ul>
-            </div>
+        <div className="relative border-t border-scara-grey/15 pt-6 overflow-hidden">
 
-            <div className="space-y-3">
-              <span className="font-bold text-scara-green tracking-wider">// LOCATIONS</span>
-              <ul className="space-y-2 text-scara-grey font-medium">
-                <li><a href="#about" className="hover:text-scara-white transition-colors">Mumbai HQ (India)</a></li>
-                <li><a href="#about" className="hover:text-scara-white transition-colors">Istanbul (Türkiye)</a></li>
-                <li><a href="#about" className="hover:text-scara-white transition-colors">Dubai & MENA (UAE)</a></li>
-              </ul>
-            </div>
-
-            <div className="space-y-3">
-              <span className="font-bold text-scara-green tracking-wider">// ENGINES</span>
-              <ul className="space-y-2 text-scara-grey font-medium">
-                <li><a href="#work" className="hover:text-scara-white transition-colors">Scara Gaming</a></li>
-                <li><a href="#work" className="hover:text-scara-white transition-colors">Scara Live</a></li>
-                <li><a href="#work" className="hover:text-scara-white transition-colors">Scara Tech</a></li>
-              </ul>
-            </div>
-
-            <div className="space-y-3">
-              <span className="font-bold text-scara-green tracking-wider">// COMPANY</span>
-              <ul className="space-y-2 text-scara-grey font-medium">
-                <li><a href="#about" className="hover:text-scara-white transition-colors">About Us</a></li>
-                <li><a href="#impact" className="hover:text-scara-white transition-colors">Impact & Stats</a></li>
-                <li><a href="#clients" className="hover:text-scara-white transition-colors">Clients</a></li>
-              </ul>
-            </div>
-
-            <div className="space-y-3">
-              <span className="font-bold text-scara-green tracking-wider">// CONNECT</span>
-              <ul className="space-y-2 text-scara-grey font-medium">
-                <li><a href="mailto:contact@scara.gg" className="hover:text-scara-white transition-colors">contact@scara.gg</a></li>
-                <li><a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="hover:text-scara-white transition-colors">LinkedIn</a></li>
-                <li><a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="hover:text-scara-white transition-colors">Instagram</a></li>
-              </ul>
-            </div>
-          </div>
-
-          {/* Massive Display SCARA Logo — fully visible, no crop, no vertical gaps */}
+          {/* Massive Display SCARA Logo */}
           <div className="relative w-full flex items-center justify-center select-none py-4">
             <Image
               src="/logo-scara.png"
               alt="SCARA Logo"
               width={1080}
               height={1080}
-              className="w-full max-w-[260px] sm:max-w-xl md:max-w-5xl h-auto object-contain opacity-50 sm:opacity-40 md:opacity-30 hover:opacity-95 transition-all duration-700 ease-out cursor-pointer drop-shadow-[0_0_20px_rgba(195,237,0,0.3)] hover:drop-shadow-[0_0_35px_rgba(195,237,0,0.6)]"
+              className="w-full max-w-[260px] sm:max-w-xl md:max-w-5xl h-auto object-contain opacity-50 sm:opacity-40 md:opacity-30 hover:opacity-80 transition-all duration-700 ease-out cursor-pointer drop-shadow-[0_0_10px_rgba(195,237,0,0.15)] hover:drop-shadow-[0_0_20px_rgba(195,237,0,0.30)]"
             />
           </div>
 
