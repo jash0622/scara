@@ -61,6 +61,99 @@ function RichParagraph({ block, animClass }: { block: ParagraphBlock; animClass:
   );
 }
 
+// ── TypingWord — types out a word letter by letter, then pauses, then instantly
+//    clears (no erase animation) and retypes — infinite loop ─────────────────
+
+function TypingWord({
+  word,
+  className,
+  style,
+}: {
+  word: string;
+  className?: string;
+  style?: React.CSSProperties;
+}) {
+  const [displayed, setDisplayed] = React.useState('');
+  const [typing, setTyping] = React.useState(true);
+
+  React.useEffect(() => {
+    let timeout: ReturnType<typeof setTimeout>;
+
+    if (typing) {
+      if (displayed.length < word.length) {
+        // Type next letter
+        timeout = setTimeout(() => {
+          setDisplayed(word.slice(0, displayed.length + 1));
+        }, 110);
+      } else {
+        // Fully typed — pause then instantly clear
+        timeout = setTimeout(() => {
+          setDisplayed('');
+          setTyping(false);
+        }, 1800);
+      }
+    } else {
+      // Brief pause after clear, then start typing again
+      timeout = setTimeout(() => setTyping(true), 400);
+    }
+
+    return () => clearTimeout(timeout);
+  }, [displayed, typing, word]);
+
+  return (
+    <span className={className} style={style}>
+      {displayed}
+    </span>
+  );
+}
+
+// ── TypingExperience — types "EXPERIENCE." char by char, then fades out and restarts ──
+
+function TypingExperience() {
+  const WORD = 'EXPERIENCE .';
+  const [displayed, setDisplayed] = React.useState('');
+  const [visible, setVisible] = React.useState(true);
+
+  React.useEffect(() => {
+    let timer: ReturnType<typeof setTimeout>;
+
+    if (visible) {
+      if (displayed.length < WORD.length) {
+        timer = setTimeout(() => setDisplayed(WORD.slice(0, displayed.length + 1)), 90);
+      } else {
+        // Fully typed — hold 5 seconds then hide
+        timer = setTimeout(() => setVisible(false), 5000);
+      }
+    } else {
+      setDisplayed('');
+      timer = setTimeout(() => setVisible(true), 350);
+    }
+
+    return () => clearTimeout(timer);
+  }, [displayed, visible]);
+
+  return (
+    <span style={{ opacity: visible ? 1 : 0, transition: visible ? 'none' : 'opacity 0.15s ease' }}>
+      {displayed}
+      {/* Underscore cursor — sits just below the baseline */}
+      <span
+        style={{
+          display: 'inline-block',
+          width: '0.5em',
+          height: '0.08em',
+          background: '#C3ED00',
+          marginLeft: '0.05em',
+          verticalAlign: 'baseline',
+          position: 'relative',
+          top: '-0.002em',
+          animation: 'aboutCursorBlink 0.75s step-start infinite',
+        }}
+        aria-hidden="true"
+      />
+    </span>
+  );
+}
+
 // ── Component ─────────────────────────────────────────────────────────────────
 
 export default function AboutTitle({ paragraphs }: AboutTitleProps) {
@@ -127,7 +220,7 @@ export default function AboutTitle({ paragraphs }: AboutTitleProps) {
             {/* Line 1 — stroke */}
             <SplitText
               tag="span"
-              text="CULTURE TODAY IS"
+              text="WHERE CULTURE"
               splitType="chars"
               delay={22}
               duration={0.7}
@@ -141,27 +234,10 @@ export default function AboutTitle({ paragraphs }: AboutTitleProps) {
               style={headingStyle}
             />
 
-            {/* Line 2 — stroke */}
+            {/* Line 2 — fill */}
             <SplitText
               tag="span"
-              text="EXPERIENCED DIGITALLY"
-              splitType="chars"
-              delay={18}
-              duration={0.7}
-              ease="power3.out"
-              from={fromStroke}
-              to={toStroke}
-              threshold={0.1}
-              rootMargin="0px"
-              textAlign="left"
-              className="about-heading about-stroke text-stroke-lime-fallback"
-              style={headingStyle}
-            />
-
-            {/* Line 3 — fill */}
-            <SplitText
-              tag="span"
-              text="BUT REMEMBERED"
+              text="BECOMES"
               splitType="chars"
               delay={20}
               duration={0.65}
@@ -175,25 +251,12 @@ export default function AboutTitle({ paragraphs }: AboutTitleProps) {
               style={headingStyle}
             />
 
-            {/* Line 4 — fill + blinking cursor */}
-            <span style={{ display: 'block', lineHeight: '0.96' }}>
-              <SplitText
-                tag="span"
-                text="PHYSICALLY"
-                splitType="chars"
-                delay={20}
-                duration={0.65}
-                ease="power4.out"
-                from={fromFill}
-                to={toFill}
-                threshold={0.1}
-                rootMargin="0px"
-                textAlign="left"
-                className="about-heading about-fill"
-                style={{ ...headingStyle, display: 'inline' }}
-              />
-              {/* Blinking terminal cursor — replaces the full stop */}
-              <span className="about-cursor" aria-hidden="true">_</span>
+            {/* Line 3 — EXPERIENCE. solid green fill + typing effect */}
+            <span
+              className="about-heading about-fill"
+              style={{ ...headingStyle, display: 'block' }}
+            >
+              <TypingExperience />
             </span>
           </div>
 

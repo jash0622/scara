@@ -34,7 +34,7 @@ export default function ContactSection() {
 
   return (
     <section id="contact" className="relative w-full bg-scara-black pt-24 pb-12 text-scara-white overflow-hidden">
-      <div className="mx-auto max-w-7xl px-6 md:px-12 space-y-24">
+      <div className="mx-auto max-w-7xl px-6 md:px-12 space-y-16">
         
         {/* Main Contact Container */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
@@ -46,11 +46,9 @@ export default function ContactSection() {
             </div>
 
             <h2 className="font-heading text-4xl sm:text-6xl font-black uppercase text-scara-white tracking-tight leading-none">
-              Let's Build <br />
-              <span className="text-scara-green drop-shadow-[0_0_25px_rgba(195,237,0,0.5)]">
-                Something Culture
-              </span> <br />
-              Moves For.
+              Got Something <br />
+              Worth <span className="text-scara-green drop-shadow-[0_0_25px_rgba(195,237,0,0.5)]">Making<br />
+              Noise</span> About?
             </h2>
 
             <p className="font-body text-base text-scara-white/80 leading-relaxed">
@@ -90,7 +88,7 @@ export default function ContactSection() {
             <div className="rounded-2xl border border-scara-grey/20 bg-scara-card-dark p-6 space-y-3">
               <div className="flex items-center gap-2 font-sub text-xs font-bold text-scara-green uppercase">
                 <MapPin className="h-4 w-4" />
-                <span>GLOBAL HQ // MUMBAI OFFICE</span>
+                <span>// MUMBAI OFFICE</span>
               </div>
               <p className="font-body text-xs text-scara-grey leading-relaxed">
                 <strong>SCARA GAMING PRIVATE LIMITED</strong> <br />
@@ -232,10 +230,76 @@ export default function ContactSection() {
 
         </div>
 
-        {/* Footer Display Section with Motion.so style Cropped Massive Logo */}
-        <div className="relative border-t border-scara-grey/15 pt-6 overflow-hidden">
+        {/* Footer */}
+        <div className="relative border-t border-scara-grey/15 pt-8 overflow-hidden space-y-0">
 
-          {/* Massive Display SCARA Logo */}
+          {/* Ticker — stats strip */}
+          <div className="relative w-full overflow-hidden border-b border-scara-green/15 py-4">
+            <div
+              className="flex gap-0 whitespace-nowrap"
+              style={{ animation: 'ticker-scroll 32s linear infinite', width: 'max-content' }}
+            >
+              {[
+                { stat: '$3T+',    label: 'Global Entertainment & Media Market' },
+                { stat: '$187.7B', label: 'Global Gaming Revenue' },
+                { stat: '3.58B',   label: 'Gamers Worldwide by 2025' },
+                { stat: '$1.18T',  label: 'Live Events Market by 2032' },
+                { stat: '600M+',   label: 'Gamers Across India, MENA & Turkey' },
+                { stat: '1B+',     label: 'Internet Users in India' },
+                { stat: '97%',     label: 'Mobile-First Youth in India' },
+                { stat: '80–90%+', label: 'Smartphone Penetration in Gulf Markets' },
+                { stat: '$3T+',    label: 'Global Entertainment & Media Market' },
+                { stat: '$187.7B', label: 'Global Gaming Revenue' },
+                { stat: '3.58B',   label: 'Gamers Worldwide by 2025' },
+                { stat: '$1.18T',  label: 'Live Events Market by 2032' },
+                { stat: '600M+',   label: 'Gamers Across India, MENA & Turkey' },
+                { stat: '1B+',     label: 'Internet Users in India' },
+                { stat: '97%',     label: 'Mobile-First Youth in India' },
+                { stat: '80–90%+', label: 'Smartphone Penetration in Gulf Markets' },
+              ].map((item, i) => (
+                <span key={i} className="inline-flex items-center">
+                  <span className="inline-flex items-center gap-3 px-8">
+                    <span className="font-heading text-xl font-extrabold text-scara-green tracking-tight">{item.stat}</span>
+                    <span className="font-sub text-xs font-semibold uppercase tracking-widest text-scara-white/60">{item.label}</span>
+                  </span>
+                  <span className="inline-flex items-center text-scara-green/40 text-base select-none">◆</span>
+                </span>
+              ))}
+            </div>
+            <style jsx>{`
+              @keyframes ticker-scroll {
+                0%   { transform: translateX(0); }
+                100% { transform: translateX(-50%); }
+              }
+            `}</style>
+          </div>
+
+          {/* Copyright + links + TOP */}
+          <div className="relative z-10 font-sub text-xs text-scara-grey uppercase py-5 border-b border-scara-grey/10 space-y-3">
+            {/* Row 1: copyright centered */}
+            <div className="text-center text-scara-grey/60">
+              © 2026 SCARA GAMING PRIVATE LIMITED. ALL RIGHTS RESERVED.
+            </div>
+            {/* Row 2: Privacy + Terms centered + TOP right */}
+            <div className="flex items-center justify-center gap-8 relative">
+              <a href="/privacy" className="hover:text-scara-green transition-colors">
+                PRIVACY POLICY
+              </a>
+              <span className="text-scara-grey/20">|</span>
+              <a href="/terms" className="hover:text-scara-green transition-colors">
+                TERMS OF SERVICE
+              </a>
+              <button
+                onClick={scrollToTop}
+                className="absolute right-0 flex items-center gap-1 text-scara-green hover:underline uppercase font-bold"
+              >
+                <span>TOP</span>
+                <ArrowUp className="h-3.5 w-3.5" />
+              </button>
+            </div>
+          </div>
+
+          {/* Massive SCARA Logo — very bottom */}
           <div className="relative w-full flex items-center justify-center select-none py-4">
             <Image
               src="/logo-scara.png"
@@ -246,24 +310,13 @@ export default function ContactSection() {
             />
           </div>
 
-          {/* Footer Bottom Bar */}
-          <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-4 font-sub text-xs text-scara-grey uppercase border-t border-scara-grey/10 pt-6 bg-scara-black/90 backdrop-blur-md">
-            <div>
-              © 2026 SCARA GAMING PRIVATE LIMITED. ALL RIGHTS RESERVED.
-            </div>
-
-            <div className="flex items-center gap-6">
-              <span>PRIVACY POLICY</span>
-              <span>TERMS OF SERVICE</span>
-              <button
-                onClick={scrollToTop}
-                className="flex items-center gap-1 text-scara-green hover:underline uppercase font-bold"
-              >
-                <span>TOP</span>
-                <ArrowUp className="h-3.5 w-3.5" />
-              </button>
-            </div>
+          {/* Final credit line */}
+          <div className="border-t border-scara-grey/10 pt-4 pb-6 text-center">
+            <p className="font-sub text-[10px] text-scara-grey/35 uppercase tracking-widest">
+              Design and Created by GG Space
+            </p>
           </div>
+
         </div>
 
       </div>

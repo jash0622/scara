@@ -95,7 +95,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
       gsap.set([panel, ...preLayers], { xPercent: offscreen, opacity: 1 });
       if (preContainer) gsap.set(preContainer, { xPercent: 0, opacity: 1 });
       gsap.set(plusH, { transformOrigin: '50% 50%', rotate: 0 });
-      gsap.set(plusV, { transformOrigin: '50% 50%', rotate: 90 });
+      gsap.set(plusV, { transformOrigin: '50% 50%', rotate: 0 });
       gsap.set(icon, { rotate: 0, transformOrigin: '50% 50%' });
       gsap.set(textInner, { yPercent: 0 });
       if (toggleBtnRef.current) gsap.set(toggleBtnRef.current, { color: menuButtonColor });
@@ -223,15 +223,9 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
     });
   }, [position]);
 
-  const animateIcon = useCallback((opening: boolean) => {
-    const icon = iconRef.current;
-    if (!icon) return;
-    spinTweenRef.current?.kill();
-    if (opening) {
-      spinTweenRef.current = gsap.to(icon, { rotate: 225, duration: 0.8, ease: 'power4.out', overwrite: 'auto' });
-    } else {
-      spinTweenRef.current = gsap.to(icon, { rotate: 0, duration: 0.35, ease: 'power3.inOut', overwrite: 'auto' });
-    }
+  const animateIcon = useCallback((_opening: boolean) => {
+    // Icon morphs via CSS ([data-open] rules in StaggeredMenu.css)
+    // No GSAP rotation needed
   }, []);
 
   const animateColor = useCallback(
@@ -358,8 +352,26 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
             </span>
           </span>
           <span ref={iconRef} className="sm-icon" aria-hidden="true">
-            <span ref={plusHRef} className="sm-icon-line" />
-            <span ref={plusVRef} className="sm-icon-line sm-icon-line-v" />
+            {open ? (
+              <span style={{
+                fontSize: '18px',
+                lineHeight: 1,
+                fontWeight: 300,
+                letterSpacing: 0,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '22px',
+                height: '14px',
+                color: 'currentColor',
+              }}>✕</span>
+            ) : (
+              <>
+                <span ref={plusHRef} className="sm-icon-line sm-icon-line-1" />
+                <span ref={plusVRef} className="sm-icon-line sm-icon-line-2" />
+                <span className="sm-icon-line sm-icon-line-3" />
+              </>
+            )}
           </span>
         </button>
       </header>

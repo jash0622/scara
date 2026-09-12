@@ -2,25 +2,12 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
-import { Coffee, Users, Briefcase, Globe } from 'lucide-react';
+import { Coffee, Users, Briefcase } from 'lucide-react';
 import ScrollExpand from '@/components/ui/ScrollExpand';
 import AboutTitle, { type ParagraphBlock } from '@/components/ui/AboutTitle';
 import { SCARA_CLIENT_LOGOS } from '@/data/scaraData';
 import ArchitectureCards from '@/components/ui/ArchitectureCards';
-import CircularTeamGallery from '@/components/ui/CircularTeamGallery';
 import LogoLoop from '@/components/ui/LogoLoop';
-
-const GlobeCanvas = dynamic(() => import('@/components/canvas/GlobeCanvas'), {
-  ssr: false,
-  loading: () => (
-    <div className="flex h-[360px] items-center justify-center font-sub text-xs text-scara-grey uppercase">
-      LOADING 2D WORLD MAP...
-    </div>
-  ),
-});
-
-// WebGL-driven ambient gradient-waves background. Loaded client-side only.
-const GradientWaves = dynamic(() => import('@/components/ui/GradientWaves'), { ssr: false });
 
 // ── useCountUp — counts from 0 to `end` when the ref enters the viewport ──────
 function useCountUp(end: number, duration = 1800) {
@@ -140,31 +127,18 @@ export default function AboutSection() {
           {/* AboutTitle paragraphs — structured segments allow inline bold without hardcoded JSX */}
           {(() => {
             const aboutParagraphs: ParagraphBlock[] = [
-              // Paragraph 1 — normal brightness
               {
                 segments: [
                   { text: 'Scara is a ' },
                   { text: 'global culture and experiences company', bold: true },
-                  { text: ' shaping what\'s next across gaming, sports, entertainment and live experiences.' },
+                  { text: ' shaping what\'s next across gaming, sports, music and live experiences.' },
                 ],
               },
-              // Paragraph 2 — normal brightness
               {
                 segments: [
-                  { text: 'Founded in 2023, Scara works with ' },
+                  { text: 'We work with ' },
                   { text: 'brands, creators', bold: true },
-                  { text: ', rights holders and communities to build ideas that people don\'t just see, but want to be part of. From strategic partnerships and ' },
-                  { text: 'original IPs', bold: true },
-                  { text: ' to creator-led campaigns and participation-driven experiences, we turn cultural insight into meaningful engagement and measurable business impact.' },
-                ],
-              },
-              // Paragraph 3 — dim (reduced opacity base)
-              {
-                dim: true,
-                segments: [
-                  { text: 'Through ' },
-                  { text: 'Scara Live', bold: true },
-                  { text: ', our live experiences vertical, we bring together sport, music, gaming and culture to create large-scale experiences for audiences and brand partners across high-growth markets.' },
+                  { text: ', rights holders and communities to turn cultural insight into ideas, IPs and experiences people want to be part of.' },
                 ],
               },
             ];
@@ -175,12 +149,9 @@ export default function AboutSection() {
           <ScrollExpand
               src="/community_hero.jpg"
               alt="Scara Community — Thousands United"
-              preTitle="// THE SCARA COMMUNITY"
-              title={`Millions of Fans.\nOne Language.`}
-              subtitle="From live experiences to digital culture, we create spaces where brands and audiences connect, participate and belong."
               scrollHint="Scroll"
               postTitle={`WE TURN AUDIENCES\nINTO COMMUNITIES.`}
-              postSubtitle="// CULTURE · GAMING · LIVE EXPERIENCES"
+              postSubtitle="// Sports · Gaming · Music · Live Experiences"
               postBody="We build experiences that turn audiences into communities and brands into part of the conversation."
               scrollMultiplier={3}
             />
@@ -189,7 +160,20 @@ export default function AboutSection() {
 
       <div className="mx-auto max-w-7xl px-6 md:px-12 space-y-24 pt-24 md:pt-36">
 
-        {/* ── 1. STATS CARDS ──────────────────────────────────────────── */}
+        {/* ── 1. ARCHITECTURE CARDS ───────────────────────────────────── */}
+        <div className="space-y-8">
+          <div>
+            <span className="font-sub text-xs font-bold tracking-[0.2em] text-scara-green uppercase">
+              // SCARA ARCHITECTURE
+            </span>
+            <h3 className="font-heading text-3xl font-bold uppercase text-scara-white mt-1">
+              How Scara Is Structured
+            </h3>
+          </div>
+          <ArchitectureCards />
+        </div>
+
+        {/* ── 2. STATS CARDS ──────────────────────────────────────────── */}
         <div className="space-y-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div>
@@ -201,7 +185,7 @@ export default function AboutSection() {
               </h3>
             </div>
             <p className="max-w-sm font-body text-sm text-scara-grey leading-relaxed">
-              Every number here is a story — a brand trusted, a community built, a culture shaped.
+              Every number here is a story.
             </p>
           </div>
 
@@ -225,19 +209,6 @@ export default function AboutSection() {
         </div>
         </div>
 
-        {/* ── 2. ARCHITECTURE CARDS ───────────────────────────────────── */}
-        <div className="space-y-8">
-          <div>
-            <span className="font-sub text-xs font-bold tracking-[0.2em] text-scara-green uppercase">
-              // SCARA ARCHITECTURE
-            </span>
-            <h3 className="font-heading text-3xl font-bold uppercase text-scara-white mt-1">
-              How Scara Is Structured
-            </h3>
-          </div>
-          <ArchitectureCards />
-        </div>
-
         {/* ── 3. GLOBAL PARTNERS & CLIENTS ────────────────────────────── */}
         <div className="space-y-10">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -250,21 +221,12 @@ export default function AboutSection() {
               </h3>
             </div>
             <span className="font-sub text-xs text-scara-grey uppercase">
-              15+ GLOBAL BRANDS & PUBLISHERS
+              Working with the best in the game.
             </span>
           </div>
 
           {/* Logo grid — 8 top row, 7 bottom row */}
           <div className="rounded-2xl border border-scara-grey/20 bg-scara-card-dark p-8 md:p-12 space-y-8">
-            <div className="flex items-center justify-between border-b border-scara-grey/15 pb-4">
-              <span className="font-sub text-xs font-bold tracking-[0.2em] text-scara-green uppercase">
-                // OFFICIAL BRAND PARTNER ROSTER
-              </span>
-              <span className="font-sub text-xs text-scara-grey uppercase">
-                2026 GLOBAL ALLIANCES
-              </span>
-            </div>
-            {/* Row 1 — 8 logos */}
             <div className="overflow-hidden py-2">
               <LogoLoop
                 logos={SCARA_CLIENT_LOGOS.slice(0, 8)}
@@ -278,7 +240,6 @@ export default function AboutSection() {
                 ariaLabel="Scara client brand partners row 1"
               />
             </div>
-            {/* Row 2 — remaining 7 logos */}
             <div className="overflow-hidden py-2 border-t border-scara-grey/10 pt-6">
               <LogoLoop
                 logos={SCARA_CLIENT_LOGOS.slice(8)}
@@ -293,55 +254,6 @@ export default function AboutSection() {
               />
             </div>
           </div>
-        </div>
-
-        {/* ── 4. GLOBAL FOOTPRINT ──────────────────────────────────────── */}
-        <div className="border-t border-b border-scara-grey/10 py-16">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            <div className="lg:col-span-5 space-y-8">
-              <div className="space-y-3">
-                <div className="inline-flex items-center gap-2 font-sub text-xs font-bold tracking-[0.2em] text-scara-green uppercase">
-                  <Globe className="h-4 w-4" />
-                  <span>GLOBAL FOOTPRINT // EXPANSION</span>
-                </div>
-                <h3 className="font-heading text-3xl sm:text-5xl font-bold uppercase text-scara-white leading-tight">
-                  A Global Agency <br />
-                  <span className="text-scara-green">In Constant Expansion.</span>
-                </h3>
-              </div>
-              <p className="font-body text-sm text-scara-grey leading-relaxed">
-                Operating live offices across <strong>India</strong>, <strong>Turkey</strong>, <strong>Dubai & MENA</strong>, and <strong>Africa</strong>, connecting brands across South Asia, MENA, and high-growth global markets.
-              </p>
-              <div className="pt-4 border-t border-scara-grey/15 flex flex-wrap gap-2">
-                {['INDIA', 'TURKEY', 'DUBAI & MENA', 'AFRICA'].map((loc) => (
-                  <span
-                    key={loc}
-                    className="font-sub text-[10px] font-bold tracking-[0.18em] uppercase border border-scara-green/40 text-scara-green bg-scara-green/5 rounded-full px-3 py-1"
-                  >
-                    {loc}
-                  </span>
-                ))}
-              </div>
-            </div>
-            <div className="lg:col-span-7 flex items-center justify-center">
-              <GlobeCanvas />
-            </div>
-          </div>
-        </div>
-
-        {/* ── 5. LEADERSHIP TEAM ──────────────────────────────────────── */}
-        <div className="space-y-8">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-4">
-            <div>
-              <span className="font-sub text-xs font-bold tracking-[0.2em] text-scara-green uppercase">
-                // LEADERSHIP & VISIONARIES
-              </span>
-              <h3 className="font-heading text-3xl md:text-5xl font-bold uppercase text-scara-white mt-1">
-                Built By Industry Veterans.
-              </h3>
-            </div>
-          </div>
-          <CircularTeamGallery />
         </div>
 
       </div>

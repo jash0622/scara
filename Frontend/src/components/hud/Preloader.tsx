@@ -49,13 +49,13 @@ const CLIP = {
 };
 
 const T = {
-  START: 0.35,
-  S_END: 1.30,
-  C_END: 2.20,
-  A1_END: 3.15,
-  R_END: 4.15,
-  A2_END: 5.10,
-  HOLD_END: 6.70,
+  START:    0.20,
+  S_END:    0.90,
+  C_END:    1.55,
+  A1_END:   2.20,
+  R_END:    2.90,
+  A2_END:   3.55,
+  HOLD_END: 4.60,
 };
 
 export default function Preloader({ onComplete }: { onComplete?: () => void }) {
@@ -463,14 +463,14 @@ export default function Preloader({ onComplete }: { onComplete?: () => void }) {
           <polygon
             ref={tmTRef}
             points="324 166.7 322.6 166.7 322.6 161.8 320.7 161.8 320.7 160.6 325.9 160.6 325.9 161.8 324 161.8 324 166.7"
-            fill="#ffffff"
+            fill="#000000"
             stroke="none"
             style={{ opacity: 0 }}
           />
           <polygon
             ref={tmMRef}
             points="332.2 166.6 332.1 163.3 330.1 166.4 328 163.3 328 166.7 326.7 166.7 326.7 160.6 328 160.6 330.1 164.4 332.3 160.6 333.5 160.6 333.5 166.7 332.2 166.6"
-            fill="#ffffff"
+            fill="#000000"
             stroke="none"
             style={{ opacity: 0 }}
           />

@@ -117,10 +117,10 @@ export default function ScrollExpand({
           )}
         </div>
 
-        {/* POST-EXPAND: appears after full expansion */}
+        {/* POST-EXPAND: postTitle shows throughout, postBody fades in after full expansion */}
         <div
           className="scroll-expand-post-content"
-          style={{ opacity: postOpacity, transform: `translateX(-50%) translateY(${postY}px)` }}
+          style={{ opacity: 1, transform: `translateX(-50%) translateY(0px)` }}
         >
           {postTitle && (
             <h2 className="scroll-expand-post-title">
@@ -131,11 +131,16 @@ export default function ScrollExpand({
               ))}
             </h2>
           )}
-          {postSubtitle && (
-            <p className="scroll-expand-post-subtitle">{postSubtitle}</p>
+          {postSubtitle && postSubtitle.length > 0 && (
+            <p className="scroll-expand-post-subtitle" style={{ opacity: postOpacity, color: '#C3ED00', fontWeight: 700, letterSpacing: '0.18em', fontSize: 'clamp(11px, 1.1vw, 13px)', textTransform: 'uppercase' }}>{postSubtitle}</p>
           )}
           {postBody && (
-            <p className="scroll-expand-post-body">{postBody}</p>
+            <p
+              className="scroll-expand-post-body"
+              style={{ opacity: postOpacity, transform: `translateY(${postY}px)`, transition: 'none' }}
+            >
+              {postBody}
+            </p>
           )}
           {children}
         </div>

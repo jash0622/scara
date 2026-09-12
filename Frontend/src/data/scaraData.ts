@@ -55,7 +55,7 @@ export const SCARA_CASE_STUDIES: CaseStudy[] = [
     fullDesc: [
       "To celebrate Holi, we partnered with Indian football captain Gurpreet Singh Sandhu and leading gaming creator Jonathan Gaming, amplified by 5 additional gaming influencers through localized content, social storytelling and community participation, driving awareness, downloads, UGC and tournament engagement."
     ],
-    heroImage: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?q=80&w=1600&auto=format&fit=crop',
+    heroImage: '/Cover Photos Case Studies/eFootball Holi _25.jpg',
     talent: ['Gurpreet Singh Sandhu', 'Jonathan Gaming'],
     services: [
       'In-Game Cosmetics',
@@ -65,7 +65,7 @@ export const SCARA_CASE_STUDIES: CaseStudy[] = [
     ],
     gallery: [
       'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=800&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=800&auto=format&fit=crop'
+      'https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=800&auto=format&fit=crop',
     ],
     pressOutlets: ['IGN India', 'Animation Xpress', 'Adgully']
   },
@@ -82,7 +82,7 @@ export const SCARA_CASE_STUDIES: CaseStudy[] = [
     fullDesc: [
       "To bring MLBB's Fanny to life, Scara activated a curated network of cosplay creators, managing the end-to-end activation from talent sourcing and shortlisting to briefing, negotiations, content coordination and publishing across Instagram. The campaign delivered character-led, authentic content that extended the 2025 anniversary campaign beyond the game."
     ],
-    heroImage: 'https://images.unsplash.com/photo-1563089145-599997674d42?q=80&w=1600&auto=format&fit=crop',
+    heroImage: '/Cover Photos Case Studies/Mobalegends Cosplay.jpg',
     talent: ['Cosplay Creators Network'],
     services: [
       'Cosplayer Sourcing',
@@ -92,7 +92,7 @@ export const SCARA_CASE_STUDIES: CaseStudy[] = [
     ],
     gallery: [
       'https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=800&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=800&auto=format&fit=crop'
+      'https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=800&auto=format&fit=crop',
     ],
     pressOutlets: ['TalkEsport', 'IGN India']
   },
@@ -110,7 +110,7 @@ export const SCARA_CASE_STUDIES: CaseStudy[] = [
       "We led the expansion of eFootball™ in India by tapping into high-impact cultural moments — Independence Day and Diwali — to move beyond a core gaming audience and engage mainstream football fans and casual sports viewers.",
       "The campaign blended celebrity-led content, nationwide online tournaments, Discord-first community building, PR amplification, and a large-scale offline Meet & Greet. This integrated approach drove scale, participation, and long-term community retention."
     ],
-    heroImage: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=1600&auto=format&fit=crop',
+    heroImage: '/Cover Photos Case Studies/eFootball Independence Day & Diwali _25.png',
     talent: ['Sunil Chhetri', 'KL Rahul', 'Ahan Shetty', 'Nitish Kumar Reddy'],
     services: [
       'In-Game Marketing',
@@ -121,7 +121,7 @@ export const SCARA_CASE_STUDIES: CaseStudy[] = [
     ],
     gallery: [
       'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=800&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1522158634071-9c9957218e79?q=80&w=800&auto=format&fit=crop'
+      'https://images.unsplash.com/photo-1522158634071-9c9957218e79?q=80&w=800&auto=format&fit=crop',
     ],
     pressOutlets: ['The Times of India', 'The Hindu', 'exchange4media']
   },
@@ -139,7 +139,7 @@ export const SCARA_CASE_STUDIES: CaseStudy[] = [
       "To launch the Lionel Messi Card in eFootball™, we built a creator-led campaign to drive downloads, gameplay and participation. The campaign combined celebrity-led awareness with micro-influencers across Kerala and West Bengal, driving audiences to play with the Messi card and participate in a UGC challenge.",
       "Regional PR, digital media and creator content further amplified the launch across mainstream football communities."
     ],
-    heroImage: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=1600&auto=format&fit=crop',
+    heroImage: '/Cover Photos Case Studies/eFootball Leo Messi Campaign _26.png',
     talent: ['Regional Micro-Influencers'],
     services: [
       'Celebrity & Influencer Marketing',
@@ -150,7 +150,7 @@ export const SCARA_CASE_STUDIES: CaseStudy[] = [
     ],
     gallery: [
       'https://images.unsplash.com/photo-1579373903781-fd5c0c30c4cd?q=80&w=800&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?q=80&w=800&auto=format&fit=crop'
+      'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?q=80&w=800&auto=format&fit=crop',
     ],
     pressOutlets: ['IGN India', 'Sports Mint', 'TalkEsport']
   },
@@ -168,7 +168,7 @@ export const SCARA_CASE_STUDIES: CaseStudy[] = [
       "To build momentum for the FIFA World Cup 2026, we executed a nationwide CTV + mobile campaign for KONAMI eFootball™, using a full-funnel strategy across key football markets.",
       "Through regional targeting and continuous creative, media and performance optimisation, the campaign drove strong reach, engagement and video completion across Kerala, West Bengal, Tamil Nadu and the North East."
     ],
-    heroImage: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1600&auto=format&fit=crop',
+    heroImage: '/Cover Photos Case Studies/eFootball WC Campaign _26.png',
     talent: [],
     services: [
       'Nationwide Performance Media',
@@ -179,7 +179,7 @@ export const SCARA_CASE_STUDIES: CaseStudy[] = [
     ],
     gallery: [
       'https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=800&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1518609878373-06d740f60d8b?q=80&w=800&auto=format&fit=crop'
+      'https://images.unsplash.com/photo-1518609878373-06d740f60d8b?q=80&w=800&auto=format&fit=crop',
     ],
     pressOutlets: ['IGN India', 'Times of India', 'Animation Xpress', 'CNBC TV18']
   },
@@ -198,7 +198,7 @@ export const SCARA_CASE_STUDIES: CaseStudy[] = [
     fullDesc: [
       "Always on influencer & Brand Ambassador Programs — a sustained, performance-driven creator strategy that kept Brawl Stars consistently top-of-mind across Turkish gaming communities."
     ],
-    heroImage: 'https://images.unsplash.com/photo-1541888946425-d0fbb186a5b3?q=80&w=1600&auto=format&fit=crop',
+    heroImage: '/Cover Photos Case Studies/Turkey Brawl Stars.png',
     talent: ['Turkish Brand Ambassadors'],
     services: [
       'Celebrity & Influencer Marketing',
@@ -206,7 +206,7 @@ export const SCARA_CASE_STUDIES: CaseStudy[] = [
       'Sustained Community Engagement'
     ],
     gallery: [
-      'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?q=80&w=800&auto=format&fit=crop'
+      'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?q=80&w=800&auto=format&fit=crop',
     ],
     pressOutlets: ['IGN Turkey', 'Insider Sport']
   },
@@ -223,14 +223,14 @@ export const SCARA_CASE_STUDIES: CaseStudy[] = [
     fullDesc: [
       "OOH & influencer campaigns across Istanbul — combining high-impact out-of-home placements with a curated network of Turkish gaming influencers to drive eFootball brand visibility and player acquisition across the city's key urban hubs."
     ],
-    heroImage: 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?q=80&w=1600&auto=format&fit=crop',
+    heroImage: '/Cover Photos Case Studies/Turkey eFootball Influencer 2.png',
     talent: ['Istanbul Gaming Influencers'],
     services: [
       'Celebrity & Influencer Marketing',
       'Campaign Strategy & Execution'
     ],
     gallery: [
-      'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?q=80&w=800&auto=format&fit=crop'
+      'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?q=80&w=800&auto=format&fit=crop',
     ],
     pressOutlets: ['IGN Turkey', 'exchange4media']
   },
@@ -248,7 +248,7 @@ export const SCARA_CASE_STUDIES: CaseStudy[] = [
       "For Ramadan, we collaborated with Turkish designers to create a special, limited-edition eFootball™ Ramadan box. Each box included a Ramadan jersey, a signed team kit, and personalized notes featuring unique codes tailored for each recipient.",
       "The campaign resonated deeply with the community, generating strong organic unboxing content and story views across Turkish social platforms."
     ],
-    heroImage: 'https://images.unsplash.com/photo-1532375810709-75b1da00537c?q=80&w=1600&auto=format&fit=crop',
+    heroImage: '/Cover Photos Case Studies/efootball Ramadan _25.webp',
     talent: ['Turkish Designers', 'Community Creators'],
     services: [
       'Special Gift Box',
@@ -272,7 +272,7 @@ export const SCARA_CASE_STUDIES: CaseStudy[] = [
     fullDesc: [
       "Performance driven gaming growth at scale — a data-first user acquisition strategy for Supercell's Clash of Clans and Brawl Stars, optimising CPI and reaching high-intent players across Turkey through targeted performance marketing."
     ],
-    heroImage: 'https://images.unsplash.com/photo-1560253023-3ec5d502959f?q=80&w=1600&auto=format&fit=crop',
+    heroImage: '/Cover Photos Case Studies/Turkey Brawl Stars & COC.jpg',
     talent: [],
     services: [
       'User Acquisition',
@@ -297,7 +297,7 @@ export const SCARA_CASE_STUDIES: CaseStudy[] = [
       "For our June eFootball™ campaign, we created a unique competitive format where three influencers battled it out through in-game challenges, with each creator's participant count directly determining the number of prizes they could unlock and give back to their followers.",
       "The format drove intense community participation, fostering rival fan bases and generating millions of video views across Turkish platforms."
     ],
-    heroImage: 'https://images.unsplash.com/photo-1542751110-97427bbecf20?q=80&w=1600&auto=format&fit=crop',
+    heroImage: '/Cover Photos Case Studies/eFootball Turkey influencer vs Influencer.png',
     talent: ['3 Turkish Gaming Influencers'],
     services: [
       'In-Game Advisory',
@@ -324,7 +324,7 @@ export const SCARA_CASE_STUDIES: CaseStudy[] = [
       "Scara seamlessly executed the end-to-end broadcast and production for the Pickleball League for Times Group.",
       "Featuring a multi-angle live broadcast setup, instant replays, multilingual commentary teams, and international broadcast feeds — delivering a world-class viewer experience."
     ],
-    heroImage: 'https://images.unsplash.com/photo-1626248801379-51a0748a5f96?q=80&w=1600&auto=format&fit=crop',
+    heroImage: '/Cover Photos Case Studies/PWR Pickleball.png',
     talent: [],
     services: [
       'Digital Broadcast',
@@ -349,7 +349,7 @@ export const SCARA_CASE_STUDIES: CaseStudy[] = [
       "Scara conceptualised and executed the Run for Fun, a special marathon event celebrating the Silver Jubilee of the Red Fort Terriers Regiment.",
       "Designed as a celebration of camaraderie and family, the event brought together regiment personnel and their families for a fun, engaging fitness experience, honouring 25 years of service while creating memorable moments of togetherness."
     ],
-    heroImage: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=1600&auto=format&fit=crop',
+    heroImage: '/Cover Photos Case Studies/Run for Fun.jpg',
     talent: [],
     services: [
       'End-to-end Event Execution'
@@ -371,25 +371,25 @@ export const SCARA_SERVICES: ServiceItem[] = [
   },
   {
     number: '02',
-    title: 'Creator Marketing',
+    title: 'Influencer Partnerships',
     description: 'Hyper-localized creator networks across India, Turkey & MENA for authentic engagement.',
     bgImage: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1200&auto=format&fit=crop'
   },
   {
     number: '03',
-    title: 'Gaming Marketing',
+    title: 'Gaming Campaigns',
     description: 'Publisher growth campaigns, CPI performance marketing, community Discord hubs, and viral drops.',
     bgImage: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1200&auto=format&fit=crop'
   },
   {
     number: '04',
-    title: 'Sports Marketing',
+    title: 'Sports Events',
     description: 'Star athlete partnerships, destination marketing, fan engagement, and emerging league IP creation.',
     bgImage: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=1200&auto=format&fit=crop'
   },
   {
     number: '05',
-    title: 'Live Events',
+    title: 'Live Experiences',
     description: 'Stadium and arena-scale physical activations, ticketed festivals, end-to-end execution.',
     bgImage: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=1200&auto=format&fit=crop'
   },
@@ -401,13 +401,13 @@ export const SCARA_SERVICES: ServiceItem[] = [
   },
   {
     number: '07',
-    title: 'Esports & Tournaments',
+    title: 'Esports',
     description: 'Grassroots to pro-circuit tournament operations, broadcast production, and multi-cam live streams.',
     bgImage: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=1200&auto=format&fit=crop'
   },
   {
     number: '08',
-    title: 'In-Game Brand Integrations',
+    title: 'In-Game Integrations',
     description: 'Designing custom in-game skins, festive jerseys, artist collaborations, and native virtual assets.',
     bgImage: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?q=80&w=1200&auto=format&fit=crop'
   }
@@ -417,93 +417,100 @@ export const SCARA_TEAM: TeamMember[] = [
   {
     name: 'Manoj George',
     role: 'Founder',
-    bio: '20+ years building pioneering sports, entertainment & gaming IPs across global markets.',
-    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=600&auto=format&fit=crop',
-    linkedinUrl: 'https://www.linkedin.com/in/manojgeorge/'
+    bio: '20+ years across sports, gaming and entertainment.',
+    image: '/team member/Manoj George.png',
+    linkedinUrl: 'https://www.linkedin.com/in/manoj-g-95b80810'
   },
   {
-    name: 'Mazher Ramzanal',
+    name: 'Mazher Ramzanali',
     role: 'Business Head, Scara Live',
-    bio: 'Specialist in physical fandom, arena-scale live events, sports broadcasts & ticketed IPs.',
-    image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=600&auto=format&fit=crop',
-    linkedinUrl: 'https://www.linkedin.com'
-  },
-  {
-    name: 'Mahmoud Zeidan',
-    role: 'Business Head, Gaming',
-    bio: 'Global gaming leader driving AAA publisher partnerships and mobile performance campaigns.',
-    image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=600&auto=format&fit=crop',
-    linkedinUrl: 'https://www.linkedin.com'
+    bio: '15+ years in branding, culture and sponsorship.',
+    image: '/team member/Mazher .png',
+    linkedinUrl: 'https://www.linkedin.com/in/mazherramzanali'
   },
   {
     name: 'Santosh P',
-    role: 'Marketing & Ticketing Strategy, Scara Live',
-    bio: '15+ years delivering large-scale stadium execution and ticketing revenue engines.',
-    image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=600&auto=format&fit=crop',
-    linkedinUrl: 'https://www.linkedin.com'
-  },
-  {
-    name: 'Ozgur Ozalp',
-    role: 'Head of Publisher Relations',
-    bio: 'Ex-Epic, Riot & Nintendo veteran connecting global game studios with emerging markets.',
-    image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=600&auto=format&fit=crop',
-    linkedinUrl: 'https://www.linkedin.com'
+    role: 'Co-founder, Scara Live',
+    bio: '16+ years building live experiences and entertainment.',
+    image: '/team member/santosh.png',
+    linkedinUrl: 'https://www.linkedin.com/in/santoshp0'
   },
   {
     name: 'Vikas Chand',
-    role: 'Business Head, Sports',
-    bio: '20+ years driving sports commercialization, athlete management, and fan loyalty.',
-    image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=600&auto=format&fit=crop',
-    linkedinUrl: 'https://www.linkedin.com'
+    role: 'Sports Business Head, Scara Live',
+    bio: '20+ years in sports marketing and fan engagement.',
+    image: '/team member/Vikas Chand.png',
+    linkedinUrl: 'https://www.linkedin.com/in/vikas-chand-6873b010'
   },
   {
     name: 'Karan Khurana',
-    role: 'Head of Publisher Business',
-    bio: 'Directing strategic publisher growth and regional monetisation systems.',
-    image: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=600&auto=format&fit=crop',
-    linkedinUrl: 'https://www.linkedin.com'
+    role: 'Head of Publisher Business, Scara',
+    bio: '10+ years in publisher partnerships and business development.',
+    image: '/team member/Karan Khurana.png',
+    linkedinUrl: 'https://www.linkedin.com/in/karan-khurana-5701b6214'
   },
   {
     name: 'Arun Sadasivan',
-    role: 'Head of Intellectual Properties',
-    bio: '15+ years creating scalable sports, music & youth culture IP ecosystems.',
-    image: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?q=80&w=600&auto=format&fit=crop',
-    linkedinUrl: 'https://www.linkedin.com'
+    role: 'Head of IP Business, Scara',
+    bio: '15 years across sports, media and entertainment.',
+    image: '/team member/arun.png',
+    linkedinUrl: 'https://www.linkedin.com/in/arun-sadasivan-271b8056'
   },
   {
     name: 'Nathaneal Slabbert',
-    role: 'Head of Global Operations',
-    bio: 'Operations architect synchronizing Mumbai, Istanbul, and UAE execution teams.',
-    image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=600&auto=format&fit=crop',
-    linkedinUrl: 'https://www.linkedin.com'
+    role: 'Head of Global Operations, Scara',
+    bio: '16+ years in esports production and management.',
+    image: '/team member/Nathaneal Slabbert.png',
+    linkedinUrl: undefined
   },
   {
     name: 'Zerah Gonsalves',
-    role: 'Talent & Host Operations',
-    bio: 'Pioneering host and talent operations across broadcast esports and culture fests.',
-    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=600&auto=format&fit=crop',
-    linkedinUrl: 'https://www.linkedin.com'
+    role: 'Creative Strategy & Business Operations, Scara',
+    bio: 'Esports veteran blending creative strategy, gaming and business.',
+    image: '/team member/Zerah Gonsalves.png',
+    linkedinUrl: 'https://www.linkedin.com/in/zerahangelagonsalves'
+  },
+  {
+    name: 'Akhil Gokul',
+    role: 'Head of PR & Social Media, Scara',
+    bio: 'PR, social and digital content specialist shaping brand conversations.',
+    image: '/team member/akhil .png',
+    linkedinUrl: 'https://www.linkedin.com/in/akhilgokul0i3'
+  },
+  {
+    name: 'Ranjit Dhoran',
+    role: 'Project Manager, Scara',
+    bio: 'Campaign planning, project management and client servicing specialist.',
+    image: '/team member/scara team4.png',
+    linkedinUrl: 'https://www.linkedin.com/in/ranjit-dhoran17'
+  },
+  {
+    name: 'Hariharan Sunder',
+    role: 'India Ops Head, Scara',
+    bio: 'Live events specialist across culture, gaming and music.',
+    image: '/team member/Hariharan.png',
+    linkedinUrl: 'https://www.linkedin.com/in/hariharan-sunder-89846457'
   },
   {
     name: 'Laurent Dumeau',
     role: 'Senior Advisor',
-    bio: 'Board advisor bringing deep expertise in global media, sports rights, and strategic growth.',
-    image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=600&auto=format&fit=crop',
-    linkedinUrl: 'https://www.linkedin.com',
+    bio: 'International media and sports leader in strategy and growth.',
+    image: '/team member/Laurent Dumeau.png',
+    linkedinUrl: 'https://www.linkedin.com/in/laurentdumeau'
   },
   {
     name: 'Harry T',
     role: 'Strategic Advisor',
-    bio: 'Strategic counsel across brand partnerships, investor relations, and market expansion.',
-    image: 'https://images.unsplash.com/photo-1519345182560-3f2917c472ef?q=80&w=600&auto=format&fit=crop',
-    linkedinUrl: 'https://www.linkedin.com',
+    bio: 'Partnerships and growth strategist across sports, gaming and entertainment.',
+    image: '/team member/Harry t.png',
+    linkedinUrl: 'https://www.linkedin.com/in/harryteper007'
   },
   {
     name: 'Jayaganesh Sabapathy',
     role: 'Advisor',
-    bio: 'Industry advisor with a track record in technology, digital ecosystems, and emerging markets.',
-    image: 'https://images.unsplash.com/photo-1504257432389-52343af06ae3?q=80&w=600&auto=format&fit=crop',
-    linkedinUrl: 'https://www.linkedin.com',
+    bio: 'Sports broadcasting and distribution expert across global markets.',
+    image: '/team member/Jayaganesh.png',
+    linkedinUrl: 'https://www.linkedin.com/in/jayaganesh-sabapathy-5bbb50a'
   },
 ];
 
@@ -557,45 +564,59 @@ export const SCARA_PRESS = [
 
 export const SCARA_INSIGHTS: InsightArticle[] = [
   {
-    title: 'How Gaming and Live Sports Are Merging into One Cultural Funnel',
-    outlet: 'Outlook Respawn',
-    category: 'Interview',
-    url: 'https://respawn.outlookindia.com',
-    date: '2026'
-  },
-  {
-    title: 'The Shift from Digital Attention to Physical Fandom in South Asia & MENA',
+    title: "Inside India's Esports Boom: Why Leagues, Careers, and Homegrown IP Matter More Than Ever",
     outlet: 'Times of India',
     category: 'Interview',
-    url: 'https://timesofindia.indiatimes.com',
-    date: '2026'
+    url: 'https://timesofindia.indiatimes.com/sports/esports/news/inside-indias-esports-boom-why-leagues-careers-and-homegrown-ip-matter-more-than-ever/articleshow/132414039.cms',
+    date: 'Manoj George'
   },
   {
-    title: 'Building Loadouts for Brand Growth: Why Content Must Be Combat-Ready',
+    title: 'AI, Live Entertainment, Ticketing — The Next Frontier of Event Technology',
+    outlet: 'Live Mint',
+    category: 'Interview',
+    url: 'https://www.livemint.com/industry/media/ai-live-entertainment-ticketing-bookmyshow-concerts-events-bot-detection-event-technology/amp-11783234582436.html',
+    date: 'Mazher Ramzanali'
+  },
+  {
+    title: 'The New Playbook of Sports: Why Emerging Formats Are Winning India\'s Attention',
     outlet: 'Marketing Mind',
     category: 'Authored Article',
-    url: 'https://marketingmind.in',
-    date: '2025'
+    url: 'https://marketingmind.in/the-new-playbook-of-sports-why-emerging-formats-are-winning-indias-attention/',
+    date: 'Arun Sadasivan'
   },
   {
-    title: 'Unlocking 600M+ Gamers Across India, MENA & Turkey',
-    outlet: 'MediaBrief',
+    title: "Zee's FIFA 2026 Deal Sparks Debate on Football's Commercial Future in India",
+    outlet: 'Ad Mirror',
     category: 'Authored Article',
-    url: 'https://mediabrief.com',
-    date: '2025'
+    url: 'https://ad-mirror.com/media/zees-fifa-2026-deal-sparks-debate-on-footballs-commercial-future-in-india',
+    date: 'Manoj George'
   },
   {
-    title: 'KONAMI eFootball Campaign Reaches 28M+ Indian Football Fans Ahead of World Cup',
-    outlet: 'CNBC TV18',
-    category: 'Campaign Coverage',
-    url: 'https://cnbctv18.com',
-    date: '2026'
+    title: 'Inside Scara: Building India\'s Next Gaming & Culture Powerhouse',
+    outlet: 'Inside Sport',
+    category: 'Interview',
+    url: 'https://www.insidesport.in/gaming/scara/',
+    date: 'Karan Khurana'
   },
   {
-    title: 'PWR Pickleball & Times Group Partner with Scara for Multi-Cam Global Broadcast',
-    outlet: 'Sports Mint',
-    category: 'Campaign Coverage',
-    url: 'https://sportsmintmedia.com',
-    date: '2025'
-  }
+    title: 'From Spectators to Participants: The Rise of Interactive Marketing in Sports and Gaming',
+    outlet: 'Media News 4U',
+    category: 'Authored Article',
+    url: 'https://www.medianews4u.com/from-spectators-to-participants-the-rise-of-interactive-marketing-in-sports-and-gaming/',
+    date: 'Arun Sadasivan'
+  },
+  {
+    title: "Anticipate Significant Growth and Continued Investment in Future",
+    outlet: 'Media Info Line',
+    category: 'Interview',
+    url: 'https://www.mediainfoline.com/interview/anticipate-significant-growth-and-continued-investment-in-future-nathaneal-slabbert-head-of-global-operations-of-scara',
+    date: 'Nathaneal Slabbert'
+  },
+  {
+    title: 'Why BFSI and FMCG Are Missing the Esports Opportunity in India',
+    outlet: 'Adgully',
+    category: 'Authored Article',
+    url: 'https://adgully.com/post/12954/manoj-george-on-why-bfsi-and-fmcg-are-missing-the-esports-opportunity-in-india',
+    date: 'Manoj George'
+  },
 ];

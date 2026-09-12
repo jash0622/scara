@@ -12,82 +12,82 @@ const SplashCursor = dynamic(() => import('@/components/ui/SplashCursor'), { ssr
 // Extended service detail specifications for rich dropdown drawers
 const SERVICE_DETAILS: Record<string, { category: string; loadouts: string[]; highlight: string }> = {
   '01': {
-    category: 'STRATEGY & AUDIENCE INTELLIGENCE',
+    category: 'BRAND STRATEGY',
     loadouts: [
-      'Cultural Positioning & Narrative Architecture',
-      'Audience Intelligence & Fandom Mapping',
-      'Campaign Loadout Blueprinting',
-      'Gen-Z & Millennial Cross-Market Strategy'
+      'Cultural Positioning',
+      'Brand Architecture',
+      'Fandom Intelligence',
+      'Audience Strategy',
     ],
     highlight: 'Combat-ready brand systems built for global scale and local cultural relevance.'
   },
   '02': {
-    category: 'CREATOR NETWORK & INFLUENCER ENGINE',
+    category: 'INFLUENCER PARTNERSHIPS',
     loadouts: [
-      'Multi-Tier Creator Sourcing & Whitelisting',
-      'UGC Campaign & Challenge Frameworks',
-      'Hyper-Local Regional Language Adaptation',
-      'Creator Campaign Performance Analytics'
+      'Creator Content Strategy',
+      'Talent Mapping',
+      'Content Partnerships',
+      'Contract & Compliance',
     ],
     highlight: 'Always-on network spanning top gaming, lifestyle & sports creators across India, Turkey & MENA.'
   },
   '03': {
-    category: 'GAMING & PUBLISHER GROWTH',
+    category: 'GAMING CAMPAIGNS',
     loadouts: [
-      'AAA & Mobile Publisher Growth Strategies',
-      'Ultra-Efficient CPI Performance Marketing',
-      'Discord Fandom Hub Architecture & Moderation',
-      'Viral In-Game & Out-of-Game Event Drops'
+      'Smart Gamification',
+      'Community Building & Activations',
+      'Brand Integration Strategy',
+      'Insight-led Campaign Ideation',
     ],
     highlight: 'Proven playbook powering millions of downloads for global gaming giants like KONAMI & Supercell.'
   },
   '04': {
-    category: 'SPORTS & ATHLETE ENDORSEMENTS',
+    category: 'SPORTS EVENTS',
     loadouts: [
-      'Star Athlete Strategic Endorsements',
-      'Destination & Tourism Sports Campaigns',
-      'League & Franchise IP Conceptualization',
-      'Grassroots to Elite Fan Engagement'
+      'Sports IP Creation',
+      'Production & Broadcast',
+      'League Management',
+      'End-to-End Tournament Execution',
     ],
-    highlight: 'Uniting world-class athletes (KL Rahul, Gurpreet Sandhu) with global destination brands.'
+    highlight: 'Uniting world-class athletes with global destination brands across high-growth markets.'
   },
   '05': {
-    category: 'ARENA STAGE & PHYSICAL ACTIVATIONS',
+    category: 'LIVE EXPERIENCES',
     loadouts: [
-      'Arena & Stadium Physical Production',
-      'Turnkey Ticketed Youth Culture Festivals',
-      'Multi-Cam Broadcast Stage Design',
-      'Experiential Brand Booths & Pop-ups'
+      'Event IP Creation',
+      'Production & Operations',
+      'Sponsorships',
+      'End-to-End Event Execution',
     ],
     highlight: 'Transforming passive spectators into unshakeable real-world brand advocates.'
   },
   '06': {
-    category: 'GLOBAL MEDIA & PR AMPLIFICATION',
+    category: 'PR & COMMUNICATIONS',
     loadouts: [
-      'Tier-1 Global & Regional Media Distribution',
-      'Executive Thought Leadership & Keynotes',
-      'Cultural Event PR & Red Carpet Activations',
-      'Real-Time Crisis & Brand Reputation Management'
+      'PR Strategy',
+      'Cultural Narratives',
+      'Comms Design and Distribution',
+      'Press & Media Amplification',
     ],
     highlight: 'Featured across CNBC TV18, Times of India, IGN, ET BrandEquity & Outlook.'
   },
   '07': {
-    category: 'ESPORTS & COMPETITIVE BROADCAST',
+    category: 'ESPORTS',
     loadouts: [
-      'Turnkey Esports League & Circuit Operations',
-      'High-Definition Multi-Cam Stream Production',
-      'Custom In-Stream HUD & Broadcast Graphics',
-      'Prize Pool & Player Operations Management'
+      'Tournament Structure',
+      'League Operations',
+      'Talents and Shoutcasters',
+      'Production & Broadcast',
     ],
     highlight: 'Broadcast-grade live event engines engineered for maximum Twitch, YouTube & TV viewership.'
   },
   '08': {
-    category: 'VIRTUAL ASSETS & IN-GAME IP',
+    category: 'IN-GAME INTEGRATIONS',
     loadouts: [
-      '3D Digital Wearable & Kit Fabrication',
-      'Artist x Game IP Collaboration Curation',
-      'Cultural Festive In-Game Drops (Holi, Ramadan, etc.)',
-      'In-Engine Asset Integration & Optimization'
+      'Integration Strategy',
+      'Custom Skins, Maps, Modes',
+      'In-game Events Design',
+      'Campaign Targeting & Amplification',
     ],
     highlight: 'Designing iconic virtual jerseys and digital assets worn by millions of players worldwide.'
   }
@@ -163,7 +163,7 @@ export default function ServicesSection() {
             </h2>
           </div>
           <p className="max-w-md font-body text-sm text-scara-grey leading-relaxed">
-            Content is engineered like loadouts — built for speed, global reach, and real-world impact across physical and digital fronts. Click any loadout to inspect specifications.
+            Services built for speed, global reach, and real-world impact.
           </p>
         </div>
 
@@ -196,37 +196,31 @@ export default function ServicesSection() {
                   onClick={() => toggleExpand(service.number)}
                   onMouseEnter={() => setHoveredService(service)}
                   onMouseLeave={() => setHoveredService(null)}
-                  className="flex flex-col md:flex-row md:items-center justify-between gap-4 py-5 px-4 md:px-6 cursor-pointer select-none"
+                  className="flex items-center justify-between gap-4 py-5 px-4 md:px-8 cursor-pointer select-none"
                   data-cursor="CLICK TO VIEW"
                 >
-                  <div className="flex items-center gap-6 md:gap-10">
+                  <div className="flex items-center gap-8 md:gap-12">
                     <span className={`font-heading text-xl md:text-2xl font-bold transition-colors ${
                       isExpanded ? 'text-scara-green' : 'text-scara-grey group-hover:text-scara-green'
                     }`}>
                       {service.number}
                     </span>
-                    <h3 className={`font-heading text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold uppercase transition-colors ${
-                      isExpanded ? 'text-scara-green' : 'text-scara-white group-hover:text-scara-green'
+                    <h3 className={`font-heading uppercase transition-all duration-500 ${
+                      isExpanded
+                        ? 'text-scara-green text-2xl sm:text-3xl md:text-4xl font-bold'
+                        : 'text-scara-white group-hover:text-scara-green text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold'
                     }`}>
                       {service.title}
                     </h3>
                   </div>
 
-                  <div className="flex items-center justify-between md:justify-end gap-6 md:max-w-md">
-                    <p className={`font-body text-xs md:text-sm line-clamp-1 transition-colors ${
-                      isExpanded ? 'text-scara-white' : 'text-scara-grey group-hover:text-scara-white'
-                    }`}>
-                      {service.description}
-                    </p>
-                    
-                    {/* Action Icon Toggle */}
-                    <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border transition-all duration-300 ${
-                      isExpanded
-                        ? 'border-scara-green bg-scara-green text-scara-black rotate-180 shadow-[0_0_12px_rgba(195,237,0,0.4)]'
-                        : 'border-scara-grey/30 text-scara-grey group-hover:border-scara-green group-hover:bg-scara-green group-hover:text-scara-black'
-                    }`}>
-                      <ChevronDown className="h-4 w-4 transition-transform duration-300" />
-                    </div>
+                  {/* Only toggle button — no description text */}
+                  <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border transition-all duration-300 ${
+                    isExpanded
+                      ? 'border-scara-green bg-scara-green text-scara-black rotate-180 shadow-[0_0_12px_rgba(195,237,0,0.4)]'
+                      : 'border-scara-grey/30 text-scara-grey group-hover:border-scara-green group-hover:bg-scara-green group-hover:text-scara-black'
+                  }`}>
+                    <ChevronDown className="h-4 w-4 transition-transform duration-300" />
                   </div>
                 </div>
 
@@ -278,7 +272,7 @@ export default function ServicesSection() {
                             </div>
                           </motion.div>
 
-                          {/* RIGHT COLUMN: Compact Content & Deliverables */}
+                          {/* RIGHT COLUMN: highlight + 4 points */}
                           <motion.div 
                             initial={{ x: 10, opacity: 0 }}
                             animate={{ x: 0, opacity: 1 }}
@@ -286,26 +280,20 @@ export default function ServicesSection() {
                             className="md:col-span-8 flex flex-col justify-between space-y-4"
                           >
                             <div className="space-y-3">
-                              {/* Category Tag */}
-                              <div className="inline-flex items-center gap-1.5 font-sub text-[10px] font-bold text-scara-green uppercase tracking-wider">
-                                <ShieldCheck className="h-3.5 w-3.5" />
-                                // {details.category}
-                              </div>
-
                               {/* Highlight Text */}
-                              <p className="font-body text-xs md:text-sm text-scara-white/90 leading-relaxed font-medium">
+                              <p className="font-body text-xs md:text-sm text-scara-white/90 leading-relaxed font-medium my-4">
                                 {details.highlight}
                               </p>
 
-                              {/* Loadout Deliverables Grid */}
-                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+                              {/* Loadout points */}
+                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                                 {details.loadouts.map((item, idx) => (
                                   <div 
                                     key={idx} 
-                                    className="flex items-center gap-2 rounded-lg border border-scara-grey/15 bg-scara-black/30 px-3 py-2 transition-colors hover:border-scara-green/30"
+                                    className="flex items-center gap-3 rounded-lg border border-scara-grey/15 bg-scara-black/30 px-4 py-3 transition-colors hover:border-scara-green/30"
                                   >
-                                    <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-scara-green" />
-                                    <span className="font-body text-[11px] font-medium text-scara-white/80 line-clamp-1">
+                                    <CheckCircle2 className="h-4 w-4 shrink-0 text-scara-green" />
+                                    <span className="font-body text-sm font-medium text-scara-white/90">
                                       {item}
                                     </span>
                                   </div>
@@ -322,18 +310,13 @@ export default function ServicesSection() {
                                 REQUEST LOADOUT BRIEF
                                 <ArrowUpRight className="h-3.5 w-3.5" />
                               </a>
-
                               <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setExpandedNumber(null);
-                                }}
+                                onClick={(e) => { e.stopPropagation(); setExpandedNumber(null); }}
                                 className="font-sub text-[10px] text-scara-grey hover:text-scara-green uppercase tracking-wider transition-colors"
                               >
                                 [ CLOSE ]
                               </button>
                             </div>
-
                           </motion.div>
 
                         </div>

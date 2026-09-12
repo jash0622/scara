@@ -1,111 +1,90 @@
 'use client';
 
-/**
- * ArchitectureCards — "fan out from behind" scroll reveal.
- *
- * On entry only the CENTER card (Scara Live) is visible. As the user scrolls,
- * the LEFT card (Scara Gaming) and RIGHT card (Scara Tech) emerge from behind
- * the center card — rotating and sliding outward into their real grid slots.
- *
- * Fully scroll-scrubbed (reverses on scroll-up). Center card never moves.
- */
-
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { Gamepad2, Tv, Cpu } from 'lucide-react';
 
-const clamp01 = (v: number) => Math.max(0, Math.min(1, v));
-const smooth  = (t: number) => t * t * (3 - 2 * t);
+// ── 3D tilt-on-hover card wrapper ─────────────────────────────────────────────
+function TiltCard({
+  children,
+  className,
+  style,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  style?: React.CSSProperties;
+}) {
+  const cardRef = useRef<HTMLDivElement>(null);
 
-export default function ArchitectureCards() {
-  const rootRef  = useRef<HTMLDivElement>(null);
-  const leftRef  = useRef<HTMLDivElement>(null);
-  const rightRef = useRef<HTMLDivElement>(null);
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const card = cardRef.current;
+    if (!card) return;
+    const { left, top, width, height } = card.getBoundingClientRect();
+    const x = e.clientX - left;
+    const y = e.clientY - top;
+    const rotateX = ((y - height / 2) / height) * 18;
+    const rotateY = ((x - width / 2) / width) * -18;
+    card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.04)`;
+    card.style.transition = 'transform 0.06s linear';
+  };
 
-  useEffect(() => {
-    const root  = rootRef.current;
-    const left  = leftRef.current;
-    const right = rightRef.current;
-    if (!root || !left || !right) return;
-
-    const apply = (p: number) => {
-      // Left card reveals first (0.0–0.62), right card slightly after (0.18–0.85)
-      const lp = smooth(clamp01((p - 0.00) / 0.62));
-      const rp = smooth(clamp01((p - 0.18) / 0.67));
-
-      // Left: starts behind center (x=0, rotated CW, scaled down, hidden),
-      // ends at its real slot (x=0 relative to grid, rotate 0, scale 1, visible).
-      // We animate a translateX that STARTS at +full-column (stacked on center)
-      // and ENDS at 0 (real position). Column offset ≈ 105% of its own width.
-      const lx = (1 - lp) * 108;      // % of own width, from stacked → home
-      const lrot = (1 - lp) * -16;    // rotate in from -16°
-      const lscale = 0.72 + lp * 0.28;
-      left.style.transform = `translateX(${lx}%) rotate(${lrot}deg) scale(${lscale})`;
-      left.style.opacity = String(lp);
-      left.style.zIndex = lp < 0.9 ? '1' : '3';
-
-      const rx = (1 - rp) * -108;     // right card slides left→home from behind
-      const rrot = (1 - rp) * 16;
-      const rscale = 0.72 + rp * 0.28;
-      right.style.transform = `translateX(${rx}%) rotate(${rrot}deg) scale(${rscale})`;
-      right.style.opacity = String(rp);
-      right.style.zIndex = rp < 0.9 ? '1' : '3';
-    };
-
-    apply(0);
-
-    // Manual scroll-position tracking via RAF + getBoundingClientRect.
-    // getBoundingClientRect reflects Lenis's CSS transform, so this is
-    // completely immune to any ScrollTrigger/Lenis sync issues.
-    //
-    // Progress 0→1 maps to the block's top travelling from 85% of the
-    // viewport height (just entered from bottom) up to 30% (settled near top).
-    let rafId = 0;
-    const tick = () => {
-      const rect = root.getBoundingClientRect();
-      const vh = window.innerHeight;
-      const startY = vh * 0.85;   // block top here → progress 0
-      const endY   = vh * 0.30;   // block top here → progress 1
-      const p = clamp01((startY - rect.top) / (startY - endY));
-      apply(p);
-      rafId = requestAnimationFrame(tick);
-    };
-    rafId = requestAnimationFrame(tick);
-
-    return () => cancelAnimationFrame(rafId);
-  }, []);
+  const handleMouseLeave = () => {
+    const card = cardRef.current;
+    if (!card) return;
+    card.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
+    card.style.transition = 'transform 0.5s cubic-bezier(0.16,1,0.3,1)';
+  };
 
   return (
-    <div ref={rootRef} className="grid grid-cols-1 md:grid-cols-3 gap-8">
-      {/* Scara Gaming — LEFT (emerges from behind center) */}
+    <div style={{ perspective: '800px', perspectiveOrigin: '50% 50%' }}>
       <div
-        ref={leftRef}
-        className="relative overflow-hidden rounded-2xl border border-scara-grey/20 bg-scara-card-dark p-8 space-y-6 group hover:border-scara-green transition-colors will-change-transform"
-        style={{ transformOrigin: 'center center', transform: 'translateX(108%) rotate(-16deg) scale(0.72)', opacity: 0 }}
+        ref={cardRef}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        className={className}
+        style={{
+          ...style,
+          transformStyle: 'preserve-3d',
+          willChange: 'transform',
+          // Remove overflow:hidden so children can pop forward in Z
+          overflow: 'visible',
+        }}
       >
-        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-scara-green text-scara-black">
+        {children}
+      </div>
+    </div>
+  );
+}
+
+// ── ArchitectureCards ─────────────────────────────────────────────────────────
+
+export default function ArchitectureCards() {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+      {/* Scara Gaming */}
+      <TiltCard className="relative rounded-2xl border border-scara-grey/20 bg-scara-card-dark p-8 space-y-6 group hover:border-scara-green transition-colors cursor-default">
+        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-scara-green text-scara-black" style={{ transform: 'translateZ(60px)', transition: 'transform 0.3s ease' }}>
           <Gamepad2 className="h-6 w-6" />
         </div>
-        <div>
+        <div style={{ transform: 'translateZ(45px)', transition: 'transform 0.3s ease' }}>
           <span className="inline-block rounded-full bg-scara-green/20 px-3 py-1 font-sub text-[10px] font-bold text-scara-green uppercase mb-3">
-            DIGITAL-FIRST FANDOM
+            PHYGITAL FANDOM
           </span>
           <h4 className="font-heading text-2xl font-bold uppercase text-scara-white">
             Scara Gaming
           </h4>
         </div>
-        <p className="font-body text-xs text-scara-grey leading-relaxed">
+        <p className="font-body text-xs text-scara-grey leading-relaxed" style={{ transform: 'translateZ(30px)', transition: 'transform 0.3s ease' }}>
           Creators, communities, gaming platforms, always-on fandom building, publisher drops, and native in-game brand integrations.
         </p>
-      </div>
+      </TiltCard>
 
-      {/* Scara Live — CENTER (always visible, never moves) */}
-      <div
-        className="relative overflow-hidden rounded-2xl border border-scara-grey/20 bg-scara-card-dark p-8 space-y-6 group hover:border-scara-green transition-colors z-[2]"
-      >
-        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-scara-green text-scara-black">
+      {/* Scara Live */}
+      <TiltCard className="relative rounded-2xl border border-scara-grey/20 bg-scara-card-dark p-8 space-y-6 group hover:border-scara-green transition-colors cursor-default z-[2]">
+        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-scara-green text-scara-black" style={{ transform: 'translateZ(60px)', transition: 'transform 0.3s ease' }}>
           <Tv className="h-6 w-6" />
         </div>
-        <div>
+        <div style={{ transform: 'translateZ(45px)', transition: 'transform 0.3s ease' }}>
           <span className="inline-block rounded-full bg-scara-green/20 px-3 py-1 font-sub text-[10px] font-bold text-scara-green uppercase mb-3">
             PHYSICAL-FIRST FANDOM
           </span>
@@ -113,21 +92,17 @@ export default function ArchitectureCards() {
             Scara Live
           </h4>
         </div>
-        <p className="font-body text-xs text-scara-grey leading-relaxed">
-          Live sports broadcast execution, arena IPs, music &amp; culture festivals, ticketed physical experiences at scale.
+        <p className="font-body text-xs text-scara-grey leading-relaxed" style={{ transform: 'translateZ(30px)', transition: 'transform 0.3s ease' }}>
+          End-to-end league management, execution, production, broadcast &amp; operations for sports. Creating arena IPs, music &amp; culture festivals, ticketed physical experiences at scale.
         </p>
-      </div>
+      </TiltCard>
 
-      {/* Scara Tech — RIGHT (emerges from behind center) */}
-      <div
-        ref={rightRef}
-        className="relative overflow-hidden rounded-2xl border border-scara-green/40 bg-scara-olive-900/60 p-8 space-y-6 group hover:border-scara-green transition-colors will-change-transform"
-        style={{ transformOrigin: 'center center', transform: 'translateX(-108%) rotate(16deg) scale(0.72)', opacity: 0 }}
-      >
-        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-scara-green text-scara-black">
+      {/* Scara Tech */}
+      <TiltCard className="relative rounded-2xl border border-scara-green/40 bg-scara-olive-900/60 p-8 space-y-6 group hover:border-scara-green transition-colors cursor-default">
+        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-scara-green text-scara-black" style={{ transform: 'translateZ(60px)', transition: 'transform 0.3s ease' }}>
           <Cpu className="h-6 w-6" />
         </div>
-        <div>
+        <div style={{ transform: 'translateZ(45px)', transition: 'transform 0.3s ease' }}>
           <span className="inline-block rounded-full bg-scara-green px-3 py-1 font-sub text-[10px] font-bold text-scara-black uppercase mb-3">
             SHARED INFRASTRUCTURE
           </span>
@@ -135,10 +110,11 @@ export default function ArchitectureCards() {
             Scara Tech
           </h4>
         </div>
-        <p className="font-body text-xs text-scara-white/90 leading-relaxed">
+        <p className="font-body text-xs text-scara-white/90 leading-relaxed" style={{ transform: 'translateZ(30px)', transition: 'transform 0.3s ease' }}>
           Unified campaign planning, audience performance analytics, creator &amp; vendor logistics engine delivering measurable ROI.
         </p>
-      </div>
+      </TiltCard>
+
     </div>
   );
 }

@@ -54,7 +54,6 @@ export default function Navbar() {
               priority
             />
             <span className="hidden sm:inline-block font-sub text-[9px] font-bold tracking-[0.25em] text-scara-grey uppercase border-l border-scara-grey/30 pl-3">
-              CREATIVE AGENCY
             </span>
           </a>
 

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { ChevronLeft, ChevronRight, Linkedin } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { SCARA_TEAM } from '@/data/scaraData';
 import CursorGrid, { CursorGridRef } from '@/components/ui/CursorGrid';
 
@@ -208,18 +208,26 @@ export default function CircularTeamGallery() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-scara-card-dark via-transparent to-transparent opacity-60" />
 
-                  {/* LinkedIn Floating Icon Badge */}
-                  <a
-                    href={member.linkedinUrl || 'https://linkedin.com'}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="absolute top-3 right-3 z-20 flex h-8 w-8 items-center justify-center rounded-full border border-scara-green/40 bg-scara-black/80 text-scara-green backdrop-blur-md transition-all duration-300 hover:bg-scara-green hover:text-scara-black hover:scale-110 shadow-xl"
-                    title={`Connect with ${member.name} on LinkedIn`}
-                    onClick={(e) => e.stopPropagation()}
-                    onMouseDown={(e) => e.stopPropagation()}
-                  >
-                    <Linkedin className="h-4 w-4" />
-                  </a>
+                  {/* LinkedIn Badge — only shown when URL exists */}
+                  {member.linkedinUrl && (
+                    <a
+                      href={member.linkedinUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="absolute top-3 right-3 z-20 flex h-8 w-8 items-center justify-center transition-all duration-300 hover:scale-110 shadow-xl"
+                      style={{ borderRadius: '6px', background: '#1a1a1a' }}
+                      title={`Connect with ${member.name} on LinkedIn`}
+                      onClick={(e) => e.stopPropagation()}
+                      onMouseDown={(e) => e.stopPropagation()}
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72" width="18" height="18" aria-hidden="true">
+                        <rect width="72" height="72" rx="10" fill="#1a1a1a"/>
+                        <circle cx="19" cy="19" r="5.5" fill="white"/>
+                        <rect x="14" y="28" width="10" height="30" fill="white"/>
+                        <path d="M36 28h9v4h.1c1.3-2.3 4.3-4.8 8.9-4.8C63.5 27.2 66 33 66 40.5V58h-10V42.3c0-3.7-.1-8.5-5.2-8.5-5.2 0-6 4.1-6 8.2V58H36V28z" fill="white"/>
+                      </svg>
+                    </a>
+                  )}
                 </div>
 
                 {/* Member Details directly underneath the photo */}

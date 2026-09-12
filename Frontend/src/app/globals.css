@@ -32,6 +32,11 @@ body {
   position: relative;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  cursor: none;
+}
+
+* {
+  cursor: none !important;
 }
 
 /* Hide default scrollbar for studio feel */

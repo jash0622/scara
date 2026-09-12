@@ -89,12 +89,13 @@
 
 .sm-icon {
   position: relative;
-  width: 14px;
+  width: 22px;
   height: 14px;
-  flex: 0 0 14px;
+  flex: 0 0 22px;
   display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
   will-change: transform;
 }
 
@@ -105,16 +106,18 @@
 }
 
 .sm-icon-line {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 100%;
+  display: block;
   height: 2px;
   background: currentColor;
   border-radius: 2px;
-  transform: translate(-50%, -50%);
   will-change: transform;
+  transition: width 0.3s ease;
 }
+
+/* 3 lines descending: line-1 longest → line-3 shortest */
+.sm-icon-line-1 { width: 100%; }
+.sm-icon-line-2 { width: 72%; }
+.sm-icon-line-3 { width: 44%; display: block; }
 
 .staggered-menu-panel {
   position: absolute;
@@ -306,4 +309,36 @@
     right: 0;
     padding: 6em 2em 2em 2em;
   }
+}
+
+/* ── Closed state: 3 descending lines (override) ── */
+.sm-icon-line-1 { width: 100%; }
+.sm-icon-line-2 { width: 72%; display: block; opacity: 1; }
+.sm-icon-line-3 { width: 44%; display: block; opacity: 1; }
+
+/* ── When menu is open: morph 3 lines into a clean × ── */
+[data-open] .sm-icon {
+  height: 16px;
+}
+
+[data-open] .sm-icon-line-1 {
+  width: 100%;
+  transform: translateY(8px) rotate(45deg);
+}
+
+[data-open] .sm-icon-line-2 {
+  width: 0;
+  opacity: 0;
+  display: block;
+}
+
+[data-open] .sm-icon-line-3 {
+  width: 100%;
+  display: block;
+  opacity: 1;
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+.sm-icon-line {
+  transition: transform 0.3s ease, width 0.3s ease, opacity 0.2s ease;
 }
