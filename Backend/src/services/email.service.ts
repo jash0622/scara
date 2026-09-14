@@ -53,7 +53,7 @@ export async function sendInternalNotification(
     to: env.EMAIL_INTERNAL_TO,
     subject,
     html,
-    replyTo: params.email, // team hits "Reply" → goes directly to the enquirer
+    reply_to: params.email, // team hits "Reply" → goes directly to the enquirer
   });
 
   logger.info(

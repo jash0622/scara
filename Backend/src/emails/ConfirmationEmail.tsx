@@ -10,9 +10,6 @@ import {
   Hr,
   Link,
   Preview,
-  Img,
-  Row,
-  Column,
 } from "@react-email/components";
 
 interface ConfirmationEmailProps {

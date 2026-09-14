@@ -6,7 +6,7 @@ import { CreateCaseStudyInput, UpdateCaseStudyInput, ReorderCaseStudiesInput } f
 import { logger } from "../utils/logger";
 
 // GET /api/case-studies
-export async function getAll(req: Request, res: Response, next: NextFunction): Promise<void> {
+export async function getAll(_req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const rows = await service.getAllCaseStudies();
     sendSuccess(res, rows.map(mapCaseStudyRow));

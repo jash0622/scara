@@ -35,8 +35,11 @@ export async function login(req: Request, res: Response, next: NextFunction): Pr
     }
 
     const payload: AdminPayload = { username: admin.username, sub: admin.id };
+    // Cast expiresIn to `any` — JWT_EXPIRES_IN is a valid duration string ("7d")
+    // but jsonwebtoken's TS overloads don't accept `string` in strict mode.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const token = jwt.sign(payload, env.JWT_SECRET, {
-      expiresIn: env.JWT_EXPIRES_IN,
+      expiresIn: env.JWT_EXPIRES_IN as any,
     });
 
     logger.info({ username }, "Admin login successful");

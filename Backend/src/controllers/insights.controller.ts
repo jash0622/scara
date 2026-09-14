@@ -4,7 +4,7 @@ import { sendSuccess, sendError, mapInsightRow } from "../utils/apiResponse";
 import { CreateInsightInput, UpdateInsightInput, ReorderInsightsInput } from "../schemas/insight.schema";
 
 // GET /api/insights
-export async function getAll(req: Request, res: Response, next: NextFunction): Promise<void> {
+export async function getAll(_req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const rows = await service.getAllInsights();
     sendSuccess(res, rows.map((r) => mapInsightRow(r as unknown as Record<string, unknown>)));

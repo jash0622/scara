@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from "express";
 import { ZodSchema, ZodError } from "zod";
-import { sendError } from "../utils/apiResponse";
 
 type ValidateTarget = "body" | "query" | "params";
 
