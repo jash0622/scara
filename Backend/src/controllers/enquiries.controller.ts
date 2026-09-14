@@ -44,7 +44,7 @@ export async function list(req: Request, res: Response, next: NextFunction): Pro
     const result = await service.listEnquiries(query);
 
     sendSuccess(res, {
-      items: result.items.map((r) => mapEnquiryRow(r as unknown as Record<string, unknown>)),
+      items: result.items.map((r) => mapEnquiryRow(r)),
       total: result.total,
       page: result.page,
       limit: result.limit,
@@ -63,7 +63,7 @@ export async function getOne(req: Request, res: Response, next: NextFunction): P
       sendError(res, "Enquiry not found", "NOT_FOUND", 404);
       return;
     }
-    sendSuccess(res, mapEnquiryRow(row as unknown as Record<string, unknown>));
+    sendSuccess(res, mapEnquiryRow(row));
   } catch (err) {
     next(err);
   }
@@ -74,7 +74,7 @@ export async function updateStatus(req: Request, res: Response, next: NextFuncti
   try {
     const { status } = req.body as EnquiryStatusInput;
     const row = await service.updateEnquiryStatus(req.params.id, status);
-    sendSuccess(res, mapEnquiryRow(row as unknown as Record<string, unknown>));
+    sendSuccess(res, mapEnquiryRow(row));
   } catch (err) {
     next(err);
   }
