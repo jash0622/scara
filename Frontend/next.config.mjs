@@ -2,6 +2,10 @@
 const nextConfig = {
   reactStrictMode: true,
   transpilePackages: ['three'],
+  // Compress responses
+  compress: true,
+  // Standalone output — self-contained for EC2 deployment
+  output: 'standalone',
   images: {
     remotePatterns: [
       {
@@ -11,6 +15,18 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'plus.unsplash.com',
+      },
+      {
+        protocol: 'https',
+        hostname: '*.s3.*.amazonaws.com',
+      },
+      {
+        protocol: 'https',
+        hostname: '*.supabase.co',
+      },
+      {
+        protocol: 'https',
+        hostname: 'scara-media.s3.ap-south-1.amazonaws.com',
       },
     ],
     unoptimized: true,

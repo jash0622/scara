@@ -9,8 +9,8 @@ import { SCARA_CLIENT_LOGOS } from '@/data/scaraData';
 import ArchitectureCards from '@/components/ui/ArchitectureCards';
 import LogoLoop from '@/components/ui/LogoLoop';
 
-// ── useCountUp — counts from 0 to `end` when the ref enters the viewport ──────
-function useCountUp(end: number, duration = 1800) {
+// ── useCountUp — fast initial rush then decelerates near the target ──────────
+function useCountUp(end: number, duration = 1600) {
   const ref = useRef<HTMLDivElement>(null);
   const [count, setCount] = useState(0);
   const started = useRef(false);
@@ -26,8 +26,21 @@ function useCountUp(end: number, duration = 1800) {
           const tick = (now: number) => {
             const elapsed = now - startTime;
             const progress = Math.min(elapsed / duration, 1);
-            // ease-out cubic
-            const eased = 1 - Math.pow(1 - progress, 3);
+
+            // Custom easing:
+            // - First 75% of time → count races through ~95% of the range (exponential-style)
+            // - Last 25% of time  → crawls the final 5% to the target (heavy ease-out)
+            let eased: number;
+            if (progress < 0.75) {
+              // Fast phase: ease-in-out quad scaled to reach 0.95 at t=0.75
+              const t = progress / 0.75;
+              eased = (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2) * 0.95;
+            } else {
+              // Slow phase: linear crawl from 0.95 → 1.0 over the last 25%
+              const t = (progress - 0.75) / 0.25;
+              eased = 0.95 + t * 0.05;
+            }
+
             setCount(Math.round(eased * end));
             if (progress < 1) requestAnimationFrame(tick);
           };
@@ -148,6 +161,7 @@ export default function AboutSection() {
           {/* ScrollExpand lives OUTSIDE the max-width container so it can be full-width */}
           <ScrollExpand
               src="/community_hero.jpg"
+              videoSrc="/Hero Video.mp4"
               alt="Scara Community — Thousands United"
               scrollHint="Scroll"
               postTitle={`WE TURN AUDIENCES\nINTO COMMUNITIES.`}
@@ -166,7 +180,7 @@ export default function AboutSection() {
             <span className="font-sub text-xs font-bold tracking-[0.2em] text-scara-green uppercase">
               // SCARA ARCHITECTURE
             </span>
-            <h3 className="font-heading text-3xl font-bold uppercase text-scara-white mt-1">
+            <h3 className="font-heading text-3xl sm:text-5xl font-extrabold uppercase text-scara-white mt-1">
               How Scara Is Structured
             </h3>
           </div>
@@ -193,7 +207,7 @@ export default function AboutSection() {
           {[
             { icon: Coffee,    end: 1200, suffix: '+',  label: 'Cups of Coffee',      sub: 'Powering every campaign brief',        color: 'from-amber-900/20 to-transparent',   idx: 1 },
             { icon: Users,     end: 15,   suffix: '+',  label: 'Global Clients',      sub: 'Brands, publishers & rights holders',  color: 'from-scara-green/10 to-transparent', idx: 2 },
-            { icon: Briefcase, end: 40,   suffix: '+',  label: 'Campaigns Delivered', sub: 'Across 8 countries',                   color: 'from-blue-900/20 to-transparent',    idx: 3 },
+            { icon: Briefcase, end: 30,   suffix: '+',  label: 'Campaigns Delivered', sub: 'Across 4 countries',                   color: 'from-blue-900/20 to-transparent',    idx: 3 },
           ].map(({ icon: Icon, end, suffix, label, sub, color, idx }) => (
             <CountCard
               key={label}

@@ -1,10 +1,11 @@
 'use client';
 
-import { useRef, useEffect, useState, ReactNode } from 'react';
+import { useRef, useEffect, ReactNode } from 'react';
 import './ScrollExpand.css';
 
 interface ScrollExpandProps {
   src: string;
+  videoSrc?: string;
   alt?: string;
   preTitle?: string;
   title?: string;
@@ -19,6 +20,7 @@ interface ScrollExpandProps {
 
 export default function ScrollExpand({
   src,
+  videoSrc,
   alt = '',
   preTitle,
   title,
@@ -30,42 +32,77 @@ export default function ScrollExpand({
   children,
   scrollMultiplier = 3,
 }: ScrollExpandProps) {
-  const outerRef = useRef<HTMLDivElement>(null);
-  const [progress, setProgress] = useState(0);
+  const outerRef    = useRef<HTMLDivElement>(null);
+  const wrapperRef  = useRef<HTMLDivElement>(null); // clip-path target
+  const preRef      = useRef<HTMLDivElement>(null);
+  const postRef     = useRef<HTMLDivElement>(null);
+  const postSubRef  = useRef<HTMLParagraphElement>(null);
+  const postBodyRef = useRef<HTMLParagraphElement>(null);
+  const hintRef     = useRef<HTMLDivElement>(null);
+  const dimRef      = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const outer = outerRef.current;
+    if (!outer) return;
+
     const handleScroll = () => {
-      const el = outerRef.current;
-      if (!el) return;
-      const rect = el.getBoundingClientRect();
-      const totalScrollHeight = el.offsetHeight - window.innerHeight;
+      const rect = outer.getBoundingClientRect();
+      const totalScrollHeight = outer.offsetHeight - window.innerHeight;
       const scrolled = -rect.top;
-      const p = Math.min(Math.max(scrolled / totalScrollHeight, 0), 1);
-      setProgress(p);
+      const rawP = Math.min(Math.max(scrolled / totalScrollHeight, 0), 1);
+
+      // easeInOutCubic
+      const eased = rawP < 0.5
+        ? 4 * rawP * rawP * rawP
+        : 1 - Math.pow(-2 * rawP + 2, 3) / 2;
+
+      // ── Clip-path ─────────────────────────────────────────────────────────
+      if (wrapperRef.current) {
+        const hI = Math.max(0, 32 - eased * 32);
+        const vI = Math.max(0, 18 - eased * 18);
+        const br = Math.max(0, 20 - eased * 20);
+        wrapperRef.current.style.clipPath = `inset(${vI}% ${hI}% round ${br}px)`;
+      }
+
+      // ── Dim overlay ───────────────────────────────────────────────────────
+      if (dimRef.current) {
+        dimRef.current.style.opacity = String(1 - eased * 0.6);
+      }
+
+      // ── Pre-content ───────────────────────────────────────────────────────
+      if (preRef.current) {
+        const preOp = Math.max(0, 1 - eased * 3);
+        preRef.current.style.opacity   = String(preOp);
+        preRef.current.style.transform = `translateY(${eased * -24}px)`;
+      }
+
+      // ── Post-content fades in after 75% expand ────────────────────────────
+      const postProgress = Math.max(0, (rawP - 0.75) / 0.25);
+      const postEased    = postProgress < 0.5
+        ? 4 * postProgress * postProgress * postProgress
+        : 1 - Math.pow(-2 * postProgress + 2, 3) / 2;
+      const clampedPost  = Math.min(postEased, 1);
+
+      if (postSubRef.current)  postSubRef.current.style.opacity  = String(clampedPost);
+      if (postBodyRef.current) {
+        postBodyRef.current.style.opacity   = String(clampedPost);
+        postBodyRef.current.style.transform = `translateY(${(1 - clampedPost) * 40}px)`;
+      }
+
+      // ── Scroll hint ───────────────────────────────────────────────────────
+      if (hintRef.current) {
+        if (rawP < 0.08) {
+          hintRef.current.classList.remove('hidden');
+        } else {
+          hintRef.current.classList.add('hidden');
+        }
+      }
     };
+
     window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
+    handleScroll(); // initial paint
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  const eased = easeInOutCubic(progress);
-
-  // Clip-path: small rounded box -> full bleed
-  const hInset = Math.max(0, 32 - eased * 32);
-  const vInset = Math.max(0, 18 - eased * 18);
-  const borderRadius = Math.max(0, 20 - eased * 20);
-  const clipPath = `inset(${vInset}% ${hInset}% round ${borderRadius}px)`;
-
-  // Pre-content fades out as expand begins
-  const preOpacity = Math.max(0, 1 - eased * 3);
-
-  // Post-content fades in after image is ~80% expanded
-  const postProgress = Math.max(0, (progress - 0.75) / 0.25);
-  const postEased = easeInOutCubic(Math.min(postProgress, 1));
-  const postOpacity = postEased;
-  const postY = (1 - postEased) * 40;
-
-  const hintVisible = progress < 0.08;
 
   return (
     <div
@@ -74,35 +111,45 @@ export default function ScrollExpand({
       style={{ height: `${scrollMultiplier * 100}vh` }}
     >
       <div className="scroll-expand-sticky">
-        {/* Expanding image */}
+
+        {/* Expanding media */}
         <div
+          ref={wrapperRef}
           className="scroll-expand-img-wrapper"
-          style={{ clipPath, transition: 'clip-path 0.04s linear' }}
+          style={{ clipPath: 'inset(18% 32% round 20px)', transition: 'clip-path 0.04s linear' }}
         >
-          <img src={src} alt={alt} />
-          {/* Gradient overlay — darkens bottom for text legibility */}
+          {videoSrc ? (
+            <video
+              src={videoSrc}
+              autoPlay
+              loop
+              muted
+              playsInline
+              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+            />
+          ) : (
+            <img src={src} alt={alt} />
+          )}
           <div className="scroll-expand-gradient" />
-          {/* Overall dim overlay that lightens as image expands */}
           <div
+            ref={dimRef}
             style={{
               position: 'absolute',
               inset: 0,
               background: 'rgba(0,0,0,0.55)',
-              opacity: 1 - eased * 0.6,
+              opacity: 1,
               pointerEvents: 'none',
-              transition: 'none',
             }}
           />
         </div>
 
-        {/* PRE-EXPAND: title visible at start, fades out */}
+        {/* PRE-EXPAND */}
         <div
+          ref={preRef}
           className="scroll-expand-pre-content"
-          style={{ opacity: preOpacity, transform: `translateY(${eased * -24}px)` }}
+          style={{ opacity: 1, transform: 'translateY(0)' }}
         >
-          {preTitle && (
-            <span className="scroll-expand-eyebrow">{preTitle}</span>
-          )}
+          {preTitle && <span className="scroll-expand-eyebrow">{preTitle}</span>}
           {title && (
             <h2 className="scroll-expand-title">
               {title.split('\n').map((line, i) => (
@@ -112,15 +159,14 @@ export default function ScrollExpand({
               ))}
             </h2>
           )}
-          {subtitle && (
-            <p className="scroll-expand-subtitle">{subtitle}</p>
-          )}
+          {subtitle && <p className="scroll-expand-subtitle">{subtitle}</p>}
         </div>
 
-        {/* POST-EXPAND: postTitle shows throughout, postBody fades in after full expansion */}
+        {/* POST-EXPAND */}
         <div
+          ref={postRef}
           className="scroll-expand-post-content"
-          style={{ opacity: 1, transform: `translateX(-50%) translateY(0px)` }}
+          style={{ opacity: 1, transform: 'translateX(-50%) translateY(0px)' }}
         >
           {postTitle && (
             <h2 className="scroll-expand-post-title">
@@ -132,12 +178,19 @@ export default function ScrollExpand({
             </h2>
           )}
           {postSubtitle && postSubtitle.length > 0 && (
-            <p className="scroll-expand-post-subtitle" style={{ opacity: postOpacity, color: '#C3ED00', fontWeight: 700, letterSpacing: '0.18em', fontSize: 'clamp(11px, 1.1vw, 13px)', textTransform: 'uppercase' }}>{postSubtitle}</p>
+            <p
+              ref={postSubRef}
+              className="scroll-expand-post-subtitle"
+              style={{ opacity: 0, color: '#C3ED00', fontWeight: 700, letterSpacing: '0.18em', fontSize: 'clamp(11px, 1.1vw, 13px)', textTransform: 'uppercase' }}
+            >
+              {postSubtitle}
+            </p>
           )}
           {postBody && (
             <p
+              ref={postBodyRef}
               className="scroll-expand-post-body"
-              style={{ opacity: postOpacity, transform: `translateY(${postY}px)`, transition: 'none' }}
+              style={{ opacity: 0, transform: 'translateY(40px)', transition: 'none' }}
             >
               {postBody}
             </p>
@@ -146,15 +199,12 @@ export default function ScrollExpand({
         </div>
 
         {/* Scroll hint */}
-        <div className={`scroll-expand-hint${hintVisible ? '' : ' hidden'}`}>
+        <div ref={hintRef} className="scroll-expand-hint">
           <span>{scrollHint}</span>
           <div className="scroll-expand-hint-line" />
         </div>
+
       </div>
     </div>
   );
-}
-
-function easeInOutCubic(t: number): number {
-  return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 }

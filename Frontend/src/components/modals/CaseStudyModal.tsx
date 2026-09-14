@@ -3,16 +3,17 @@
 import { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ArrowRight, ExternalLink, ChevronRight, ChevronLeft, Sparkles } from 'lucide-react';
-import { CaseStudy, SCARA_CASE_STUDIES } from '@/data/scaraData';
+import { CaseStudy } from '@/lib/types';
 import DepthCarousel from '@/components/ui/DepthCarousel';
 
 interface CaseStudyModalProps {
   caseStudy: CaseStudy | null;
+  allCaseStudies: CaseStudy[];
   onClose: () => void;
   onSelectNext: (nextCase: CaseStudy) => void;
 }
 
-export default function CaseStudyModal({ caseStudy, onClose, onSelectNext }: CaseStudyModalProps) {
+export default function CaseStudyModal({ caseStudy, allCaseStudies, onClose, onSelectNext }: CaseStudyModalProps) {
   const [selectedLightboxImage, setSelectedLightboxImage] = useState<string | null>(null);
   const modalContentRef = useRef<HTMLDivElement>(null);
 
@@ -39,16 +40,19 @@ export default function CaseStudyModal({ caseStudy, onClose, onSelectNext }: Cas
     };
   }, [caseStudy, onClose, selectedLightboxImage]);
 
-  // Find next/prev case study
+  // Find next/prev case study from the live list passed as prop
   const currentIndex = caseStudy
-    ? SCARA_CASE_STUDIES.findIndex((c) => c.id === caseStudy.id)
+    ? allCaseStudies.findIndex((c) => c.id === caseStudy.id)
     : 0;
-  const nextCaseStudy = SCARA_CASE_STUDIES[(currentIndex + 1) % SCARA_CASE_STUDIES.length];
-  const prevCaseStudy = SCARA_CASE_STUDIES[(currentIndex - 1 + SCARA_CASE_STUDIES.length) % SCARA_CASE_STUDIES.length];
+  const nextCaseStudy = allCaseStudies[(currentIndex + 1) % allCaseStudies.length];
+  const prevCaseStudy = allCaseStudies[(currentIndex - 1 + allCaseStudies.length) % allCaseStudies.length];
 
-  // Combine hero image + gallery images for DepthCarousel
+  // Banner image: use dedicated bannerImage if set, otherwise fall back to heroImage
+  const bannerSrc = caseStudy?.bannerImage || caseStudy?.heroImage || '';
+
+  // Gallery carousel: only actual gallery images (banner is shown separately above)
   const galleryImages = caseStudy
-    ? [caseStudy.heroImage, ...(caseStudy.gallery || [])]
+    ? (caseStudy.gallery || [])
     : [];
 
   return (
@@ -96,7 +100,7 @@ export default function CaseStudyModal({ caseStudy, onClose, onSelectNext }: Cas
               {/* 1. Hero Header */}
               <div className="relative h-52 sm:h-64 md:h-72 w-full overflow-hidden rounded-xl bg-scara-black border border-scara-grey/20">
                 <img
-                  src={caseStudy.heroImage}
+                  src={bannerSrc}
                   alt={caseStudy.title}
                   className="h-full w-full object-cover"
                 />
@@ -153,7 +157,7 @@ export default function CaseStudyModal({ caseStudy, onClose, onSelectNext }: Cas
                 </div>
               </div>
 
-              {/* 3. Press & Media Coverage (moved up, replaces Key Measurable Impact) */}
+              {/* 3. Press & Media Coverage */}
               {caseStudy.pressOutlets && caseStudy.pressOutlets.length > 0 && (
                 <div className="space-y-3">
                   <h3 className="font-sub text-[11px] font-bold tracking-[0.2em] text-scara-green uppercase">
@@ -161,19 +165,23 @@ export default function CaseStudyModal({ caseStudy, onClose, onSelectNext }: Cas
                   </h3>
                   <div className="flex flex-wrap gap-2">
                     {caseStudy.pressOutlets.map((outlet, i) => (
-                      <span
+                      <a
                         key={i}
-                        className="flex items-center gap-1.5 rounded-full border border-scara-grey/30 bg-scara-black px-4 py-1.5 font-sub text-[11px] font-semibold text-scara-white/90 transition-colors hover:border-scara-green/50 hover:text-scara-white"
+                        href={outlet.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-1.5 rounded-full border border-scara-grey/30 bg-scara-black px-4 py-1.5 font-sub text-[11px] font-semibold text-scara-white/90 transition-all hover:border-scara-green hover:text-scara-green hover:shadow-[0_0_12px_rgba(195,237,0,0.2)]"
                       >
-                        <span>{outlet}</span>
+                        <span>{outlet.name}</span>
                         <ExternalLink className="h-3 w-3 text-scara-green" />
-                      </span>
+                      </a>
                     ))}
                   </div>
                 </div>
               )}
 
-              {/* 4. Campaign Assets Gallery */}
+              {/* 4. Campaign Assets Gallery — only shown when gallery images exist */}
+              {galleryImages.length > 0 && (
               <div className="space-y-4 border-t border-scara-grey/15 pt-6">
                 <div className="flex items-center justify-between">
                   <h3 className="font-sub text-[11px] font-bold tracking-[0.2em] text-scara-green uppercase">
@@ -204,6 +212,7 @@ export default function CaseStudyModal({ caseStudy, onClose, onSelectNext }: Cas
                   />
                 </div>
               </div>
+              )}
 
               {/* 5. Next / Prev Navigation */}
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 border-t border-scara-grey/20 pt-6">

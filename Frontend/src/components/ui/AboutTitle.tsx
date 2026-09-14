@@ -110,7 +110,7 @@ function TypingWord({
 // ── TypingExperience — types "EXPERIENCE." char by char, then fades out and restarts ──
 
 function TypingExperience() {
-  const WORD = 'EXPERIENCE .';
+  const WORD = 'EXPERIENCE.';
   const [displayed, setDisplayed] = React.useState('');
   const [visible, setVisible] = React.useState(true);
 
@@ -119,7 +119,10 @@ function TypingExperience() {
 
     if (visible) {
       if (displayed.length < WORD.length) {
-        timer = setTimeout(() => setDisplayed(WORD.slice(0, displayed.length + 1)), 90);
+        // The final '.' gets a 0.5s delay before typing
+        const isLastChar = displayed.length === WORD.length - 1;
+        const delay = isLastChar ? 500 : 90;
+        timer = setTimeout(() => setDisplayed(WORD.slice(0, displayed.length + 1)), delay);
       } else {
         // Fully typed — hold 5 seconds then hide
         timer = setTimeout(() => setVisible(false), 5000);
@@ -134,15 +137,19 @@ function TypingExperience() {
 
   return (
     <span style={{ opacity: visible ? 1 : 0, transition: visible ? 'none' : 'opacity 0.15s ease' }}>
-      {displayed}
-      {/* Underscore cursor — sits just below the baseline */}
+      {/* Render EXPERIENCE and . separately so we can add a small gap before . */}
+      {displayed.length <= 10
+        ? displayed
+        : <>{displayed.slice(0, 10)}<span style={{ marginLeft: '0.03em' }}>{displayed.slice(10)}</span></>
+      }
+      {/* Underscore cursor — tight gap, just below baseline */}
       <span
         style={{
           display: 'inline-block',
           width: '0.5em',
           height: '0.08em',
           background: '#C3ED00',
-          marginLeft: '0.05em',
+          marginLeft: '0.04em',
           verticalAlign: 'baseline',
           position: 'relative',
           top: '-0.002em',

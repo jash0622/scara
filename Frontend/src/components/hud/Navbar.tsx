@@ -20,8 +20,8 @@ const MENU_ITEMS: StaggeredMenuItem[] = [
 
 // Only Instagram & LinkedIn — rendered as SVG icon links below the menu
 const SOCIAL_ITEMS: StaggeredMenuSocialItem[] = [
-  { label: 'Instagram', link: 'https://instagram.com' },
-  { label: 'LinkedIn',  link: 'https://linkedin.com' },
+  { label: 'Instagram', link: 'https://www.instagram.com/scara_social?stkn=MzFkY254ZHdianpv&utm_source=qr' },
+  { label: 'LinkedIn',  link: 'https://in.linkedin.com/company/druidscara' },
 ];
 
 export default function Navbar() {
@@ -59,7 +59,7 @@ export default function Navbar() {
 
           {/* CTA — the menu toggle is rendered by StaggeredMenu (fixed top-right).
               Reserve right-side space so the CTA doesn't sit under the toggle. */}
-          <div className="flex items-center gap-5 pr-24 md:pr-28">
+          <div className="flex items-center gap-5 pr-24 sm:pr-24 md:pr-28">
             <Magnet padding={60} magnetStrength={2.5}>
               <a
                 href="#contact"

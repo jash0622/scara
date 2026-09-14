@@ -5,9 +5,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUpRight, ChevronDown, CheckCircle2, Sparkles, ShieldCheck } from 'lucide-react';
 import { SCARA_SERVICES, ServiceItem } from '@/data/scaraData';
 import ArchitectureCards from '@/components/ui/ArchitectureCards';
-import dynamic from 'next/dynamic';
-
-const SplashCursor = dynamic(() => import('@/components/ui/SplashCursor'), { ssr: false });
 
 // Extended service detail specifications for rich dropdown drawers
 const SERVICE_DETAILS: Record<string, { category: string; loadouts: string[]; highlight: string }> = {

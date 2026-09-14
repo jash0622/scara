@@ -100,7 +100,6 @@ export default function Preloader({ onComplete }: { onComplete?: () => void }) {
       });
       if (clipCRef.current)  clipCRef.current.setAttribute('width', String(CLIP.C_w));
       if (clipA1Ref.current) clipA1Ref.current.setAttribute('width', String(CLIP.A_w));
-      if (tmCircleRef.current) tmCircleRef.current.style.opacity = '1';
       if (tmTRef.current)      tmTRef.current.style.opacity = '1';
       if (tmMRef.current)      tmMRef.current.style.opacity = '1';
       const t1 = setTimeout(() => setShutterStarted(true), 800);
@@ -126,7 +125,6 @@ export default function Preloader({ onComplete }: { onComplete?: () => void }) {
     if (clipA1Ref.current) clipA1Ref.current.setAttribute('width', '0');
 
     // TM hidden
-    if (tmCircleRef.current) gsap.set(tmCircleRef.current, { opacity: 0 });
     if (tmTRef.current)      gsap.set(tmTRef.current,      { opacity: 0 });
     if (tmMRef.current)      gsap.set(tmMRef.current,      { opacity: 0 });
 
@@ -247,9 +245,8 @@ export default function Preloader({ onComplete }: { onComplete?: () => void }) {
     buildStrokeLetter(strokeA2Ref.current, pathA2Ref.current, T.R_END,  T.A2_END);
 
     // TM
-    tl.to(tmCircleRef.current, { opacity: 1, duration: 0.25, ease: 'power2.out' }, T.A2_END)
-      .to(tmTRef.current,      { opacity: 1, duration: 0.20, ease: 'power2.out' }, T.A2_END + 0.15)
-      .to(tmMRef.current,      { opacity: 1, duration: 0.20, ease: 'power2.out' }, T.A2_END + 0.25);
+    tl.to(tmTRef.current,      { opacity: 1, duration: 0.20, ease: 'power2.out' }, T.A2_END + 0.10)
+      .to(tmMRef.current,      { opacity: 1, duration: 0.20, ease: 'power2.out' }, T.A2_END + 0.22);
 
     // Exit
     tl.call(() => setShutterStarted(true), [], T.HOLD_END);
@@ -452,14 +449,7 @@ export default function Preloader({ onComplete }: { onComplete?: () => void }) {
             style={{ opacity: 0 }}
           />
 
-          {/* TM — all hidden initially */}
-          <circle
-            ref={tmCircleRef}
-            cx="327.2" cy="163.4" r="9.4"
-            fill="#000000"
-            stroke="none"
-            style={{ opacity: 0 }}
-          />
+          {/* TM — all hidden initially, no background circle */}
           <polygon
             ref={tmTRef}
             points="324 166.7 322.6 166.7 322.6 161.8 320.7 161.8 320.7 160.6 325.9 160.6 325.9 161.8 324 161.8 324 166.7"

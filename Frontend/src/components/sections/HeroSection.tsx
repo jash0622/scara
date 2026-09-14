@@ -17,7 +17,7 @@ export default function HeroSection() {
   const trans = 'transition-all duration-700 ease-out';
 
   return (
-    <div id="hero" className="relative w-full bg-scara-black" style={{ minHeight: '100vh' }}>
+    <div id="hero" className="relative w-full bg-scara-black">
       {/* Black background */}
       <div className="absolute inset-0 bg-scara-black z-0" />
 
@@ -38,12 +38,19 @@ export default function HeroSection() {
       {/* Main two-column layout */}
       <div className="relative z-10 flex h-full min-h-screen w-full flex-col">
         {/* Navbar spacer */}
-        <div className="shrink-0" style={{ height: '82px' }} />
+        <div className="shrink-0 h-16 sm:h-20" style={{ height: undefined }} />
 
-        <div className="flex flex-1 items-center w-full px-6 md:px-10 lg:px-14 gap-8 lg:gap-6">
+        <div className="relative lg:static flex flex-col lg:flex-row flex-1 items-center w-full px-6 md:px-10 lg:px-14 gap-0 lg:gap-6 pt-32 lg:pt-0 pb-6 lg:pb-0">
 
-          {/* LEFT — text content */}
-          <div className="flex flex-col justify-center w-full lg:max-w-[40%] shrink-0">
+          {/* TEXT content — on mobile: top, on desktop: normal flow */}
+          <div className="
+            lg:static lg:flex lg:flex-col lg:justify-center lg:w-full lg:max-w-[40%] lg:shrink-0
+            relative lg:relative
+            flex flex-col w-full shrink-0
+            px-0 pt-4 pb-2 lg:pb-0
+            z-10 lg:z-auto
+            order-1 lg:order-none
+          ">
 
             {/* Eyebrow pill */}
             <div
@@ -62,18 +69,17 @@ export default function HeroSection() {
               style={{
                 transitionDelay: '180ms',
                 fontSize: 'clamp(2.2rem, 4.2vw, 4rem)',
-                whiteSpace: 'nowrap',
               }}
             >
               SHAPING <br />
-              <span className="text-scara-green drop-shadow-[0_0_30px_rgba(195,237,0,0.3)]">
+              <span className="lg:whitespace-nowrap text-scara-green drop-shadow-[0_0_30px_rgba(195,237,0,0.3)]">
                 SPORTS, GAMING,
               </span>
               <br />
-              <span className="text-scara-green drop-shadow-[0_0_30px_rgba(195,237,0,0.3)]">
-                MUSIC
-              </span>{' '}&amp;{' '}
-              CULTURE.
+              <span className="lg:whitespace-nowrap">
+                <span className="text-scara-green drop-shadow-[0_0_30px_rgba(195,237,0,0.3)]">MUSIC</span>
+                {' '}&amp;{' '}CULTURE.
+              </span>
             </h1>
 
             {/* Subline */}
@@ -107,9 +113,19 @@ export default function HeroSection() {
             </div>
           </div>
 
-          {/* RIGHT — Map, takes remaining space */}
-          <div className="hidden lg:flex flex-1 items-center justify-center min-w-0 overflow-hidden">
-            <GlobeCanvas />
+          {/* Globe/Map — below content on mobile, beside text on desktop */}
+          <div className="
+            lg:flex lg:flex-1 lg:items-center lg:justify-center lg:min-w-0 lg:overflow-hidden
+            relative lg:static
+            flex items-center justify-center w-full
+            opacity-100
+            order-2 lg:order-none
+            mt-4 lg:mt-0
+          "
+               style={{ height: undefined }}>
+            <div className="w-full lg:w-auto lg:overflow-visible overflow-hidden max-h-[55vw] lg:max-h-none">
+              <GlobeCanvas />
+            </div>
           </div>
 
         </div>
