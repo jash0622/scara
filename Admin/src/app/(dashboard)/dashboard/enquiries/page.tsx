@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Clock, Inbox, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
@@ -22,7 +23,7 @@ const BUDGET_OPTIONS = [
   "$250k+",
 ];
 
-export default function EnquiriesPage() {
+function EnquiriesContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -242,6 +243,14 @@ export default function EnquiriesPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function EnquiriesPage() {
+  return (
+    <Suspense>
+      <EnquiriesContent />
+    </Suspense>
   );
 }
 
