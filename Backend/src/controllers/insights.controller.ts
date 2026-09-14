@@ -7,7 +7,7 @@ import { CreateInsightInput, UpdateInsightInput, ReorderInsightsInput } from "..
 export async function getAll(_req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const rows = await service.getAllInsights();
-    sendSuccess(res, rows.map((r) => mapInsightRow(r as unknown as Record<string, unknown>)));
+    sendSuccess(res, rows.map((r) => mapInsightRow(r)));
   } catch (err) {
     next(err);
   }
@@ -21,7 +21,7 @@ export async function getOne(req: Request, res: Response, next: NextFunction): P
       sendError(res, "Insight not found", "NOT_FOUND", 404);
       return;
     }
-    sendSuccess(res, mapInsightRow(row as unknown as Record<string, unknown>));
+    sendSuccess(res, mapInsightRow(row));
   } catch (err) {
     next(err);
   }
@@ -32,7 +32,7 @@ export async function create(req: Request, res: Response, next: NextFunction): P
   try {
     const input = req.body as CreateInsightInput;
     const row = await service.createInsight(input);
-    sendSuccess(res, mapInsightRow(row as unknown as Record<string, unknown>), 201);
+    sendSuccess(res, mapInsightRow(row), 201);
   } catch (err) {
     next(err);
   }
@@ -43,7 +43,7 @@ export async function update(req: Request, res: Response, next: NextFunction): P
   try {
     const input = req.body as UpdateInsightInput;
     const row = await service.updateInsight(req.params.id, input);
-    sendSuccess(res, mapInsightRow(row as unknown as Record<string, unknown>));
+    sendSuccess(res, mapInsightRow(row));
   } catch (err) {
     next(err);
   }

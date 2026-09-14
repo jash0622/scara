@@ -1,5 +1,5 @@
 import { Response } from "express";
-import { ApiSuccess, ApiError } from "../types";
+import { ApiSuccess, ApiError, CaseStudyRow, InsightArticleRow, EnquiryRow } from "../types";
 
 /** Send a successful JSON response */
 export function sendSuccess<T>(res: Response, data: T, statusCode = 200): void {
@@ -19,7 +19,7 @@ export function sendError(
 }
 
 /** Map DB row fields from snake_case to camelCase for CaseStudy */
-export function mapCaseStudyRow(row: Record<string, unknown>): Record<string, unknown> {
+export function mapCaseStudyRow(row: CaseStudyRow): Record<string, unknown> {
   return {
     id: row.id,
     slug: row.slug,
@@ -45,13 +45,12 @@ export function mapCaseStudyRow(row: Record<string, unknown>): Record<string, un
 
 /** Map DB row fields from snake_case to camelCase for InsightArticle.
  *  Also injects backward-compat `date` alias for the existing frontend. */
-export function mapInsightRow(row: Record<string, unknown>): Record<string, unknown> {
+export function mapInsightRow(row: InsightArticleRow): Record<string, unknown> {
   return {
     id: row.id,
     title: row.title,
     outlet: row.outlet,
     author: row.author ?? null,
-    // Backward-compat: old frontend reads `article.date` which stored author name
     date: row.author ?? null,
     category: row.category,
     url: row.url,
@@ -63,7 +62,7 @@ export function mapInsightRow(row: Record<string, unknown>): Record<string, unkn
 }
 
 /** Map DB row fields from snake_case to camelCase for Enquiry */
-export function mapEnquiryRow(row: Record<string, unknown>): Record<string, unknown> {
+export function mapEnquiryRow(row: EnquiryRow): Record<string, unknown> {
   return {
     id: row.id,
     name: row.name,

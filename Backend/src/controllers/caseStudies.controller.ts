@@ -23,7 +23,7 @@ export async function getOne(req: Request, res: Response, next: NextFunction): P
       sendError(res, "Case study not found", "NOT_FOUND", 404);
       return;
     }
-    sendSuccess(res, mapCaseStudyRow(row as unknown as Record<string, unknown>));
+    sendSuccess(res, mapCaseStudyRow(row));
   } catch (err) {
     next(err);
   }
@@ -34,7 +34,7 @@ export async function create(req: Request, res: Response, next: NextFunction): P
   try {
     const input = req.body as CreateCaseStudyInput;
     const row = await service.createCaseStudy(input);
-    sendSuccess(res, mapCaseStudyRow(row as unknown as Record<string, unknown>), 201);
+    sendSuccess(res, mapCaseStudyRow(row), 201);
   } catch (err) {
     next(err);
   }
@@ -45,7 +45,7 @@ export async function update(req: Request, res: Response, next: NextFunction): P
   try {
     const input = req.body as UpdateCaseStudyInput;
     const row = await service.updateCaseStudy(req.params.id, input);
-    sendSuccess(res, mapCaseStudyRow(row as unknown as Record<string, unknown>));
+    sendSuccess(res, mapCaseStudyRow(row));
   } catch (err) {
     next(err);
   }
