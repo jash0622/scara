@@ -8,6 +8,13 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      screens: {
+        '3xl': '1920px',
+      },
+      maxWidth: {
+        '8xl': '1440px',
+        '9xl': '1600px',
+      },
       colors: {
         scara: {
           black: "#000000",

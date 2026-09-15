@@ -172,7 +172,7 @@ export default function AboutSection() {
         </div>
       </div>
 
-      <div className="mx-auto max-w-7xl px-6 md:px-12 space-y-24 pt-24 md:pt-36">
+      <div className="mx-auto max-w-7xl 2xl:max-w-8xl px-6 md:px-12 2xl:px-16 space-y-24 pt-24 md:pt-36">
 
         {/* ── 1. ARCHITECTURE CARDS ───────────────────────────────────── */}
         <div className="space-y-8">

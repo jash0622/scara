@@ -62,7 +62,7 @@ export default function WorkSection() {
           onSelectNext={(c) => setSelectedCaseStudy(c)}
         />
 
-        <div className="mx-auto max-w-7xl px-6 md:px-12">
+        <div className="mx-auto max-w-7xl 2xl:max-w-8xl px-6 md:px-12 2xl:px-16">
           {loading ? (
             // Skeleton loader — matches the card stack height
             <div className="flex items-center justify-center min-h-[500px]">

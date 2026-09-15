@@ -45,7 +45,7 @@ export default function InsightsSection() {
 
   return (
     <section id="insights" className="relative w-full bg-scara-black py-24 md:py-36 text-scara-white">
-      <div className="mx-auto max-w-7xl px-6 md:px-12 space-y-12">
+      <div className="mx-auto max-w-7xl 2xl:max-w-8xl px-6 md:px-12 2xl:px-16 space-y-12">
 
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">

@@ -40,7 +40,7 @@ export default function Home() {
 
         {/* 5. Leadership & Visionaries */}
         <section id="team" className="relative w-full bg-scara-black py-16 md:py-24 text-scara-white">
-          <div className="mx-auto max-w-7xl px-6 md:px-12 space-y-8">
+          <div className="mx-auto max-w-7xl 2xl:max-w-8xl px-6 md:px-12 2xl:px-16 space-y-8">
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
               <div>
                 <span className="font-sub text-xs font-bold tracking-[0.2em] text-scara-green uppercase">

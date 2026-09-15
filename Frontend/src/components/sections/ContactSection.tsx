@@ -112,7 +112,7 @@ export default function ContactSection() {
 
   return (
     <section id="contact" className="relative w-full bg-scara-black pt-24 pb-0 text-scara-white overflow-hidden">
-      <div className="mx-auto max-w-7xl px-6 md:px-12 space-y-12">
+      <div className="mx-auto max-w-7xl 2xl:max-w-8xl px-6 md:px-12 2xl:px-16 space-y-12">
 
         {/* Main Contact Container */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
