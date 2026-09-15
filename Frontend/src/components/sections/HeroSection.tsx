@@ -40,7 +40,7 @@ export default function HeroSection() {
         {/* Navbar spacer */}
         <div className="shrink-0 h-16 sm:h-20" style={{ height: undefined }} />
 
-        <div className="relative lg:static flex flex-col lg:flex-row flex-1 items-center w-full px-6 md:px-10 lg:px-14 gap-0 lg:gap-6 pt-32 lg:pt-0 pb-6 lg:pb-0">
+        <div className="relative lg:static flex flex-col lg:flex-row flex-1 items-center w-full px-6 md:px-10 lg:px-14 2xl:px-20 3xl:px-28 gap-0 lg:gap-6 pt-16 sm:pt-20 lg:pt-0 pb-6 lg:pb-0">
 
           {/* TEXT content — on mobile: top, on desktop: normal flow */}
           <div className="
