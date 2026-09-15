@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUpRight, ChevronDown, CheckCircle2, Sparkles, ShieldCheck } from 'lucide-react';
 import { SCARA_SERVICES, ServiceItem } from '@/data/scaraData';
@@ -93,14 +93,36 @@ const SERVICE_DETAILS: Record<string, { category: string; loadouts: string[]; hi
 export default function ServicesSection() {
   const [hoveredService, setHoveredService] = useState<ServiceItem | null>(null);
   const [expandedNumber, setExpandedNumber] = useState<string | null>(null);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
+  // Floating panel ref — position driven via direct DOM mutation, no re-render
+  const floatingPanelRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const sectionRectRef = useRef<DOMRect | null>(null);
+
+  // Cache section rect — update only on resize, NOT on every mousemove
+  useEffect(() => {
+    const update = () => {
+      if (sectionRef.current) {
+        sectionRectRef.current = sectionRef.current.getBoundingClientRect();
+      }
+    };
+    update();
+    window.addEventListener('resize', update, { passive: true });
+    window.addEventListener('scroll', update, { passive: true });
+    return () => {
+      window.removeEventListener('resize', update);
+      window.removeEventListener('scroll', update);
+    };
+  }, []);
+
+  // mousemove: no setState, no getBoundingClientRect — pure DOM write
   const handleMouseMove = (e: React.MouseEvent) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    setMousePos({
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-    });
+    const rect = sectionRectRef.current;
+    if (!rect || !floatingPanelRef.current) return;
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    floatingPanelRef.current.style.left = `${x + 24}px`;
+    floatingPanelRef.current.style.top  = `${y - 120}px`;
   };
 
   const toggleExpand = (number: string) => {
@@ -110,20 +132,19 @@ export default function ServicesSection() {
   return (
     <section
       id="services"
+      ref={sectionRef}
       onMouseMove={handleMouseMove}
       className="relative w-full bg-scara-black py-24 md:py-36 text-scara-white overflow-hidden"
     >
-      {/* Floating Awwwards-style Hover Preview Panel (Only active when NOT hovering over open dropdown drawer) */}
+      {/* Floating hover preview — position driven via ref, Framer Motion handles enter/exit only */}
       <AnimatePresence>
         {hoveredService && expandedNumber !== hoveredService.number && (
           <motion.div
+            ref={floatingPanelRef}
             initial={{ opacity: 0, scale: 0.85, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.85, y: 10 }}
-            style={{
-              left: mousePos.x + 24,
-              top: mousePos.y - 120,
-            }}
+            style={{ left: 0, top: 0 }}
             transition={{ type: 'spring', stiffness: 450, damping: 35 }}
             className="pointer-events-none absolute z-40 hidden lg:block h-56 w-80 overflow-hidden rounded-2xl border border-scara-green/60 shadow-[0_0_35px_rgba(195,237,0,0.35)] bg-scara-card-dark"
           >

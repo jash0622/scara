@@ -45,10 +45,16 @@ export default function ScrollExpand({
     const outer = outerRef.current;
     if (!outer) return;
 
+    // Cache outer top offset once — avoids getBoundingClientRect on every scroll frame
+    let outerTop = outer.getBoundingClientRect().top + window.scrollY;
+    const onResize = () => {
+      outerTop = outer.getBoundingClientRect().top + window.scrollY;
+    };
+    window.addEventListener('resize', onResize, { passive: true });
+
     const handleScroll = () => {
-      const rect = outer.getBoundingClientRect();
       const totalScrollHeight = outer.offsetHeight - window.innerHeight;
-      const scrolled = -rect.top;
+      const scrolled = window.scrollY - outerTop;
       const rawP = Math.min(Math.max(scrolled / totalScrollHeight, 0), 1);
 
       // easeInOutCubic
@@ -101,7 +107,10 @@ export default function ScrollExpand({
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll(); // initial paint
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', onResize);
+    };
   }, []);
 
   return (
@@ -116,7 +125,7 @@ export default function ScrollExpand({
         <div
           ref={wrapperRef}
           className="scroll-expand-img-wrapper"
-          style={{ clipPath: 'inset(18% 32% round 20px)', transition: 'clip-path 0.04s linear' }}
+          style={{ clipPath: 'inset(18% 32% round 20px)' }}
         >
           {videoSrc ? (
             <video

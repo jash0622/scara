@@ -20,28 +20,29 @@ function LinkedInIcon() {
 export default function CircularTeamGallery() {
   const containerRef = useRef<HTMLDivElement>(null);
   const cursorGridRef = useRef<CursorGridRef>(null);
-  const [scrollPos, setScrollPos] = useState(0);
+  // Card DOM refs — transforms written directly, no React state re-renders
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   // Drag state — all in refs to avoid stale closure issues
   const isDraggingRef = useRef(false);
   const dragStartXRef = useRef(0);
   const dragScrollStartRef = useRef(0);
-  const didMoveRef = useRef(false);     // true if pointer moved > threshold
-  const isDragActiveRef = useRef(false); // true during active pointer-captured drag
+  const didMoveRef = useRef(false);
+  const isDragActiveRef = useRef(false);
 
   const targetScrollRef = useRef(0);
   const currentScrollRef = useRef(0);
   const animationFrameRef = useRef<number | null>(null);
 
-  // Responsive card width — narrower on mobile so fewer cards are needed to fill
+  // Responsive card width
   const [cardWidth, setCardWidth] = useState(270);
 
   useEffect(() => {
     function updateCardWidth() {
       const vw = window.innerWidth;
-      if (vw < 480)       setCardWidth(200);  // xs phones
-      else if (vw < 768)  setCardWidth(230);  // sm phones/tablets
-      else                setCardWidth(270);  // desktop — unchanged
+      if (vw < 480)       setCardWidth(200);
+      else if (vw < 768)  setCardWidth(230);
+      else                setCardWidth(270);
     }
     updateCardWidth();
     window.addEventListener('resize', updateCardWidth, { passive: true });
@@ -52,19 +53,42 @@ export default function CircularTeamGallery() {
   const itemTotalWidth = cardWidth + cardGap;
   const totalSetWidth = SCARA_TEAM.length * itemTotalWidth;
 
+  // ── Write transforms directly to DOM — no setState, no React re-render ─────
+  const applyCardTransforms = useCallback((sp: number) => {
+    SCARA_TEAM.forEach((_, i) => {
+      const el = cardRefs.current[i];
+      if (!el) return;
+      const rawX = i * itemTotalWidth - sp;
+      const itemX =
+        (((rawX + totalSetWidth / 2) % totalSetWidth) + totalSetWidth) % totalSetWidth -
+        totalSetWidth / 2;
+      const rotationY = Math.max(-38, Math.min(38, itemX * 0.08));
+      const translateY = Math.min(50, Math.pow(Math.abs(itemX), 2) * 0.00012);
+      const translateZ = -Math.min(180, Math.abs(itemX) * 0.32);
+      const scale = Math.max(0.78, 1 - Math.abs(itemX) * 0.0005);
+      const opacity = Math.max(0.25, 1 - Math.abs(itemX) * 0.0012);
+      el.style.transform = `translate3d(${itemX}px, ${translateY}px, ${translateZ}px) rotateY(${rotationY}deg) scale(${scale})`;
+      el.style.opacity = String(opacity);
+      el.style.pointerEvents = opacity > 0.35 ? 'auto' : 'none';
+      el.style.zIndex = String(Math.max(1, Math.round(100 - Math.abs(itemX) * 0.1)));
+      // Only promote GPU layers for visible cards
+      el.style.willChange = opacity > 0.6 ? 'transform, opacity' : 'auto';
+    });
+  }, [itemTotalWidth, totalSetWidth]);
+
   // ── Smooth scroll animation loop ─────────────────────────────────────────
   const updateCardTransforms = useCallback(() => {
     currentScrollRef.current += (targetScrollRef.current - currentScrollRef.current) * 0.1;
-    setScrollPos(currentScrollRef.current);
+    applyCardTransforms(currentScrollRef.current);
 
     if (Math.abs(targetScrollRef.current - currentScrollRef.current) > 0.05) {
       animationFrameRef.current = requestAnimationFrame(updateCardTransforms);
     } else {
       currentScrollRef.current = targetScrollRef.current;
-      setScrollPos(targetScrollRef.current);
+      applyCardTransforms(currentScrollRef.current);
       animationFrameRef.current = null;
     }
-  }, []);
+  }, [applyCardTransforms]);
 
   const scrollTo = useCallback((newPos: number) => {
     targetScrollRef.current = newPos;
@@ -258,32 +282,29 @@ export default function CircularTeamGallery() {
           style={{ transformStyle: 'preserve-3d', zIndex: 1 }}
         >
           {SCARA_TEAM.map((member, i) => {
-            // Infinite modulo wrapping
-            const rawX = i * itemTotalWidth - scrollPos;
+            // Initial position computed once for mount — rAF loop takes over after
+            const rawX = i * itemTotalWidth - currentScrollRef.current;
             const itemX =
               (((rawX + totalSetWidth / 2) % totalSetWidth) + totalSetWidth) % totalSetWidth -
               totalSetWidth / 2;
-
             const rotationY = Math.max(-38, Math.min(38, itemX * 0.08));
             const translateY = Math.min(50, Math.pow(Math.abs(itemX), 2) * 0.00012);
             const translateZ = -Math.min(180, Math.abs(itemX) * 0.32);
             const scale = Math.max(0.78, 1 - Math.abs(itemX) * 0.0005);
             const opacity = Math.max(0.25, 1 - Math.abs(itemX) * 0.0012);
 
-            // Cards that are far away (nearly invisible) don't need pointer events
-            const isVisible = opacity > 0.35;
-
             return (
               <div
                 key={member.name}
+                ref={el => { cardRefs.current[i] = el; }}
                 className="absolute w-[200px] sm:w-[230px] md:w-[280px] rounded-2xl border border-scara-grey/25 bg-[#0d0f0a] p-4 shadow-2xl transition-colors duration-300 hover:border-scara-green/60 hover:shadow-[0_0_25px_rgba(195,237,0,0.2)] group/card"
                 style={{
                   transform: `translate3d(${itemX}px, ${translateY}px, ${translateZ}px) rotateY(${rotationY}deg) scale(${scale})`,
                   opacity,
                   transformStyle: 'preserve-3d',
-                  willChange: 'transform, opacity',
+                  willChange: opacity > 0.6 ? 'transform, opacity' : 'auto',
                   zIndex: Math.max(1, Math.round(100 - Math.abs(itemX) * 0.1)),
-                  pointerEvents: isVisible ? 'auto' : 'none',
+                  pointerEvents: opacity > 0.35 ? 'auto' : 'none',
                 }}
                 onPointerMove={(e) => {
                   if (containerRef.current && cursorGridRef.current) {
