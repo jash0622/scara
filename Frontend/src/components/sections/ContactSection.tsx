@@ -35,7 +35,7 @@ function TorchLogo() {
         onMouseMove={handleMouseMove}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => { setIsHovered(false); setMouse(null); }}
-        className="relative w-full max-w-[240px] sm:max-w-lg md:max-w-4xl cursor-none overflow-hidden"
+        className="relative w-full max-w-[400px] sm:max-w-lg md:max-w-4xl cursor-none overflow-hidden"
       >
         {/* Dark base logo */}
         <Image
@@ -386,14 +386,14 @@ export default function ContactSection() {
             <div className="text-center text-scara-grey/60 text-[9px] sm:text-xs whitespace-nowrap overflow-hidden text-ellipsis">
               © 2026 SCARA GAMING PRIVATE LIMITED. ALL RIGHTS RESERVED.
             </div>
-            {/* Links + TOP */}
-            <div className="flex items-center justify-center gap-4 sm:gap-8 relative text-sm sm:text-xs text-scara-grey">
-              <a href="/privacy" className="hover:text-scara-green transition-colors tracking-wider">PRIVACY POLICY</a>
+            {/* Links + TOP — all in one line on mobile */}
+            <div className="flex items-center justify-center gap-3 sm:gap-8 relative text-xs sm:text-xs text-scara-grey whitespace-nowrap">
+              <a href="/privacy" className="hover:text-scara-green transition-colors tracking-wide">PRIVACY POLICY</a>
               <span className="text-scara-grey/20">|</span>
-              <a href="/terms" className="hover:text-scara-green transition-colors tracking-wider">TERMS OF SERVICE</a>
+              <a href="/terms" className="hover:text-scara-green transition-colors tracking-wide">TERMS OF SERVICE</a>
               <button
                 onClick={scrollToTop}
-                className="sm:absolute sm:right-0 flex items-center gap-1.5 text-scara-green hover:underline font-bold tracking-wider"
+                className="sm:absolute sm:right-0 flex items-center gap-1.5 text-scara-green hover:underline font-bold tracking-wide"
               >
                 <span>TOP</span>
                 <ArrowUp className="h-4 w-4" />
