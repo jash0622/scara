@@ -157,8 +157,8 @@ export default function CaseStudyModal({ caseStudy, allCaseStudies, onClose, onS
                 </div>
               </div>
 
-              {/* 3. Press & Media Coverage */}
-              {caseStudy.pressOutlets && caseStudy.pressOutlets.length > 0 && (
+              {/* 3. Press & Media Coverage — only shown when outlets exist */}
+              {Array.isArray(caseStudy.pressOutlets) && caseStudy.pressOutlets.length > 0 && (
                 <div className="space-y-3">
                   <h3 className="font-sub text-[11px] font-bold tracking-[0.2em] text-scara-green uppercase">
                     // PRESS & MEDIA COVERAGE

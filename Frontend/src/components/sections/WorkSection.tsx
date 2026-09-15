@@ -27,7 +27,8 @@ function mapDTO(dto: CaseStudyDTO): CaseStudy {
     services: dto.services,
     gallery: dto.gallery,
     // Keep full press outlet objects (name + url) for clickable links in modal
-    pressOutlets: dto.pressOutlets,
+    // Guard against null/undefined from API
+    pressOutlets: Array.isArray(dto.pressOutlets) ? dto.pressOutlets : [],
     isFeaturedIP: dto.isFeaturedIP,
   };
 }
