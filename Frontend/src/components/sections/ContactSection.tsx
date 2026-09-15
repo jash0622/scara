@@ -123,7 +123,7 @@ export default function ContactSection() {
               // WORK WITH US
             </div>
 
-            <h2 className="font-heading text-4xl sm:text-6xl font-black uppercase text-scara-white tracking-tight leading-none">
+            <h2 className="font-heading text-5xl sm:text-6xl font-black uppercase text-scara-white tracking-tight leading-none">
               Got Something <br />
               Worth <span className="text-scara-green drop-shadow-[0_0_25px_rgba(195,237,0,0.5)]">Making<br />
               Noise</span> About?

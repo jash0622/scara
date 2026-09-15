@@ -46,7 +46,7 @@ export default function Home() {
                 <span className="font-sub text-xs font-bold tracking-[0.2em] text-scara-green uppercase">
                   // LEADERSHIP & VISIONARIES
                 </span>
-                <h3 className="font-heading text-3xl md:text-5xl font-bold uppercase text-scara-white mt-1">
+                <h3 className="font-heading text-4xl sm:text-5xl font-bold uppercase text-scara-white mt-1">
                   Built By Industry Veterans.
                 </h3>
               </div>

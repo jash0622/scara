@@ -180,7 +180,7 @@ export default function AboutSection() {
             <span className="font-sub text-xs font-bold tracking-[0.2em] text-scara-green uppercase">
               // SCARA ARCHITECTURE
             </span>
-            <h3 className="font-heading text-3xl sm:text-5xl font-extrabold uppercase text-scara-white mt-1">
+            <h3 className="font-heading text-4xl sm:text-5xl font-extrabold uppercase text-scara-white mt-1">
               How Scara Is Structured
             </h3>
           </div>
@@ -194,7 +194,7 @@ export default function AboutSection() {
               <span className="font-sub text-xs font-bold tracking-[0.25em] text-scara-green uppercase">
                 // BY THE NUMBERS
               </span>
-              <h3 className="font-heading text-3xl sm:text-5xl font-extrabold uppercase text-scara-white mt-1">
+              <h3 className="font-heading text-4xl sm:text-5xl font-extrabold uppercase text-scara-white mt-1">
                 Built on <span className="text-scara-green">Real Relationships.</span>
               </h3>
             </div>
@@ -230,7 +230,7 @@ export default function AboutSection() {
               <span className="font-sub text-xs font-bold tracking-[0.25em] text-scara-green uppercase">
                 // GLOBAL PARTNERS & CLIENTS
               </span>
-              <h3 className="font-heading text-3xl sm:text-5xl font-extrabold uppercase text-scara-white mt-1 tracking-tight">
+              <h3 className="font-heading text-4xl sm:text-5xl font-extrabold uppercase text-scara-white mt-1 tracking-tight">
                 Trusted by <span className="text-scara-green">Industry Giants.</span>
               </h3>
             </div>
@@ -239,9 +239,25 @@ export default function AboutSection() {
             </span>
           </div>
 
-          {/* Logo grid — 8 top row, 7 bottom row */}
+          {/* Logo grid — mobile: single scrolling row | desktop: two rows */}
           <div className="rounded-2xl border border-scara-grey/20 bg-scara-card-dark p-8 md:p-12 space-y-8">
-            <div className="overflow-hidden py-2">
+            {/* Mobile: single row with ALL logos */}
+            <div className="block sm:hidden overflow-hidden py-2">
+              <LogoLoop
+                logos={SCARA_CLIENT_LOGOS}
+                speed={55}
+                direction="left"
+                logoHeight={36}
+                gap={48}
+                fadeOut
+                fadeOutColor="#0a0a0a"
+                scaleOnHover
+                ariaLabel="Scara client brand partners"
+              />
+            </div>
+
+            {/* Desktop: two rows */}
+            <div className="hidden sm:block overflow-hidden py-2">
               <LogoLoop
                 logos={SCARA_CLIENT_LOGOS.slice(0, 8)}
                 speed={70}
@@ -254,7 +270,7 @@ export default function AboutSection() {
                 ariaLabel="Scara client brand partners row 1"
               />
             </div>
-            <div className="overflow-hidden py-2 border-t border-scara-grey/10 pt-6">
+            <div className="hidden sm:block overflow-hidden py-2 border-t border-scara-grey/10 pt-6">
               <LogoLoop
                 logos={SCARA_CLIENT_LOGOS.slice(8)}
                 speed={60}

@@ -54,7 +54,7 @@ export default function InsightsSection() {
               <Newspaper className="h-4 w-4" />
               <span>THOUGHT LEADERSHIP & PRESS</span>
             </div>
-            <h2 className="font-heading text-4xl sm:text-6xl font-black uppercase text-scara-white tracking-tight">
+            <h2 className="font-heading text-5xl sm:text-6xl font-black uppercase text-scara-white tracking-tight">
               Insights & <span className="text-scara-green">Media.</span>
             </h2>
           </div>
