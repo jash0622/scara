@@ -364,9 +364,9 @@ export default function ContactSection() {
                 { stat: '80–90%+', label: 'Smartphone Penetration in Gulf Markets' },
               ].map((item, i) => (
                 <span key={i} className="inline-flex items-center">
-                  <span className="inline-flex items-center gap-3 px-8">
-                    <span className="font-heading text-xl font-extrabold text-scara-green tracking-tight">{item.stat}</span>
-                    <span className="font-sub text-xs font-semibold uppercase tracking-widest text-scara-white/60">{item.label}</span>
+                  <span className="inline-flex items-center gap-3 px-6 sm:px-8">
+                    <span className="font-heading text-base sm:text-xl font-extrabold text-scara-green tracking-tight">{item.stat}</span>
+                    <span className="font-sub text-[10px] sm:text-xs font-semibold uppercase tracking-widest text-scara-white/60">{item.label}</span>
                   </span>
                   <span className="inline-flex items-center text-scara-green/40 text-base select-none">◆</span>
                 </span>
@@ -380,33 +380,33 @@ export default function ContactSection() {
             `}</style>
           </div>
 
-          {/* Copyright + Privacy + TOP — tighter gap */}
-          <div className="relative z-10 font-sub text-xs text-scara-grey uppercase pt-3 pb-2 space-y-2">
-            <div className="text-center text-scara-grey/60">
+          {/* Copyright + Privacy + TOP */}
+          <div className="relative z-10 font-sub uppercase pt-4 pb-2 space-y-3">
+            {/* Copyright — single line, smaller text so it fits on mobile */}
+            <div className="text-center text-scara-grey/60 text-[9px] sm:text-xs whitespace-nowrap overflow-hidden text-ellipsis">
               © 2026 SCARA GAMING PRIVATE LIMITED. ALL RIGHTS RESERVED.
             </div>
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-center gap-2 sm:gap-8 relative">
-              <div className="flex items-center justify-center gap-4 sm:gap-8">
-                <a href="/privacy" className="hover:text-scara-green transition-colors">PRIVACY POLICY</a>
-                <span className="text-scara-grey/20">|</span>
-                <a href="/terms" className="hover:text-scara-green transition-colors">TERMS OF SERVICE</a>
-              </div>
+            {/* Links + TOP */}
+            <div className="flex items-center justify-center gap-4 sm:gap-8 relative text-sm sm:text-xs text-scara-grey">
+              <a href="/privacy" className="hover:text-scara-green transition-colors tracking-wider">PRIVACY POLICY</a>
+              <span className="text-scara-grey/20">|</span>
+              <a href="/terms" className="hover:text-scara-green transition-colors tracking-wider">TERMS OF SERVICE</a>
               <button
                 onClick={scrollToTop}
-                className="sm:absolute sm:right-0 self-center flex items-center gap-1 text-scara-green hover:underline uppercase font-bold"
+                className="sm:absolute sm:right-0 flex items-center gap-1.5 text-scara-green hover:underline font-bold tracking-wider"
               >
                 <span>TOP</span>
-                <ArrowUp className="h-3.5 w-3.5" />
+                <ArrowUp className="h-4 w-4" />
               </button>
             </div>
           </div>
 
-          {/* SCARA Logo — torch effect, moved slightly down, gap reduced */}
+          {/* SCARA Logo — torch effect */}
           <TorchLogo />
 
-          {/* GG Space credit — brighter */}
+          {/* GG Space credit */}
           <div className="border-t border-scara-grey/10 pt-2 pb-2 text-center">
-            <p className="font-sub text-[10px] text-scara-grey/60 uppercase tracking-widest">
+            <p className="font-sub text-xs sm:text-[10px] text-scara-grey/60 uppercase tracking-widest">
               Design and Created by GG Space
             </p>
           </div>

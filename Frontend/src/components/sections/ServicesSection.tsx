@@ -154,7 +154,7 @@ export default function ServicesSection() {
               <Sparkles className="h-4 w-4" />
               // WHAT WE DO
             </div>
-            <h2 className="font-heading text-5xl sm:text-6xl font-extrabold uppercase text-scara-white tracking-tight">
+            <h2 className="font-heading text-4xl sm:text-6xl font-extrabold uppercase text-scara-white tracking-tight">
               Capabilities & <br />
               <span className="text-scara-green">Loadouts.</span>
             </h2>
