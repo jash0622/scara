@@ -22,7 +22,7 @@ const NAV = [
 ];
 
 const STORAGE_KEY = "scara_sidebar_collapsed";
-const TRANSITION = "220ms cubic-bezier(0.4,0,0.2,1)";
+const TRANSITION = "180ms cubic-bezier(0.4,0,0.2,1)";
 
 export function Sidebar() {
   const pathname = usePathname();
@@ -83,6 +83,8 @@ export function Sidebar() {
         zIndex: 50,
         transition: `width ${TRANSITION}`,
         overflow: "hidden",
+        willChange: "width",
+        contain: "layout style",
       }}
     >
       {/* ── Logo ── */}
@@ -99,23 +101,17 @@ export function Sidebar() {
           transition: `padding ${TRANSITION}, justify-content ${TRANSITION}`,
         }}
       >
-        <ScaraMark />
-        <span
-          style={{
-            fontWeight: 700,
-            fontSize: "15px",
-            letterSpacing: "0.1em",
-            color: "var(--text-primary)",
-            textTransform: "uppercase",
-            whiteSpace: "nowrap",
-            opacity: labelVisible ? 1 : 0,
-            transform: labelVisible ? "translateX(0)" : "translateX(-6px)",
-            transition: `opacity 150ms ease-out, transform 150ms ease-out`,
-            pointerEvents: collapsed ? "none" : "auto",
-          }}
-        >
-          SCARA
-        </span>
+        {/* Real logo when expanded, mark only when collapsed */}
+        {collapsed ? (
+          <ScaraMark />
+        ) : (
+          <img
+            src="/logo-scara.png"
+            alt="SCARA"
+            style={{ height: "22px", width: "auto", objectFit: "contain", filter: "brightness(1)" }}
+            draggable={false}
+          />
+        )}
       </div>
 
       {/* ── Nav items ── */}

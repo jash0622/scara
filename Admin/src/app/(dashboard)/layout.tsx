@@ -1,8 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
 import { Sidebar } from "@/components/Sidebar";
 import { Topbar } from "@/components/Topbar";
 import RouteProgressBar from "@/components/RouteProgressBar";
@@ -17,7 +15,6 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const [collapsed, setCollapsed] = useState(false);
-  const pathname = usePathname();
 
   useEffect(() => {
     function sync() {
@@ -50,10 +47,11 @@ export default function DashboardLayout({
         style={{
           flex: 1,
           marginLeft: sidebarWidth,
-          transition: "margin-left 220ms cubic-bezier(0.4,0,0.2,1)",
+          transition: "margin-left 180ms cubic-bezier(0.4,0,0.2,1)",
           display: "flex",
           flexDirection: "column",
           minWidth: 0,
+          willChange: "margin-left",
         }}
       >
         <Topbar sidebarWidth={sidebarWidth} />
@@ -69,17 +67,7 @@ export default function DashboardLayout({
             boxSizing: "border-box",
           }}
         >
-          <AnimatePresence mode="wait" initial={false}>
-            <motion.div
-              key={pathname}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -6 }}
-              transition={{ duration: 0.18, ease: [0.4, 0, 0.2, 1] }}
-            >
-              {children}
-            </motion.div>
-          </AnimatePresence>
+          {children}
         </main>
       </div>
     </div>

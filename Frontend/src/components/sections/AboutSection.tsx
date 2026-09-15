@@ -151,7 +151,11 @@ export default function AboutSection() {
                 segments: [
                   { text: 'We work with ' },
                   { text: 'brands, creators', bold: true },
-                  { text: ', rights holders and communities to turn cultural insight into ideas, IPs and experiences people want to be part of.' },
+                  { text: ', ' },
+                  { text: 'rights holders', bold: true },
+                  { text: ' and ' },
+                  { text: 'communities', bold: true },
+                  { text: ' to turn cultural insight into ideas, IPs and experiences people want to be part of.' },
                 ],
               },
             ];
