@@ -15,6 +15,10 @@ import uploadRoutes from "./routes/upload.routes";
 
 const app = express();
 
+// ── Trust Nginx reverse proxy (1 hop) ────────────────────────────────────────
+// Required so express-rate-limit can read X-Forwarded-For correctly
+app.set("trust proxy", 1);
+
 // ── Security headers ──────────────────────────────────────────────────────────
 app.use(helmet());
 
@@ -24,13 +28,9 @@ const allowedOrigins = [env.FRONTEND_URL, env.ADMIN_PANEL_URL];
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow requests with no origin (e.g. server-to-server, curl, Postman in dev)
+      // Allow requests with no origin (server-to-server, Admin route handlers on same machine)
       if (!origin) {
-        if (env.NODE_ENV === "production") {
-          callback(new Error("Origin required in production"), false);
-        } else {
-          callback(null, true);
-        }
+        callback(null, true);
         return;
       }
       if (allowedOrigins.includes(origin)) {
