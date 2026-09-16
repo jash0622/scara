@@ -28,13 +28,13 @@ function TorchLogo() {
   };
 
   return (
-    <div className="w-full flex items-center justify-center select-none mt-2 mb-0">
+    <div className="w-full flex items-center justify-center select-none -mt-6 -mb-4">
       <div
         ref={containerRef}
         onMouseMove={handleMouseMove}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => { setIsHovered(false); setMouse(null); }}
-        className="relative w-full max-w-[400px] sm:max-w-lg md:max-w-4xl cursor-none overflow-hidden"
+        className="relative w-full max-w-[480px] sm:max-w-xl md:max-w-5xl cursor-none overflow-hidden"
         style={{ isolation: 'isolate' }}
       >
         {/* Drop shadow below — gives bottom depth like clay/relief */}
@@ -419,32 +419,34 @@ export default function ContactSection() {
             `}</style>
           </div>
 
-          {/* Copyright + Privacy + TOP */}
-          <div className="relative z-10 font-sub uppercase pt-4 pb-2 space-y-3">
-            {/* Copyright — single line, smaller text so it fits on mobile */}
-            <div className="text-center text-scara-grey/60 text-[9px] sm:text-xs whitespace-nowrap overflow-hidden text-ellipsis">
-              © 2026 SCARA GAMING PRIVATE LIMITED. ALL RIGHTS RESERVED.
-            </div>
-            {/* Links + TOP — all in one line on mobile */}
-            <div className="flex items-center justify-center gap-3 sm:gap-8 relative text-xs sm:text-xs text-scara-grey whitespace-nowrap">
-              <a href="/privacy" className="hover:text-scara-green transition-colors tracking-wide">PRIVACY POLICY</a>
-              <span className="text-scara-grey/20">|</span>
-              <a href="/terms" className="hover:text-scara-green transition-colors tracking-wide">TERMS OF SERVICE</a>
+          {/* Copyright + Privacy + TOP — shifted down closer to the logo */}
+          <div className="relative z-10 font-sub uppercase pt-5 sm:pt-6 pb-1 space-y-2">
+            {/* Copyright row — TOP button sits opposite on the right */}
+            <div className="relative flex items-center justify-center">
+              <div className="text-center text-scara-grey/60 text-[9px] sm:text-xs whitespace-nowrap overflow-hidden text-ellipsis">
+                © 2026 SCARA GAMING PRIVATE LIMITED. ALL RIGHTS RESERVED.
+              </div>
               <button
                 onClick={scrollToTop}
-                className="sm:absolute sm:right-0 flex items-center gap-1.5 text-scara-green hover:underline font-bold tracking-wide"
+                className="absolute right-0 flex items-center gap-1.5 text-scara-green hover:underline font-bold tracking-wide text-xs"
               >
                 <span>TOP</span>
                 <ArrowUp className="h-4 w-4" />
               </button>
+            </div>
+            {/* Links */}
+            <div className="flex items-center justify-center gap-3 sm:gap-8 text-xs text-scara-grey whitespace-nowrap">
+              <a href="/privacy" className="hover:text-scara-green transition-colors tracking-wide">PRIVACY POLICY</a>
+              <span className="text-scara-grey/20">|</span>
+              <a href="/terms" className="hover:text-scara-green transition-colors tracking-wide">TERMS OF SERVICE</a>
             </div>
           </div>
 
           {/* SCARA Logo — torch effect */}
           <TorchLogo />
 
-          {/* GG Space credit */}
-          <div className="border-t border-scara-grey/10 pt-2 pb-2 text-center">
+          {/* GG Space credit — tighter to logo */}
+          <div className="border-t border-scara-grey/10 pt-2 pb-2 text-center -mt-4 sm:-mt-6">
             <p className="font-sub text-xs sm:text-[10px] text-scara-grey/60 uppercase tracking-widest">
               Design and Created by GG Space
             </p>
