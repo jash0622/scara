@@ -59,7 +59,7 @@ export const SCARA_SERVICES: ServiceItem[] = [
   },
   {
     number: '06',
-    title: 'PR & Communications',
+    title: 'PR & Comms',
     description: 'High-impact media relations, press distribution across top global sports, tech, and entertainment outlets.',
     bgImage: '/Services/PR & Comms.jpg',
   },
@@ -89,7 +89,7 @@ export const SCARA_TEAM: TeamMember[] = [
   },
   {
     name: 'Zerah Gonsalves',
-    role: 'Creative Strategy & Business Operations, Scara',
+    role: 'Creative Strategy & Business Ops, Scara',
     bio: 'Esports veteran blending creative strategy, gaming and business.',
     image: '/team member/Zerah Gonsalves.png',
     linkedinUrl: 'https://www.linkedin.com/in/zerahangelagonsalves',

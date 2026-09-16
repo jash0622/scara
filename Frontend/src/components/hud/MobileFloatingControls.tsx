@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { ArrowUp } from 'lucide-react';
+import { ArrowUp, ChevronLeft, ChevronRight } from 'lucide-react';
 
 /**
  * Mobile-only floating controls:
@@ -12,6 +12,7 @@ import { ArrowUp } from 'lucide-react';
  */
 export default function MobileFloatingControls() {
   const [showTop, setShowTop] = useState(false);
+  const [pillExpanded, setPillExpanded] = useState(false);
 
   useEffect(() => {
     let idleTimer: ReturnType<typeof setTimeout>;
@@ -40,24 +41,54 @@ export default function MobileFloatingControls() {
 
   return (
     <div className="sm:hidden">
-      {/* ── Work With Us — vertical pill pinned to right edge, center ── */}
-      <button
-        onClick={scrollToContact}
-        aria-label="Work with us"
-        className="fixed right-0 top-1/2 -translate-y-1/2 z-[90] font-heading text-[10px] font-extrabold uppercase tracking-[0.15em] text-scara-black transition-transform active:scale-95"
+      {/* ── Work With Us — collapsible vertical pill pinned to right edge ── */}
+      <div
+        className="fixed right-0 top-1/2 z-[90]"
         style={{
-          writingMode: 'vertical-rl',
-          padding: '16px 6px',
-          borderTopLeftRadius: '10px',
-          borderBottomLeftRadius: '10px',
-          background: 'rgba(195, 237, 0, 0.9)',
-          backdropFilter: 'blur(6px)',
-          WebkitBackdropFilter: 'blur(6px)',
-          boxShadow: '-2px 0 8px rgba(0,0,0,0.3)',
+          transform: `translateY(-50%) translateX(${pillExpanded ? '0' : '100%'})`,
+          transition: 'transform 0.45s cubic-bezier(0.16, 1, 0.3, 1)',
         }}
       >
-        Work With Us
-      </button>
+        {/* The pill itself — links to contact */}
+        <button
+          onClick={scrollToContact}
+          aria-label="Work with us"
+          className="font-heading text-[10px] font-extrabold uppercase tracking-[0.15em] text-scara-black transition-transform active:scale-95"
+          style={{
+            writingMode: 'vertical-rl',
+            padding: '16px 6px',
+            borderTopLeftRadius: '10px',
+            borderBottomLeftRadius: '10px',
+            background: 'rgba(195, 237, 0, 0.9)',
+            backdropFilter: 'blur(6px)',
+            WebkitBackdropFilter: 'blur(6px)',
+            boxShadow: '-2px 0 8px rgba(0,0,0,0.3)',
+          }}
+        >
+          Work With Us
+        </button>
+
+        {/* Slim handle notch — sits just outside the left edge of the pill */}
+        <button
+          onClick={() => setPillExpanded((v) => !v)}
+          aria-label={pillExpanded ? 'Hide work with us' : 'Show work with us'}
+          aria-expanded={pillExpanded}
+          className="absolute top-1/2 -translate-y-1/2 flex h-9 w-4 items-center justify-center text-scara-black transition-transform active:scale-95"
+          style={{
+            right: '100%',
+            borderTopLeftRadius: '8px',
+            borderBottomLeftRadius: '8px',
+            background: 'rgba(195, 237, 0, 0.95)',
+            boxShadow: '-2px 0 8px rgba(0,0,0,0.25)',
+          }}
+        >
+          {pillExpanded ? (
+            <ChevronRight className="h-3.5 w-3.5" strokeWidth={2} />
+          ) : (
+            <ChevronLeft className="h-3.5 w-3.5" strokeWidth={2} />
+          )}
+        </button>
+      </div>
 
       {/* ── Scroll-to-top arrow — bottom right, only after hero ── */}
       <button

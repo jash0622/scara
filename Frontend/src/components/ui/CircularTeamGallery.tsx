@@ -357,7 +357,7 @@ export default function CircularTeamGallery() {
                     {member.role}
                   </div>
                   {member.bio && (
-                    <p className="font-body text-[11px] text-scara-grey leading-relaxed line-clamp-2 pt-1 border-t border-scara-grey/15 mt-2">
+                    <p className="font-body text-[11px] text-scara-grey leading-relaxed line-clamp-none sm:line-clamp-2 pt-1 border-t border-scara-grey/15 mt-2">
                       {member.bio}
                     </p>
                   )}

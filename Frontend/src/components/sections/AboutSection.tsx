@@ -245,18 +245,31 @@ export default function AboutSection() {
 
           {/* Logo grid — mobile: single scrolling row | desktop: two rows */}
           <div className="rounded-2xl border border-scara-grey/20 bg-scara-card-dark px-8 md:px-12 pt-3 pb-6 md:pt-4 md:pb-8 space-y-6">
-            {/* Mobile: single row with ALL logos */}
-            <div className="block sm:hidden overflow-hidden py-2">
+            {/* Mobile: two rows (8 top / 7 bottom) — mirrors desktop */}
+            <div className="block sm:hidden overflow-hidden pt-5 pb-2">
               <LogoLoop
-                logos={SCARA_CLIENT_LOGOS}
-                speed={55}
+                logos={SCARA_CLIENT_LOGOS.slice(0, 8)}
+                speed={45}
                 direction="left"
-                logoHeight={36}
-                gap={48}
+                logoHeight={32}
+                gap={40}
                 fadeOut
                 fadeOutColor="#0a0a0a"
                 scaleOnHover
-                ariaLabel="Scara client brand partners"
+                ariaLabel="Scara client brand partners row 1"
+              />
+            </div>
+            <div className="block sm:hidden overflow-hidden py-2 border-t border-scara-grey/10 pt-6">
+              <LogoLoop
+                logos={SCARA_CLIENT_LOGOS.slice(8)}
+                speed={40}
+                direction="right"
+                logoHeight={30}
+                gap={38}
+                fadeOut
+                fadeOutColor="#0a0a0a"
+                scaleOnHover
+                ariaLabel="Scara client brand partners row 2"
               />
             </div>
 

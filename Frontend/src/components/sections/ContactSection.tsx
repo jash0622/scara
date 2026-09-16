@@ -34,7 +34,7 @@ function TorchLogo() {
         onMouseMove={handleMouseMove}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => { setIsHovered(false); setMouse(null); }}
-        className="relative w-full max-w-[560px] sm:max-w-xl md:max-w-5xl cursor-none overflow-hidden"
+        className="relative w-full max-w-[380px] sm:max-w-md md:max-w-3xl cursor-none overflow-hidden"
         style={{ isolation: 'isolate' }}
       >
         {/* Drop shadow below — gives bottom depth like clay/relief */}
@@ -446,7 +446,7 @@ export default function ContactSection() {
           <TorchLogo />
 
           {/* GG Space credit — tighter to logo */}
-          <div className="border-t border-scara-grey/10 pt-2 pb-2 text-center -mt-2 sm:-mt-6">
+          <div className="border-t border-scara-grey/10 pt-2 pb-2 text-center -mt-8 sm:-mt-16">
             <p className="font-sub text-[8px] sm:text-[10px] text-scara-grey/60 uppercase tracking-widest">
               Design and Created by GG Space
             </p>

@@ -352,6 +352,11 @@
     padding-right: 0;
   }
 
+  /* Nudge the leading numbers up slightly so they align with the letters */
+  .sm-panel-list[data-numbering] .sm-panel-item::after {
+    margin-top: 0.15em;
+  }
+
   .sm-socials {
     margin-top: 1.5rem;
     padding-top: 1.5rem;
