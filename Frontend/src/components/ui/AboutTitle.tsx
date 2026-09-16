@@ -113,8 +113,24 @@ function TypingExperience() {
   const WORD = 'EXPERIENCE.';
   const [displayed, setDisplayed] = React.useState('');
   const [visible, setVisible] = React.useState(true);
+  const [onScreen, setOnScreen] = React.useState(true);
+  const spanRef = React.useRef<HTMLSpanElement>(null);
+
+  // Pause the typing loop whenever the element is scrolled out of view —
+  // stops setState churn during scroll = no jank.
+  React.useEffect(() => {
+    const el = spanRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => setOnScreen(entry.isIntersecting),
+      { threshold: 0 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
 
   React.useEffect(() => {
+    if (!onScreen) return; // frozen while off-screen
     let timer: ReturnType<typeof setTimeout>;
 
     if (visible) {
@@ -133,10 +149,10 @@ function TypingExperience() {
     }
 
     return () => clearTimeout(timer);
-  }, [displayed, visible]);
+  }, [displayed, visible, onScreen]);
 
   return (
-    <span style={{ opacity: visible ? 1 : 0, transition: visible ? 'none' : 'opacity 0.15s ease' }}>
+    <span ref={spanRef} style={{ opacity: visible ? 1 : 0, transition: visible ? 'none' : 'opacity 0.15s ease' }}>
       {/* Render EXPERIENCE and . separately so we can add a small gap before . */}
       {displayed.length <= 10
         ? displayed

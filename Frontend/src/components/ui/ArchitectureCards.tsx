@@ -5,32 +5,48 @@ import { Gamepad2, Tv, Cpu } from 'lucide-react';
 
 function TiltCard({ children, className }: { children: React.ReactNode; className?: string }) {
   const ref = useRef<HTMLDivElement>(null);
+  const rafRef = useRef<number | null>(null);
+  const rectRef = useRef<DOMRect | null>(null);
+
+  const onEnter = (e: React.MouseEvent<HTMLDivElement>) => {
+    // Cache bounds once on enter — no getBoundingClientRect per mousemove
+    rectRef.current = e.currentTarget.getBoundingClientRect();
+    const el = ref.current;
+    if (el) el.style.transition = 'transform 0.12s linear';
+  };
 
   const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const el = ref.current;
-    if (!el) return;
-    // Use currentTarget bounds — cached by browser, no forced reflow
-    const rect = e.currentTarget.getBoundingClientRect();
-    const rx = ((e.clientY - rect.top - rect.height / 2) / rect.height) * 18;
-    const ry = ((e.clientX - rect.left - rect.width / 2) / rect.width) * -18;
-    el.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) scale(1.04)`;
-    el.style.transition = 'transform 0.08s linear';
+    const rect = rectRef.current;
+    if (!el || !rect) return;
+    const clientX = e.clientX;
+    const clientY = e.clientY;
+    // Throttle DOM writes to one per animation frame
+    if (rafRef.current) return;
+    rafRef.current = requestAnimationFrame(() => {
+      rafRef.current = null;
+      const rx = ((clientY - rect.top - rect.height / 2) / rect.height) * 14;
+      const ry = ((clientX - rect.left - rect.width / 2) / rect.width) * -14;
+      el.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) scale(1.03)`;
+    });
   };
 
   const onLeave = () => {
     const el = ref.current;
     if (!el) return;
-    el.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg) scale(1)';
+    if (rafRef.current) { cancelAnimationFrame(rafRef.current); rafRef.current = null; }
     el.style.transition = 'transform 0.5s cubic-bezier(0.16,1,0.3,1)';
+    el.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg) scale(1)';
   };
 
   return (
     <div
       ref={ref}
+      onMouseEnter={onEnter}
       onMouseMove={onMove}
       onMouseLeave={onLeave}
       className={className}
-      style={{ touchAction: 'pan-y' }}
+      style={{ touchAction: 'pan-y', willChange: 'transform' }}
     >
       {children}
     </div>
@@ -88,6 +104,9 @@ export default function ArchitectureCards() {
                 linear-gradient(rgba(0,0,0,0.62), rgba(0,0,0,0.62)),
                 url('${img}') center/cover no-repeat
               `,
+              // Promote to its own GPU layer so scroll never repaints the image
+              transform: 'translateZ(0)',
+              backfaceVisibility: 'hidden',
             }}
           />
 
