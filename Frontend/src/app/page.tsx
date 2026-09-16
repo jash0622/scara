@@ -28,7 +28,7 @@ export default function Home() {
         transition={{ duration: 1.0, delay: preloaderFinished ? 0 : 5.75, ease: [0.16, 1, 0.3, 1] }}
       >
         {/* 1. Hero */}
-        <HeroSection />
+        <HeroSection preloaderFinished={preloaderFinished} />
 
         {/* 2. About text + expand + Architecture + Stats + Clients */}
         <AboutSection />

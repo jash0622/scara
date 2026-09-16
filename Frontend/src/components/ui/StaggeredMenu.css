@@ -137,7 +137,7 @@
   right: 0;
   width: clamp(300px, 42vw, 520px);
   height: 100%;
-  background: #050505;
+  background: #020202;
   border-left: 1px solid rgba(195, 237, 0, 0.15);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -149,7 +149,13 @@
   z-index: 10;
   pointer-events: auto;
   opacity: 0;
+  isolation: isolate;
 }
+
+/* ── Soft flowing waves — gentle chartreuse light bands drifting on the LEFT ──
+   Very light, no rotation, no circle. Two feathered wave-bands slowly
+   drift up/down to feel like calm flowing light. */
+/* Aurora dune waves are rendered by the <MenuAurora /> React component (SVG). */
 
 /* Large screens: cap width so it doesn't stretch too wide */
 @media (min-width: 1536px) {
@@ -200,6 +206,8 @@
   min-height: 0;
   height: 100%;
   padding-bottom: 1rem;
+  position: relative;
+  z-index: 1;
 }
 
 .sm-socials {

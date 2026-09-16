@@ -55,7 +55,7 @@ export default function InsightsSection() {
               <span>THOUGHT LEADERSHIP & PRESS</span>
             </div>
             <h2 className="font-heading text-4xl sm:text-6xl font-extrabold uppercase text-scara-white tracking-tight mt-1">
-              Insights & <span className="text-scara-green">Media.</span>
+              The Media <span className="text-scara-green">Room.</span>
             </h2>
           </div>
           <p className="max-w-sm font-body text-sm text-scara-grey leading-relaxed">

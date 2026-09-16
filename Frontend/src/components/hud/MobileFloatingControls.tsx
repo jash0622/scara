@@ -42,10 +42,10 @@ export default function MobileFloatingControls() {
           padding: '16px 6px',
           borderTopLeftRadius: '10px',
           borderBottomLeftRadius: '10px',
-          background: 'rgba(195, 237, 0, 0.88)',
-          backdropFilter: 'blur(8px)',
-          WebkitBackdropFilter: 'blur(8px)',
-          boxShadow: '-4px 0 18px rgba(195, 237, 0, 0.25), -1px 0 6px rgba(0,0,0,0.35)',
+          background: 'rgba(195, 237, 0, 0.9)',
+          backdropFilter: 'blur(6px)',
+          WebkitBackdropFilter: 'blur(6px)',
+          boxShadow: '-2px 0 8px rgba(0,0,0,0.3)',
         }}
       >
         Work With Us

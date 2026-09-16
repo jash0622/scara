@@ -2,6 +2,7 @@
 
 import React, { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
+import MenuAurora from './MenuAurora';
 import './StaggeredMenu.css';
 
 export interface StaggeredMenuItem {
@@ -384,6 +385,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
       </header>
 
       <aside id="staggered-menu-panel" ref={panelRef} className="staggered-menu-panel" aria-hidden={!open}>
+        <MenuAurora />
         <div className="sm-panel-inner">
           <ul className="sm-panel-list" role="list" data-numbering={displayItemNumbering || undefined}>
             {items && items.length ? (
