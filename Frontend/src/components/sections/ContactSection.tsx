@@ -376,10 +376,10 @@ export default function ContactSection() {
         </div>
 
         {/* Footer */}
-        <div className="relative border-t border-scara-grey/15 pt-4 overflow-hidden">
+        <div className="relative border-t border-scara-grey/15 pt-4 overflow-hidden mt-10 sm:mt-0">
 
           {/* Ticker */}
-          <div className="relative w-full overflow-hidden border-b border-scara-green/15 py-3 mt-4">
+          <div className="relative w-full overflow-hidden border-b border-scara-green/15 py-3 mt-1 sm:mt-4">
             <div
               className="flex gap-0 whitespace-nowrap"
               style={{ animation: 'ticker-scroll 32s linear infinite', width: 'max-content' }}
@@ -420,7 +420,7 @@ export default function ContactSection() {
           </div>
 
           {/* Copyright + Privacy + TOP */}
-          <div className="relative z-10 font-sub uppercase pt-5 sm:pt-6 pb-1 space-y-4 sm:space-y-2">
+          <div className="relative z-10 font-sub uppercase pt-5 sm:pt-6 pb-1 space-y-2 sm:space-y-2">
             {/* Copyright row — TOP button opposite (desktop only; mobile uses floating arrow) */}
             <div className="relative flex items-center justify-center">
               <div className="text-center text-scara-grey/60 text-[9px] sm:text-xs whitespace-nowrap overflow-hidden text-ellipsis">
@@ -435,7 +435,7 @@ export default function ContactSection() {
               </button>
             </div>
             {/* Links */}
-            <div className="flex items-center justify-center gap-3 sm:gap-8 text-xs text-scara-grey whitespace-nowrap">
+            <div className="flex items-center justify-center gap-3 sm:gap-8 text-[10px] sm:text-xs text-scara-grey whitespace-nowrap">
               <a href="/privacy" className="hover:text-scara-green transition-colors tracking-wide">PRIVACY POLICY</a>
               <span className="text-scara-grey/20">|</span>
               <a href="/terms" className="hover:text-scara-green transition-colors tracking-wide">TERMS OF SERVICE</a>
@@ -446,7 +446,7 @@ export default function ContactSection() {
           <TorchLogo />
 
           {/* GG Space credit — tighter to logo */}
-          <div className="border-t border-scara-grey/10 pt-2 pb-2 text-center -mt-8 sm:-mt-16">
+          <div className="border-t border-scara-grey/10 pt-2 pb-2 text-center -mt-4 sm:-mt-16">
             <p className="font-sub text-[8px] sm:text-[10px] text-scara-grey/60 uppercase tracking-widest">
               Design and Created by GG Space
             </p>

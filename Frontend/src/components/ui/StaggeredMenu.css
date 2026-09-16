@@ -42,7 +42,7 @@
 
 @media (max-width: 640px) {
   .staggered-menu-header {
-    height: 80px;
+    height: 72px;
   }
   .staggered-menu-header[data-scrolled='true'] {
     height: 52px;
