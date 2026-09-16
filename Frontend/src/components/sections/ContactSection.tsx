@@ -29,31 +29,69 @@ function TorchLogo() {
 
   return (
     <div className="w-full flex items-center justify-center select-none mt-2 mb-0">
-      {/* containerRef is on the SAME element that mouse coords are relative to */}
       <div
         ref={containerRef}
         onMouseMove={handleMouseMove}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => { setIsHovered(false); setMouse(null); }}
         className="relative w-full max-w-[400px] sm:max-w-lg md:max-w-4xl cursor-none overflow-hidden"
+        style={{ isolation: 'isolate' }}
       >
-        {/* Dark base logo */}
+        {/* Drop shadow below — gives bottom depth like clay/relief */}
+        <Image
+          src="/logo-scara.png"
+          alt=""
+          width={1080}
+          height={1080}
+          className="absolute inset-0 w-full h-auto object-contain pointer-events-none"
+          style={{
+            filter: 'blur(5px) brightness(0)',
+            opacity: 0.45,
+            transform: 'translateY(5px) translateX(2px)',
+          }}
+          draggable={false}
+          aria-hidden
+        />
+
+        {/* Base logo — dim */}
         <Image
           src="/logo-scara.png"
           alt="SCARA Logo"
           width={1080}
           height={1080}
-          className="w-full h-auto object-contain opacity-20"
+          className="w-full h-auto object-contain"
+          style={{
+            opacity: 0.18,
+            position: 'relative',
+            filter: 'brightness(1)',
+          }}
           draggable={false}
         />
 
-        {/* Torch layer — absolute on top, masked to cursor position */}
+        {/* Top-edge highlight — simulates raised surface catching light */}
+        <Image
+          src="/logo-scara.png"
+          alt=""
+          width={1080}
+          height={1080}
+          className="absolute inset-0 w-full h-auto object-contain pointer-events-none"
+          style={{
+            filter: 'blur(0px) brightness(2)',
+            opacity: 0.06,
+            transform: 'translateY(-2px)',
+            mixBlendMode: 'screen',
+          }}
+          draggable={false}
+          aria-hidden
+        />
+
+        {/* Torch reveal on hover — no color change, just brightness */}
         {isHovered && mouse && (
           <div
             className="absolute inset-0 pointer-events-none"
             style={{
-              WebkitMaskImage: `radial-gradient(circle 110px at ${mouse.x}px ${mouse.y}px, black 0%, rgba(0,0,0,0.5) 60%, transparent 100%)`,
-              maskImage: `radial-gradient(circle 110px at ${mouse.x}px ${mouse.y}px, black 0%, rgba(0,0,0,0.5) 60%, transparent 100%)`,
+              WebkitMaskImage: `radial-gradient(circle 130px at ${mouse.x}px ${mouse.y}px, black 0%, rgba(0,0,0,0.55) 55%, transparent 100%)`,
+              maskImage: `radial-gradient(circle 130px at ${mouse.x}px ${mouse.y}px, black 0%, rgba(0,0,0,0.55) 55%, transparent 100%)`,
             }}
           >
             <Image
@@ -61,7 +99,8 @@ function TorchLogo() {
               alt=""
               width={1080}
               height={1080}
-              className="w-full h-auto object-contain opacity-95 drop-shadow-[0_0_24px_rgba(195,237,0,0.7)]"
+              className="w-full h-auto object-contain"
+              style={{ opacity: 0.9, filter: 'brightness(1.15)' }}
               draggable={false}
               aria-hidden
             />
