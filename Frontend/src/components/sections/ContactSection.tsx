@@ -28,13 +28,13 @@ function TorchLogo() {
   };
 
   return (
-    <div className="w-full flex items-center justify-center select-none -mt-6 -mb-4">
+    <div className="w-full flex items-center justify-center select-none mt-2 -mb-2 sm:-mt-6 sm:-mb-4">
       <div
         ref={containerRef}
         onMouseMove={handleMouseMove}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => { setIsHovered(false); setMouse(null); }}
-        className="relative w-full max-w-[480px] sm:max-w-xl md:max-w-5xl cursor-none overflow-hidden"
+        className="relative w-full max-w-[560px] sm:max-w-xl md:max-w-5xl cursor-none overflow-hidden"
         style={{ isolation: 'isolate' }}
       >
         {/* Drop shadow below — gives bottom depth like clay/relief */}
@@ -419,16 +419,16 @@ export default function ContactSection() {
             `}</style>
           </div>
 
-          {/* Copyright + Privacy + TOP — shifted down closer to the logo */}
-          <div className="relative z-10 font-sub uppercase pt-5 sm:pt-6 pb-1 space-y-2">
-            {/* Copyright row — TOP button sits opposite on the right */}
+          {/* Copyright + Privacy + TOP */}
+          <div className="relative z-10 font-sub uppercase pt-5 sm:pt-6 pb-1 space-y-4 sm:space-y-2">
+            {/* Copyright row — TOP button opposite (desktop only; mobile uses floating arrow) */}
             <div className="relative flex items-center justify-center">
               <div className="text-center text-scara-grey/60 text-[9px] sm:text-xs whitespace-nowrap overflow-hidden text-ellipsis">
                 © 2026 SCARA GAMING PRIVATE LIMITED. ALL RIGHTS RESERVED.
               </div>
               <button
                 onClick={scrollToTop}
-                className="absolute right-0 flex items-center gap-1.5 text-scara-green hover:underline font-bold tracking-wide text-xs"
+                className="hidden sm:flex absolute right-0 items-center gap-1.5 text-scara-green hover:underline font-bold tracking-wide text-xs"
               >
                 <span>TOP</span>
                 <ArrowUp className="h-4 w-4" />
@@ -446,8 +446,8 @@ export default function ContactSection() {
           <TorchLogo />
 
           {/* GG Space credit — tighter to logo */}
-          <div className="border-t border-scara-grey/10 pt-2 pb-2 text-center -mt-4 sm:-mt-6">
-            <p className="font-sub text-xs sm:text-[10px] text-scara-grey/60 uppercase tracking-widest">
+          <div className="border-t border-scara-grey/10 pt-2 pb-2 text-center -mt-2 sm:-mt-6">
+            <p className="font-sub text-[8px] sm:text-[10px] text-scara-grey/60 uppercase tracking-widest">
               Design and Created by GG Space
             </p>
           </div>

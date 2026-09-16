@@ -14,13 +14,21 @@ export default function MobileFloatingControls() {
   const [showTop, setShowTop] = useState(false);
 
   useEffect(() => {
+    let idleTimer: ReturnType<typeof setTimeout>;
     const onScroll = () => {
-      // Show the top-arrow once user scrolls past ~80% of the viewport (past hero)
-      setShowTop(window.scrollY > window.innerHeight * 0.8);
+      // Only show once user is past the hero AND actively scrolling
+      const pastHero = window.scrollY > window.innerHeight * 0.8;
+      setShowTop(pastHero);
+
+      // Hide the arrow shortly after scrolling stops
+      clearTimeout(idleTimer);
+      idleTimer = setTimeout(() => setShowTop(false), 1400);
     };
-    onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      clearTimeout(idleTimer);
+    };
   }, []);
 
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
