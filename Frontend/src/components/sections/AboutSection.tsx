@@ -184,7 +184,7 @@ export default function AboutSection() {
             <span className="font-sub text-xs font-bold tracking-[0.2em] text-scara-green uppercase">
               // SCARA ARCHITECTURE
             </span>
-            <h3 className="font-heading text-4xl sm:text-5xl font-extrabold uppercase text-scara-white mt-1">
+            <h3 className="font-heading text-3xl sm:text-5xl font-extrabold uppercase text-scara-white mt-1">
               How Scara Is Structured
             </h3>
           </div>
@@ -198,7 +198,7 @@ export default function AboutSection() {
               <span className="font-sub text-xs font-bold tracking-[0.25em] text-scara-green uppercase">
                 // BY THE NUMBERS
               </span>
-              <h3 className="font-heading text-4xl sm:text-5xl font-extrabold uppercase text-scara-white mt-1">
+              <h3 className="font-heading text-3xl sm:text-5xl font-extrabold uppercase text-scara-white mt-1">
                 Built on <span className="text-scara-green">Real Relationships.</span>
               </h3>
             </div>
@@ -234,7 +234,7 @@ export default function AboutSection() {
               <span className="font-sub text-xs font-bold tracking-[0.25em] text-scara-green uppercase">
                 // GLOBAL PARTNERS & CLIENTS
               </span>
-              <h3 className="font-heading text-4xl sm:text-5xl font-extrabold uppercase text-scara-white mt-1 tracking-tight">
+              <h3 className="font-heading text-3xl sm:text-5xl font-extrabold uppercase text-scara-white mt-1 tracking-tight">
                 Trusted by <span className="text-scara-green">Industry Giants.</span>
               </h3>
             </div>

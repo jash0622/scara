@@ -52,6 +52,8 @@
   max-width: 800px;
   transition: none;
   will-change: opacity, transform;
+  /* Mobile: shift text up slightly */
+  margin-top: -8vh;
 }
 
 .scroll-expand-eyebrow {

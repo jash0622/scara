@@ -309,7 +309,23 @@
     width: 100%;
     left: 0;
     right: 0;
-    padding: 6em 2em 2em 2em;
+    padding: 5em 2em 3em 2em;
+    overflow-y: auto;
+  }
+
+  .sm-panel-list {
+    gap: 0.2rem;
+  }
+
+  .sm-panel-item {
+    font-size: clamp(1.6rem, 9vw, 2.4rem);
+    padding-right: 0;
+  }
+
+  .sm-socials {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    flex-shrink: 0;
   }
 }
 

@@ -16,6 +16,8 @@ const MENU_ITEMS: StaggeredMenuItem[] = [
   { label: 'Services', ariaLabel: 'View our services',  link: '#services' },
   { label: 'Work',     ariaLabel: 'See our work',       link: '#work' },
   { label: 'Insights', ariaLabel: 'Read our insights',  link: '#insights' },
+  { label: 'Team',     ariaLabel: 'Meet our team',      link: '#team' },
+  { label: 'Contact',  ariaLabel: 'Get in touch',       link: '#contact' },
 ];
 
 // Only Instagram & LinkedIn — rendered as SVG icon links below the menu
@@ -38,7 +40,7 @@ export default function Navbar() {
       <header
         className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 ${
           isScrolled
-            ? 'bg-scara-black/85 backdrop-blur-md py-4 border-b border-scara-grey/10'
+            ? 'bg-scara-black/85 backdrop-blur-md py-3 border-b border-scara-grey/10'
             : 'bg-transparent py-6'
         }`}
       >

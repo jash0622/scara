@@ -173,18 +173,21 @@ export default function WorkCardStack({ items, onCardClick }: WorkCardStackProps
       ══════════════════════════════════════════════════════════════════════ */}
       <div className="block md:hidden w-full">
         {/* Eyebrow */}
-        <div className="font-sub font-bold uppercase mb-3 text-center" style={{ fontSize: '9px', letterSpacing: '0.22em', color: '#C3ED00' }}>
+        <div className="font-sub font-bold uppercase mb-3 text-left" style={{ fontSize: '9px', letterSpacing: '0.22em', color: '#C3ED00' }}>
           // FLAGSHIP CAMPAIGNS & IPS
         </div>
 
-        {/* Heading — centered, wraps naturally */}
-        <div className="flex justify-center mb-4">
-          <WorkHeading fontSize="clamp(48px, 14vw, 72px)" allowWrap />
+        {/* Heading — left aligned, overflow visible so S/C not cut */}
+        <div className="flex justify-start mb-3 overflow-visible" style={{ marginLeft: '-2px' }}>
+          <WorkHeading fontSize="clamp(44px, 13vw, 68px)" allowWrap />
         </div>
 
-        {/* Year odometer */}
-        <div className="flex justify-center mb-6">
-          <YearOdometer year={Number(current?.year) || 2025} />
+        {/* Year odometer — left aligned, smaller, tighter to heading */}
+        <div className="flex justify-start mb-2 pl-0 -mt-3">
+          <div style={{ transform: 'scale(0.6)', transformOrigin: 'left center' }}>
+            <YearOdometer year={Number(current?.year) || 2025} />
+          </div>
+        </div>
         </div>
 
         {/* Card area — full width, capped at MOBILE_CARD_MAX */}
@@ -280,7 +283,7 @@ export default function WorkCardStack({ items, onCardClick }: WorkCardStackProps
               </div>
               <WorkHeading fontSize="clamp(64px, 8.5vw, 132px)" />
             </div>
-            <div className="flex justify-end" style={{ paddingRight: '40px' }}>
+            <div className="flex justify-end" style={{ paddingRight: '32px' }}>
               <YearOdometer year={Number(current?.year) || 2025} />
             </div>
           </div>

@@ -254,7 +254,7 @@ export default function CircularTeamGallery() {
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
-        className="relative w-full h-[360px] sm:h-[480px] md:h-[540px] overflow-hidden rounded-2xl border border-scara-grey/20 bg-scara-card-dark/50 backdrop-blur-md flex items-center justify-center cursor-grab active:cursor-grabbing isolate"
+        className="relative w-full h-[440px] sm:h-[480px] md:h-[540px] overflow-hidden rounded-2xl border border-scara-grey/20 bg-scara-card-dark/50 backdrop-blur-md flex items-center justify-center cursor-grab active:cursor-grabbing isolate"
         style={{ perspective: '1100px', perspectiveOrigin: '50% 50%', touchAction: 'pan-y' }}
       >
         {/* CursorGrid Background */}
