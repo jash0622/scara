@@ -280,7 +280,7 @@ export default function WorkCardStack({ items, onCardClick }: WorkCardStackProps
               </div>
               <WorkHeading fontSize="clamp(64px, 8.5vw, 132px)" />
             </div>
-            <div className="flex justify-end" style={{ paddingRight: '60px' }}>
+            <div className="flex justify-end" style={{ paddingRight: '40px' }}>
               <YearOdometer year={Number(current?.year) || 2025} />
             </div>
           </div>
