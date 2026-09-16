@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { Sparkles, ArrowUpRight } from 'lucide-react';
 import Magnet from '@/components/ui/Magnet';
@@ -10,8 +10,92 @@ const GlobeCanvas = dynamic(() => import('@/components/canvas/GlobeCanvas'), {
   loading: () => null,
 });
 
-export default function HeroSection() {
+interface HeroSectionProps {
+  preloaderFinished?: boolean;
+}
+
+// ── Mobile-only reveal heading — vertical sweep: white top→bottom, then colour settles ──
+// Words wrap naturally (SHAPING / SPORTS, / GAMING, / MUSIC & / CULTURE.) — same as before
+function MobileWipeHeading({ trigger }: { trigger: boolean }) {
+  // Each word with its final colour + line-break flag after it
+  const words: { text: string; color: string; breakAfter?: boolean }[] = [
+    { text: 'SHAPING', color: '#FFFFFF', breakAfter: true },
+    { text: 'SPORTS,', color: '#C3ED00' },
+    { text: 'GAMING,', color: '#C3ED00', breakAfter: true },
+    { text: 'MUSIC', color: '#C3ED00' },
+    { text: '\u00A0&\u00A0', color: '#FFFFFF' },
+    { text: 'CULTURE.', color: '#FFFFFF' },
+  ];
+
+  return (
+    <h1
+      className="font-heading font-extrabold uppercase tracking-tight leading-[0.92]"
+      style={{ fontSize: 'clamp(2.4rem, 11vw, 4rem)' }}
+    >
+      {words.map((w, i) => {
+        const delay = 0.2 + i * 0.22;
+        return (
+          <span key={i}>
+            <span style={{ position: 'relative', display: 'inline-block', color: 'transparent' }}>
+              {/* Final colour — revealed as white sweep retracts */}
+              <span
+                aria-hidden="true"
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  color: w.color,
+                  clipPath: trigger ? 'inset(0 0 0% 0)' : 'inset(0 0 100% 0)',
+                  transition: trigger ? `clip-path 0.6s cubic-bezier(.33,1,.68,1) ${delay + 0.4}s` : 'none',
+                  whiteSpace: 'pre',
+                }}
+              >
+                {w.text}
+              </span>
+              {/* White sweep — enters top→bottom, holds, retracts revealing colour */}
+              <span
+                aria-hidden="true"
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  color: '#FFFFFF',
+                  clipPath: 'inset(0 0 100% 0)',
+                  animation: trigger ? `heroSweep 1.05s cubic-bezier(.33,1,.68,1) ${delay}s forwards` : 'none',
+                  whiteSpace: 'pre',
+                }}
+              >
+                {w.text}
+              </span>
+              {/* Spacer for layout */}
+              <span style={{ visibility: 'hidden', whiteSpace: 'pre' }}>{w.text}</span>
+            </span>
+            {w.breakAfter ? <br /> : <span> </span>}
+          </span>
+        );
+      })}
+
+      <style jsx>{`
+        @keyframes heroSweep {
+          0%   { clip-path: inset(0 0 100% 0); }
+          45%  { clip-path: inset(0 0 0% 0); }
+          55%  { clip-path: inset(0 0 0% 0); }
+          100% { clip-path: inset(100% 0 0 0); }
+        }
+      `}</style>
+    </h1>
+  );
+}
+
+export default function HeroSection({ preloaderFinished = false }: HeroSectionProps) {
   const [mounted] = useState(true);
+  const [wipeStart, setWipeStart] = useState(false);
+
+  // Trigger mobile wipe animation ~2s after preloader finishes
+  useEffect(() => {
+    if (preloaderFinished) {
+      const t = setTimeout(() => setWipeStart(true), 300);
+      return () => clearTimeout(t);
+    }
+  }, [preloaderFinished]);
 
   const entry = 'opacity-100 translate-y-0';
   const trans = 'transition-all duration-700 ease-out';
@@ -63,9 +147,14 @@ export default function HeroSection() {
               </span>
             </div>
 
-            {/* Headline */}
+            {/* Headline — MOBILE: wipe-reveal animation */}
+            <div className="sm:hidden">
+              <MobileWipeHeading trigger={wipeStart} />
+            </div>
+
+            {/* Headline — DESKTOP: unchanged */}
             <h1
-              className={`font-heading font-extrabold uppercase tracking-tight text-scara-white leading-[0.92] ${entry} ${trans}`}
+              className={`hidden sm:block font-heading font-extrabold uppercase tracking-tight text-scara-white leading-[0.92] ${entry} ${trans}`}
               style={{
                 transitionDelay: '180ms',
                 fontSize: 'clamp(2.2rem, 4.2vw, 4rem)',
