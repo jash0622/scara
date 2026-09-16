@@ -14,74 +14,31 @@ interface HeroSectionProps {
   preloaderFinished?: boolean;
 }
 
-// ── Mobile-only reveal heading — vertical sweep: white top→bottom, then colour settles ──
-// Words wrap naturally (SHAPING / SPORTS, / GAMING, / MUSIC & / CULTURE.) — same as before
-function MobileWipeHeading({ trigger }: { trigger: boolean }) {
-  // Each word with its final colour + line-break flag after it
-  const words: { text: string; color: string; breakAfter?: boolean }[] = [
-    { text: 'SHAPING', color: '#FFFFFF', breakAfter: true },
-    { text: 'SPORTS,', color: '#C3ED00' },
-    { text: 'GAMING,', color: '#C3ED00', breakAfter: true },
-    { text: 'MUSIC', color: '#C3ED00' },
-    { text: '\u00A0&\u00A0', color: '#FFFFFF' },
-    { text: 'CULTURE.', color: '#FFFFFF' },
-  ];
-
+/**
+ * GreenReveal — each LETTER turns from white to green, one after another
+ * (left→right), when `trigger` is true. No overlay, no ghost text — the
+ * actual letter colour animates. `delay` staggers whole words.
+ */
+function GreenReveal({ text, trigger, delay }: { text: string; trigger: boolean; delay: number }) {
+  const letters = text.split('');
+  const perLetter = 0.06; // seconds between each letter turning green
   return (
-    <h1
-      className="font-heading font-extrabold uppercase tracking-tight leading-[0.92]"
-      style={{ fontSize: 'clamp(2.4rem, 11vw, 4rem)' }}
-    >
-      {words.map((w, i) => {
-        const delay = 0.2 + i * 0.22;
-        return (
-          <span key={i}>
-            <span style={{ position: 'relative', display: 'inline-block', color: 'transparent' }}>
-              {/* Final colour — revealed as white sweep retracts */}
-              <span
-                aria-hidden="true"
-                style={{
-                  position: 'absolute',
-                  inset: 0,
-                  color: w.color,
-                  clipPath: trigger ? 'inset(0 0 0% 0)' : 'inset(0 0 100% 0)',
-                  transition: trigger ? `clip-path 0.6s cubic-bezier(.33,1,.68,1) ${delay + 0.4}s` : 'none',
-                  whiteSpace: 'pre',
-                }}
-              >
-                {w.text}
-              </span>
-              {/* White sweep — enters top→bottom, holds, retracts revealing colour */}
-              <span
-                aria-hidden="true"
-                style={{
-                  position: 'absolute',
-                  inset: 0,
-                  color: '#FFFFFF',
-                  clipPath: 'inset(0 0 100% 0)',
-                  animation: trigger ? `heroSweep 1.05s cubic-bezier(.33,1,.68,1) ${delay}s forwards` : 'none',
-                  whiteSpace: 'pre',
-                }}
-              >
-                {w.text}
-              </span>
-              {/* Spacer for layout */}
-              <span style={{ visibility: 'hidden', whiteSpace: 'pre' }}>{w.text}</span>
-            </span>
-            {w.breakAfter ? <br /> : <span> </span>}
-          </span>
-        );
-      })}
-
-      <style jsx>{`
-        @keyframes heroSweep {
-          0%   { clip-path: inset(0 0 100% 0); }
-          45%  { clip-path: inset(0 0 0% 0); }
-          55%  { clip-path: inset(0 0 0% 0); }
-          100% { clip-path: inset(100% 0 0 0); }
-        }
-      `}</style>
-    </h1>
+    // Keep the whole word together (no wrapping mid-word)
+    <span style={{ whiteSpace: 'nowrap' }}>
+      {letters.map((ch, i) => (
+        <span
+          key={i}
+          className="hero-letter"
+          style={{
+            animation: trigger
+              ? `heroLetterGreen 0.3s ease ${delay + i * perLetter}s forwards`
+              : 'none',
+          }}
+        >
+          {ch}
+        </span>
+      ))}
+    </span>
   );
 }
 
@@ -89,13 +46,22 @@ export default function HeroSection({ preloaderFinished = false }: HeroSectionPr
   const [mounted] = useState(true);
   const [wipeStart, setWipeStart] = useState(false);
 
-  // Trigger mobile wipe animation ~2s after preloader finishes
+  // Text shows fully WHITE first. Once the preloader finishes and the hero
+  // reveals, wait 1.5s then run the green letter-by-letter reveal
+  // (SPORTS → GAMING → MUSIC). Fallback: if the preloader was already done
+  // on mount, still trigger after a short delay.
   useEffect(() => {
-    if (preloaderFinished) {
-      const t = setTimeout(() => setWipeStart(true), 300);
-      return () => clearTimeout(t);
-    }
+    if (!preloaderFinished) return;
+    const t = setTimeout(() => setWipeStart(true), 1500);
+    return () => clearTimeout(t);
   }, [preloaderFinished]);
+
+  // Safety fallback — if preloaderFinished never flips (e.g. skipped),
+  // trigger anyway ~6.5s after mount so the title never stays plain white.
+  useEffect(() => {
+    const t = setTimeout(() => setWipeStart(true), 6500);
+    return () => clearTimeout(t);
+  }, []);
 
   const entry = 'opacity-100 translate-y-0';
   const trans = 'transition-all duration-700 ease-out';
@@ -147,12 +113,19 @@ export default function HeroSection({ preloaderFinished = false }: HeroSectionPr
               </span>
             </div>
 
-            {/* Headline — MOBILE: wipe-reveal animation */}
-            <div className="sm:hidden">
-              <MobileWipeHeading trigger={wipeStart} />
-            </div>
+            {/* Headline — MOBILE (each word on its own line, same as before) */}
+            <h1
+              className="sm:hidden font-heading font-extrabold uppercase tracking-tight text-scara-white leading-[0.92]"
+              style={{ fontSize: 'clamp(2.4rem, 11vw, 4rem)' }}
+            >
+              SHAPING <br />
+              <GreenReveal text="SPORTS," trigger={wipeStart} delay={0} /> <br />
+              <GreenReveal text="GAMING," trigger={wipeStart} delay={0.45} /> <br />
+              <GreenReveal text="MUSIC" trigger={wipeStart} delay={0.9} />
+              {' '}&amp;{' '}CULTURE.
+            </h1>
 
-            {/* Headline — DESKTOP: unchanged */}
+            {/* Headline — DESKTOP (fixed line breaks, unchanged layout) */}
             <h1
               className={`hidden sm:block font-heading font-extrabold uppercase tracking-tight text-scara-white leading-[0.92] ${entry} ${trans}`}
               style={{
@@ -161,12 +134,13 @@ export default function HeroSection({ preloaderFinished = false }: HeroSectionPr
               }}
             >
               SHAPING <br />
-              <span className="lg:whitespace-nowrap text-scara-green drop-shadow-[0_0_30px_rgba(195,237,0,0.3)]">
-                SPORTS, GAMING,
+              <span className="lg:whitespace-nowrap">
+                <GreenReveal text="SPORTS," trigger={wipeStart} delay={0} />{' '}
+                <GreenReveal text="GAMING," trigger={wipeStart} delay={0.45} />
               </span>
               <br />
               <span className="lg:whitespace-nowrap">
-                <span className="text-scara-green drop-shadow-[0_0_30px_rgba(195,237,0,0.3)]">MUSIC</span>
+                <GreenReveal text="MUSIC" trigger={wipeStart} delay={0.9} />
                 {' '}&amp;{' '}CULTURE.
               </span>
             </h1>
@@ -219,6 +193,23 @@ export default function HeroSection({ preloaderFinished = false }: HeroSectionPr
 
         </div>
       </div>
+
+      {/* Hero title letter-by-letter green reveal keyframe */}
+      <style jsx global>{`
+        .hero-letter {
+          color: #ffffff;
+        }
+        @keyframes heroLetterGreen {
+          from {
+            color: #ffffff;
+            text-shadow: none;
+          }
+          to {
+            color: #c3ed00;
+            text-shadow: 0 0 30px rgba(195, 237, 0, 0.3);
+          }
+        }
+      `}</style>
     </div>
   );
 }
