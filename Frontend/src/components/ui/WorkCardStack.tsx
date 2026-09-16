@@ -62,9 +62,9 @@ function WorkHeading({ fontSize, allowWrap }: { fontSize: string; allowWrap?: bo
   const CHAR_DUR = 0.18;
 
   return (
-    <div ref={ref} style={{ overflow: 'visible' }}>
+    <div ref={ref} style={{ overflow: 'visible', paddingTop: '0.08em' }}>
       {/* ── SELECTED ── */}
-      <div style={{ ...baseFont, display: 'flex', flexWrap: allowWrap ? 'wrap' : 'nowrap', marginBottom: '0.12em' }}>
+      <div style={{ ...baseFont, display: 'flex', flexWrap: allowWrap ? 'wrap' : 'nowrap', marginBottom: '0.12em', lineHeight: 1 }}>
         {SEL.split('').map((ch, i) => {
           let whiteClip = 'inset(0 100% 0 0)';
           let whiteTransition = 'none';
@@ -76,7 +76,7 @@ function WorkHeading({ fontSize, allowWrap }: { fontSize: string; allowWrap?: bo
             whiteTransition = `clip-path ${CHAR_DUR}s cubic-bezier(.4,0,.2,1) ${i * 0.05}s`;
           }
           return (
-            <span key={i} style={{ position: 'relative', display: 'inline-block', color: 'transparent', WebkitTextStroke: '1.5px #C3ED00', overflow: 'hidden' }}>
+            <span key={i} style={{ position: 'relative', display: 'inline-block', color: 'transparent', WebkitTextStroke: '1.5px #C3ED00', overflow: 'visible', paddingTop: '0.05em' }}>
               {ch}
               <span aria-hidden="true" style={{ position: 'absolute', inset: 0, color: '#ffffff', WebkitTextStroke: '0', display: 'flex', alignItems: 'center', justifyContent: 'center', clipPath: whiteClip, transition: whiteTransition, fontFamily: 'var(--font-anton), Anton, sans-serif' }}>
                 {ch}
@@ -177,14 +177,14 @@ export default function WorkCardStack({ items, onCardClick }: WorkCardStackProps
           // FLAGSHIP CAMPAIGNS & IPS
         </div>
 
-        {/* Heading — left aligned, overflow visible so S/C not cut */}
-        <div className="flex justify-start mb-3 overflow-visible" style={{ marginLeft: '-2px' }}>
-          <WorkHeading fontSize="clamp(44px, 13vw, 68px)" allowWrap />
+        {/* Heading — left aligned, overflow visible + top padding so S/C not cut */}
+        <div className="flex justify-start mb-3 overflow-visible" style={{ marginLeft: '0px', paddingTop: '0.15em' }}>
+          <WorkHeading fontSize="clamp(56px, 16vw, 88px)" allowWrap />
         </div>
 
-        {/* Year odometer — left aligned, smaller, tighter to heading */}
-        <div className="flex justify-start mb-2 pl-0 -mt-3">
-          <div style={{ transform: 'scale(0.6)', transformOrigin: 'left center' }}>
+        {/* Year odometer — right-centric, slightly smaller */}
+        <div className="flex justify-end mb-3 -mt-2" style={{ paddingRight: '12%' }}>
+          <div style={{ transform: 'scale(0.82)', transformOrigin: 'right center' }}>
             <YearOdometer year={Number(current?.year) || 2025} />
           </div>
         </div>

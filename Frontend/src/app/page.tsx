@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import Preloader        from '@/components/hud/Preloader';
+import MobileFloatingControls from '@/components/hud/MobileFloatingControls';
 import HeroSection      from '@/components/sections/HeroSection';
 import AboutSection     from '@/components/sections/AboutSection';
 import ServicesSection  from '@/components/sections/ServicesSection';
@@ -61,6 +62,9 @@ export default function Home() {
         {/* 7. Contact + Footer */}
         <ContactSection />
       </motion.main>
+
+      {/* Mobile-only floating controls — Work With Us + scroll-to-top */}
+      <MobileFloatingControls />
     </>
   );
 }

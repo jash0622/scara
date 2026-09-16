@@ -17,23 +17,35 @@
 }
 
 .staggered-menu-header {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  /* align the toggle with the navbar's max-w-7xl + px-12 gutter */
-  padding: 1.9rem clamp(1.5rem, 4vw, 3rem);
+  /* Match navbar height so Menu stays vertically centered with logo.
+     Navbar: py-6 (24px) default, py-3 (12px) scrolled. Logo ~28-32px tall.
+     Use a fixed header height that equals navbar's total height at each state. */
+  height: 88px;
+  padding: 0 clamp(1.5rem, 4vw, 3rem);
   background: transparent;
   pointer-events: none;
   z-index: 120;
+  transition: height 0.5s ease;
 }
 
-@media (min-width: 768px) {
+/* Scrolled state — navbar shrinks, keep Menu centered with it */
+.staggered-menu-header[data-scrolled='true'] {
+  height: 62px;
+}
+
+@media (max-width: 640px) {
   .staggered-menu-header {
-    padding-top: 2.1rem;
+    height: 80px;
+  }
+  .staggered-menu-header[data-scrolled='true'] {
+    height: 52px;
   }
 }
 
@@ -293,7 +305,8 @@
   content: counter(smItem, decimal-leading-zero);
   position: static;
   align-self: flex-start;
-  margin-top: 0.75em;
+  margin-top: 0.5em;
+  margin-left: 0.15em;
   font-family: var(--font-ibm-plex-sans), 'IBM Plex Sans', sans-serif;
   font-size: 11px;
   font-weight: 400;

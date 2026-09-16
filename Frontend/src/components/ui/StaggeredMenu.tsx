@@ -51,7 +51,14 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
   onMenuClose,
 }) => {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const openRef = useRef(false);
+
+  React.useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 80);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   const panelRef = useRef<HTMLElement>(null);
   const preLayersRef = useRef<HTMLDivElement>(null);
@@ -334,7 +341,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
         })()}
       </div>
 
-      <header className="staggered-menu-header" aria-label="Main navigation header">
+      <header className="staggered-menu-header" aria-label="Main navigation header" data-scrolled={scrolled || undefined}>
         <button
           ref={toggleBtnRef}
           className="sm-toggle"
