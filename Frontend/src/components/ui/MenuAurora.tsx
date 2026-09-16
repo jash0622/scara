@@ -23,7 +23,7 @@ export default function MenuAurora() {
           position: 'absolute',
           inset: 0,
           background:
-            'radial-gradient(ellipse 60% 60% at 15% 20%, rgba(198,240,0,0.10) 0%, transparent 62%)',
+            'radial-gradient(ellipse 60% 60% at 15% 20%, rgba(198,240,0,0.15) 0%, transparent 62%)',
         }}
       />
 
@@ -43,8 +43,8 @@ export default function MenuAurora() {
       >
         <defs>
           <linearGradient id="duneFade" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stopColor="#C6F000" stopOpacity="0.55" />
-            <stop offset="55%" stopColor="#C6F000" stopOpacity="0.12" />
+            <stop offset="0%" stopColor="#C6F000" stopOpacity="0.75" />
+            <stop offset="55%" stopColor="#C6F000" stopOpacity="0.22" />
             <stop offset="100%" stopColor="#C6F000" stopOpacity="0" />
           </linearGradient>
           <filter id="duneBlur" x="-30%" y="-30%" width="160%" height="160%">

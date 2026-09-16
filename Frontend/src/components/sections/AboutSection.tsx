@@ -244,7 +244,7 @@ export default function AboutSection() {
           </div>
 
           {/* Logo grid — mobile: single scrolling row | desktop: two rows */}
-          <div className="rounded-2xl border border-scara-grey/20 bg-scara-card-dark p-8 md:p-12 space-y-8">
+          <div className="rounded-2xl border border-scara-grey/20 bg-scara-card-dark px-8 md:px-12 pt-3 pb-6 md:pt-4 md:pb-8 space-y-6">
             {/* Mobile: single row with ALL logos */}
             <div className="block sm:hidden overflow-hidden py-2">
               <LogoLoop

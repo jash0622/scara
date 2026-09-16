@@ -15,8 +15,8 @@ const MENU_ITEMS: StaggeredMenuItem[] = [
   { label: 'About',    ariaLabel: 'Learn about Scara',  link: '#about' },
   { label: 'Services', ariaLabel: 'View our services',  link: '#services' },
   { label: 'Work',     ariaLabel: 'See our work',       link: '#work' },
-  { label: 'Insights', ariaLabel: 'Read our insights',  link: '#insights' },
   { label: 'Team',     ariaLabel: 'Meet our team',      link: '#team' },
+  { label: 'Insights', ariaLabel: 'Read our insights',  link: '#insights' },
   { label: 'Contact',  ariaLabel: 'Get in touch',       link: '#contact' },
 ];
 
@@ -52,7 +52,7 @@ export default function Navbar() {
               alt="SCARA Logo"
               width={400}
               height={100}
-              className="h-6 sm:h-7 md:h-8 w-auto object-contain transition-transform duration-300 group-hover:scale-105 filter drop-shadow-[0_0_8px_rgba(195,237,0,0.15)]"
+              className="h-7 sm:h-8 md:h-9 w-auto object-contain transition-transform duration-300 group-hover:scale-105 filter drop-shadow-[0_0_8px_rgba(195,237,0,0.15)]"
               priority
             />
             <span className="hidden sm:inline-block font-sub text-[9px] font-bold tracking-[0.25em] text-scara-grey uppercase border-l border-scara-grey/30 pl-3">
