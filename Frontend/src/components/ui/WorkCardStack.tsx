@@ -188,7 +188,6 @@ export default function WorkCardStack({ items, onCardClick }: WorkCardStackProps
             <YearOdometer year={Number(current?.year) || 2025} />
           </div>
         </div>
-        </div>
 
         {/* Card area — full width, capped at MOBILE_CARD_MAX */}
         <div className="relative w-full overflow-hidden" style={{ height: `${MOBILE_CARD_MAX * 1.25}px` }}>
