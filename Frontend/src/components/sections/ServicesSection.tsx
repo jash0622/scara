@@ -99,7 +99,11 @@ export default function ServicesSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const sectionRectRef = useRef<DOMRect | null>(null);
 
-  // Cache section rect — update only on resize, NOT on every mousemove
+  const rafRef = useRef<number | null>(null);
+
+  // Cache section rect — update on resize only (NOT on scroll — that caused
+  // a forced reflow every scroll frame = jank). On scroll we recompute the
+  // rect lazily inside mousemove instead.
   useEffect(() => {
     const update = () => {
       if (sectionRef.current) {
@@ -108,21 +112,26 @@ export default function ServicesSection() {
     };
     update();
     window.addEventListener('resize', update, { passive: true });
-    window.addEventListener('scroll', update, { passive: true });
-    return () => {
-      window.removeEventListener('resize', update);
-      window.removeEventListener('scroll', update);
-    };
+    return () => window.removeEventListener('resize', update);
   }, []);
 
-  // mousemove: no setState, no getBoundingClientRect — pure DOM write
+  // mousemove: rAF-throttled DOM write, no setState. Rect uses cached value +
+  // live scrollY offset so it stays correct without reflow on scroll.
   const handleMouseMove = (e: React.MouseEvent) => {
-    const rect = sectionRectRef.current;
-    if (!rect || !floatingPanelRef.current) return;
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    floatingPanelRef.current.style.left = `${x + 24}px`;
-    floatingPanelRef.current.style.top  = `${y - 120}px`;
+    if (!floatingPanelRef.current || !sectionRectRef.current) return;
+    const clientX = e.clientX;
+    const clientY = e.clientY;
+    if (rafRef.current) return;
+    rafRef.current = requestAnimationFrame(() => {
+      rafRef.current = null;
+      const panel = floatingPanelRef.current;
+      const sec = sectionRef.current;
+      if (!panel || !sec) return;
+      // Read fresh rect only here (throttled to 1/frame, only while hovering)
+      const rect = sec.getBoundingClientRect();
+      panel.style.left = `${clientX - rect.left + 24}px`;
+      panel.style.top = `${clientY - rect.top - 120}px`;
+    });
   };
 
   const toggleExpand = (number: string) => {
@@ -144,7 +153,7 @@ export default function ServicesSection() {
             initial={{ opacity: 0, scale: 0.85, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.85, y: 10 }}
-            style={{ left: 0, top: 0 }}
+            style={{ left: 0, top: 0, willChange: 'transform, left, top', transform: 'translateZ(0)' }}
             transition={{ type: 'spring', stiffness: 450, damping: 35 }}
             className="pointer-events-none absolute z-40 hidden lg:block h-56 w-80 overflow-hidden rounded-2xl border border-scara-green/60 shadow-[0_0_35px_rgba(195,237,0,0.35)] bg-scara-card-dark"
           >
@@ -248,37 +257,36 @@ export default function ServicesSection() {
                     <motion.div
                       key={`drawer-${service.number}`}
                       initial={{ height: 0, opacity: 0 }}
-                      animate={{ 
-                        height: 'auto', 
+                      animate={{
+                        height: 'auto',
                         opacity: 1,
                         transition: {
-                          height: { duration: 0.35, ease: [0.16, 1, 0.3, 1] },
-                          opacity: { duration: 0.25, delay: 0.08 }
+                          height: { duration: 0.32, ease: [0.16, 1, 0.3, 1] },
+                          opacity: { duration: 0.22, delay: 0.05 }
                         }
                       }}
-                      exit={{ 
-                        height: 0, 
+                      exit={{
+                        height: 0,
                         opacity: 0,
                         transition: {
-                          height: { duration: 0.28, ease: [0.7, 0, 0.84, 0] },
-                          opacity: { duration: 0.15 }
+                          height: { duration: 0.26, ease: [0.7, 0, 0.84, 0] },
+                          opacity: { duration: 0.12 }
                         }
                       }}
                       className="overflow-hidden"
+                      style={{ willChange: 'height, opacity' }}
                     >
                       <div className="px-4 md:px-6 pb-6 pt-2 border-t border-scara-grey/15">
                         <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
                           
                           {/* LEFT COLUMN: Compact Preview Image */}
-                          <motion.div 
-                            initial={{ scale: 0.96, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            transition={{ duration: 0.3, delay: 0.1 }}
+                          <div 
                             className="md:col-span-4 relative h-48 sm:h-52 md:h-56 rounded-xl overflow-hidden border border-scara-green/30 shadow-[0_0_20px_rgba(195,237,0,0.12)] group/img"
                           >
                             <img
                               src={service.bgImage}
                               alt={service.title}
+                              loading="lazy"
                               className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover/img:scale-105"
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-scara-black/80 via-transparent to-transparent" />
@@ -288,13 +296,10 @@ export default function ServicesSection() {
                                 {service.number} // PREVIEW
                               </span>
                             </div>
-                          </motion.div>
+                          </div>
 
                           {/* RIGHT COLUMN: highlight + 4 points */}
-                          <motion.div 
-                            initial={{ x: 10, opacity: 0 }}
-                            animate={{ x: 0, opacity: 1 }}
-                            transition={{ duration: 0.3, delay: 0.12 }}
+                          <div 
                             className="md:col-span-8 flex flex-col justify-between space-y-4"
                           >
                             <div className="space-y-3">
@@ -335,7 +340,7 @@ export default function ServicesSection() {
                                 [ CLOSE ]
                               </button>
                             </div>
-                          </motion.div>
+                          </div>
 
                         </div>
                       </div>
