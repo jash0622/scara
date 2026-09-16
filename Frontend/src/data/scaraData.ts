@@ -88,6 +88,13 @@ export const SCARA_TEAM: TeamMember[] = [
     linkedinUrl: 'https://www.linkedin.com/in/manoj-g-95b80810',
   },
   {
+    name: 'Zerah Gonsalves',
+    role: 'Creative Strategy & Business Operations, Scara',
+    bio: 'Esports veteran blending creative strategy, gaming and business.',
+    image: '/team member/Zerah Gonsalves.png',
+    linkedinUrl: 'https://www.linkedin.com/in/zerahangelagonsalves',
+  },
+  {
     name: 'Mazher Ramzanali',
     role: 'Business Head, Scara Live',
     bio: '15+ years in branding, culture and sponsorship.',
@@ -128,13 +135,6 @@ export const SCARA_TEAM: TeamMember[] = [
     bio: '16+ years in esports production and management.',
     image: '/team member/Nathaneal Slabbert.png',
     linkedinUrl: undefined,
-  },
-  {
-    name: 'Zerah Gonsalves',
-    role: 'Creative Strategy & Business Operations, Scara',
-    bio: 'Esports veteran blending creative strategy, gaming and business.',
-    image: '/team member/Zerah Gonsalves.png',
-    linkedinUrl: 'https://www.linkedin.com/in/zerahangelagonsalves',
   },
   {
     name: 'Akhil Gokul',
