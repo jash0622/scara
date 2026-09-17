@@ -1,9 +1,18 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 
-export const metadata = {
-  title: 'Privacy Policy — SCARA',
-  description: 'Privacy Policy for SCARA Gaming Private Limited.',
+export const metadata: Metadata = {
+  title: 'Privacy Policy',
+  description: 'Privacy Policy for SCARA Gaming Private Limited — how we collect, use and protect your information on scara.gg.',
+  alternates: { canonical: '/privacy' },
+  openGraph: {
+    title: 'Privacy Policy | SCARA',
+    description: 'Privacy Policy for SCARA Gaming Private Limited.',
+    url: '/privacy',
+    type: 'website',
+  },
+  robots: { index: true, follow: true },
 };
 
 export default function PrivacyPage() {

@@ -1,9 +1,18 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 
-export const metadata = {
-  title: 'Terms & Conditions — SCARA',
-  description: 'Terms and Conditions for SCARA Gaming Private Limited.',
+export const metadata: Metadata = {
+  title: 'Terms & Conditions',
+  description: 'Terms and Conditions for using scara.gg, operated by SCARA Gaming Private Limited.',
+  alternates: { canonical: '/terms' },
+  openGraph: {
+    title: 'Terms & Conditions | SCARA',
+    description: 'Terms and Conditions for SCARA Gaming Private Limited.',
+    url: '/terms',
+    type: 'website',
+  },
+  robots: { index: true, follow: true },
 };
 
 export default function TermsPage() {

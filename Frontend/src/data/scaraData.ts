@@ -211,21 +211,21 @@ export const SCARA_CLIENTS = [
 // ── Client logos (logo loop) ──────────────────────────────────────────────────
 
 export const SCARA_CLIENT_LOGOS = [
-  { src: '/clients/brand logos 1.png', alt: 'Scara Client Brand 1' },
-  { src: '/clients/brand logos 2.png', alt: 'Scara Client Brand 2' },
-  { src: '/clients/brand logos 3.png', alt: 'Scara Client Brand 3' },
-  { src: '/clients/brand logos 4.png', alt: 'Scara Client Brand 4' },
-  { src: '/clients/brand logos 5.png', alt: 'Scara Client Brand 5' },
-  { src: '/clients/brand logos 6.png', alt: 'Scara Client Brand 6' },
-  { src: '/clients/brand logos 7.png', alt: 'Scara Client Brand 7' },
-  { src: '/clients/brand logos 8.png', alt: 'Scara Client Brand 8' },
-  { src: '/clients/brand logos 9.png', alt: 'Scara Client Brand 9' },
-  { src: '/clients/Armani_Exchange_white_transparent_16x9.png', alt: 'Armani Exchange' },
-  { src: '/clients/KONAMI_white_transparent_16x9.png', alt: 'KONAMI' },
-  { src: '/clients/Layer 10.png', alt: 'Scara Global Partner' },
-  { src: '/clients/PlaySide_Studios_white_transparent_16x9.png', alt: 'PlaySide Studios' },
-  { src: '/clients/Visit_Seattle_white_transparent_16x9.png', alt: 'Visit Seattle' },
-  { src: '/clients/Vizta_Games_white_transparent_16x9.png', alt: 'Vizta Games' },
+  { src: '/clients/brand logos 1.png', alt: 'SCARA client and brand partner logo' },
+  { src: '/clients/brand logos 2.png', alt: 'SCARA client and brand partner logo' },
+  { src: '/clients/brand logos 3.png', alt: 'SCARA client and brand partner logo' },
+  { src: '/clients/brand logos 4.png', alt: 'SCARA client and brand partner logo' },
+  { src: '/clients/brand logos 5.png', alt: 'SCARA client and brand partner logo' },
+  { src: '/clients/brand logos 6.png', alt: 'SCARA client and brand partner logo' },
+  { src: '/clients/brand logos 7.png', alt: 'SCARA client and brand partner logo' },
+  { src: '/clients/brand logos 8.png', alt: 'SCARA client and brand partner logo' },
+  { src: '/clients/brand logos 9.png', alt: 'SCARA client and brand partner logo' },
+  { src: '/clients/Armani_Exchange_white_transparent_16x9.png', alt: 'Armani Exchange — SCARA client' },
+  { src: '/clients/KONAMI_white_transparent_16x9.png', alt: 'KONAMI — SCARA client' },
+  { src: '/clients/Layer 10.png', alt: 'SCARA global brand partner logo' },
+  { src: '/clients/PlaySide_Studios_white_transparent_16x9.png', alt: 'PlaySide Studios — SCARA client' },
+  { src: '/clients/Visit_Seattle_white_transparent_16x9.png', alt: 'Visit Seattle — SCARA client' },
+  { src: '/clients/Vizta_Games_white_transparent_16x9.png', alt: 'Vizta Games — SCARA client' },
 ];
 
 // ── Press outlets ─────────────────────────────────────────────────────────────
