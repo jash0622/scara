@@ -7,18 +7,19 @@ import {
   keepPreviousData,
 } from "@tanstack/react-query";
 import { api } from "../api-client";
-import { Enquiry, EnquiryFilters, PaginatedResult } from "../types";
+import { Enquiry, EnquiryFilters, EnquiryStats, EnquiryStatsFilters, PaginatedResult } from "../types";
 import { toast } from "sonner";
 
 const QK = {
   all: (filters: EnquiryFilters) => ["enquiries", filters] as const,
   one: (id: string) => ["enquiries", id] as const,
   unread: ["enquiries-unread"] as const,
+  stats: (filters: EnquiryStatsFilters) => ["enquiries-stats", filters] as const,
 };
 
 // ── List (server-paginated) ───────────────────────────────────────────────────
 
-export function useEnquiries(filters: EnquiryFilters = {}) {
+export function useEnquiries(filters: EnquiryFilters = {}, options?: { poll?: boolean }) {
   return useQuery({
     queryKey: QK.all(filters),
     queryFn: async () => {
@@ -27,6 +28,7 @@ export function useEnquiries(filters: EnquiryFilters = {}) {
         limit: filters.limit ?? 20,
         status: filters.status,
         budget: filters.budget,
+        q: filters.q,
         from: filters.from,
         to: filters.to,
       });
@@ -34,6 +36,26 @@ export function useEnquiries(filters: EnquiryFilters = {}) {
       return res.data;
     },
     placeholderData: keepPreviousData, // keep old data visible while fetching next page
+    // Near-realtime: refresh in the background so new submissions appear without
+    // a manual reload. Only when the tab is focused (React Query default).
+    refetchInterval: options?.poll ? 30_000 : false,
+  });
+}
+
+// ── Aggregated stats (server-computed) ────────────────────────────────────────
+
+export function useEnquiryStats(filters: EnquiryStatsFilters = {}) {
+  return useQuery({
+    queryKey: QK.stats(filters),
+    queryFn: async () => {
+      const res = await api.get<EnquiryStats>("/api/enquiries/stats", {
+        from: filters.from,
+        to: filters.to,
+      });
+      if (!res.success) throw new Error(res.error.message);
+      return res.data;
+    },
+    placeholderData: keepPreviousData,
   });
 }
 
@@ -121,6 +143,71 @@ export function useDeleteEnquiry() {
     },
     onError: (err: Error) => {
       toast.error(`Failed to delete: ${err.message}`);
+    },
+  });
+}
+
+// ── Bulk status update ────────────────────────────────────────────────────────
+
+export function useBulkUpdateEnquiryStatus() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      ids,
+      status,
+    }: {
+      ids: string[];
+      status: "new" | "read" | "archived";
+    }) => {
+      const res = await api.patch<{ updated: number; status: string }>(
+        "/api/enquiries/bulk-status",
+        { ids, status }
+      );
+      if (!res.success) throw new Error(res.error.message);
+      return res.data;
+    },
+    onSuccess: ({ updated, status }) => {
+      qc.invalidateQueries({ queryKey: ["enquiries"] });
+      qc.invalidateQueries({ queryKey: QK.unread });
+      qc.invalidateQueries({ queryKey: ["enquiries-stats"] });
+      toast.success(`${updated} enquir${updated === 1 ? "y" : "ies"} marked ${status}`);
+    },
+    onError: (err: Error) => {
+      toast.error(`Bulk update failed: ${err.message}`);
+    },
+  });
+}
+
+// ── Reply to an enquiry via email ─────────────────────────────────────────────
+
+export function useReplyToEnquiry() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id,
+      subject,
+      message,
+    }: {
+      id: string;
+      subject: string;
+      message: string;
+    }) => {
+      const res = await api.post<{ sent: boolean; to: string }>(
+        `/api/enquiries/${id}/reply`,
+        { subject, message }
+      );
+      if (!res.success) throw new Error(res.error.message);
+      return res.data;
+    },
+    onSuccess: (data, { id }) => {
+      // Reply auto-marks new enquiries as read on the backend.
+      qc.invalidateQueries({ queryKey: QK.one(id) });
+      qc.invalidateQueries({ queryKey: ["enquiries"] });
+      qc.invalidateQueries({ queryKey: QK.unread });
+      toast.success(`Reply sent to ${data.to}`);
+    },
+    onError: (err: Error) => {
+      toast.error(`Failed to send reply: ${err.message}`);
     },
   });
 }

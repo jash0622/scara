@@ -95,6 +95,14 @@ export default function ScrollExpand({
         postBodyRef.current.style.transform = `translateY(${(1 - clampedPost) * 40}px)`;
       }
 
+      // ── Mobile only: gently lift the whole post block (incl. title) as the
+      //    subtitle/body reveal, so the title shifts up smoothly with the text.
+      if (postRef.current) {
+        const isMobile = window.matchMedia('(max-width: 768px)').matches;
+        const lift = isMobile ? clampedPost * 28 : 0;
+        postRef.current.style.transform = `translateX(-50%) translateY(${-lift}px)`;
+      }
+
       // ── Scroll hint ───────────────────────────────────────────────────────
       if (hintRef.current) {
         if (rawP < 0.08) {

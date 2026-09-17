@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Film, Newspaper, Inbox, ArrowRight, Clock, TrendingUp, BarChart2, PieChart as PieIcon } from "lucide-react";
@@ -14,38 +15,67 @@ import {
   Pie,
   Cell,
   CartesianGrid,
+  Legend,
 } from "recharts";
 import { useCaseStudies } from "@/lib/queries/caseStudies.queries";
 import { useInsights } from "@/lib/queries/insights.queries";
-import { useEnquiries, useUnreadEnquiryCount } from "@/lib/queries/enquiries.queries";
+import { useEnquiries, useUnreadEnquiryCount, useEnquiryStats } from "@/lib/queries/enquiries.queries";
 import { StatusBadge } from "@/components/StatusBadge";
 import { formatDistanceToNow } from "date-fns";
 
 // ── Colour palette ─────────────────────────────────────────────────────────────
 const ACCENT = "#C3ED00";
 const BUDGET_COLORS = ["#C3ED00", "#5B9DF9", "#34D399", "#FBBF24"];
+const STATUS_COLORS = { new: "#C3ED00", read: "#5B9DF9", archived: "#6E6E73" };
 
-// ── Build monthly bar-chart data from enquiries list ──────────────────────────
-function buildMonthlyData(items: import("@/lib/types").Enquiry[]) {
-  const map: Record<string, number> = {};
-  items.forEach((e) => {
-    const d = new Date(e.submittedAt);
-    const key = d.toLocaleDateString("en-US", { month: "short", year: "2-digit" });
-    map[key] = (map[key] ?? 0) + 1;
-  });
-  return Object.entries(map)
-    .map(([month, count]) => ({ month, count }))
-    .slice(-6);
+type YMonth = { year: number; month: number }; // month: 0-11
+
+// Iterate months from start..end inclusive, calling fn for each. Guard reversed input.
+function eachMonth(start: YMonth, end: YMonth, fn: (y: number, m: number, label: string) => void) {
+  let y = start.year;
+  let m = start.month;
+  for (let i = 0; i < 120; i++) {
+    const label = new Date(y, m, 1).toLocaleDateString("en-US", { month: "short", year: "2-digit" });
+    fn(y, m, label);
+    if (y === end.year && m === end.month) break;
+    m += 1;
+    if (m > 11) { m = 0; y += 1; }
+    if (y > end.year + 1) break;
+  }
 }
 
-// ── Build budget pie data ─────────────────────────────────────────────────────
-function buildBudgetData(items: import("@/lib/types").Enquiry[]) {
-  const map: Record<string, number> = {};
-  items.forEach((e) => {
-    const k = e.budget ?? "Unknown";
-    map[k] = (map[k] ?? 0) + 1;
+// ── Build monthly bar-chart data from server buckets over a continuous range ──
+// Zero-fills empty months, always chronological.
+function buildMonthlyData(
+  serverMonths: { year: number; month: number; count: number }[],
+  start: YMonth,
+  end: YMonth
+) {
+  const tally: Record<string, number> = {};
+  serverMonths.forEach((s) => { tally[`${s.year}-${s.month}`] = s.count; });
+
+  const buckets: { month: string; count: number }[] = [];
+  eachMonth(start, end, (y, m, label) => {
+    buckets.push({ month: label, count: tally[`${y}-${m}`] ?? 0 });
   });
-  return Object.entries(map).map(([name, value]) => ({ name, value }));
+  return buckets;
+}
+
+// ── Build monthly-by-status data (stacked bars) from server buckets ───────────
+function buildMonthlyByStatus(
+  serverMonths: { year: number; month: number; new: number; read: number; archived: number }[],
+  start: YMonth,
+  end: YMonth
+) {
+  const tally: Record<string, { new: number; read: number; archived: number }> = {};
+  serverMonths.forEach((s) => { tally[`${s.year}-${s.month}`] = { new: s.new, read: s.read, archived: s.archived }; });
+
+  const buckets: { month: string; new: number; read: number; archived: number }[] = [];
+  eachMonth(start, end, (y, m, label) => {
+    const t = tally[`${y}-${m}`] ?? { new: 0, read: 0, archived: 0 };
+    buckets.push({ month: label, new: t.new, read: t.read, archived: t.archived });
+  });
+  return buckets;
 }
 
 // ── Custom tooltip ─────────────────────────────────────────────────────────────
@@ -94,37 +124,189 @@ function SectionHeader({ icon, title, action }: { icon: React.ReactNode; title: 
   );
 }
 
+// ── Month/year range selector for the enquiries chart ─────────────────────────
+type YM = { year: number; month: number }; // month: 0-11
+
+const MONTH_NAMES = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+function MonthRangeSelector({
+  start,
+  end,
+  onChange,
+  onReset,
+}: {
+  start: YM;
+  end: YM;
+  onChange: (start: YM, end: YM) => void;
+  onReset: () => void;
+}) {
+  const thisYear = new Date().getFullYear();
+  // Offer a sensible span of selectable years (5 years back → current).
+  const years = Array.from({ length: 6 }, (_, i) => thisYear - 5 + i);
+
+  const selectStyle: React.CSSProperties = {
+    backgroundColor: "var(--bg-surface-raised)",
+    border: "1px solid var(--border-default)",
+    borderRadius: "var(--radius-sm, 6px)",
+    color: "var(--text-primary)",
+    fontSize: "12px",
+    padding: "4px 6px",
+    outline: "none",
+    cursor: "pointer",
+  };
+  const labelStyle: React.CSSProperties = { fontSize: "11px", color: "var(--text-muted)" };
+
+  // Quick presets relative to the current month.
+  const applyLast = (months: number) => {
+    const now = new Date();
+    const s = new Date(now.getFullYear(), now.getMonth() - (months - 1), 1);
+    onChange(
+      { year: s.getFullYear(), month: s.getMonth() },
+      { year: now.getFullYear(), month: now.getMonth() }
+    );
+  };
+
+  const presetBtn = (label: string, onClick: () => void): React.ReactNode => (
+    <button
+      onClick={onClick}
+      style={{
+        backgroundColor: "transparent",
+        border: "1px solid var(--border-default)",
+        borderRadius: "var(--radius-sm, 6px)",
+        color: "var(--text-secondary)",
+        fontSize: "11px",
+        padding: "4px 8px",
+        cursor: "pointer",
+      }}
+    >
+      {label}
+    </button>
+  );
+
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap", justifyContent: "flex-end" }}>
+      {presetBtn("6M", () => applyLast(6))}
+      {presetBtn("12M", () => applyLast(12))}
+      {presetBtn("Reset", onReset)}
+
+      <span style={{ ...labelStyle, marginLeft: "4px" }}>From</span>
+      <select
+        aria-label="Start month"
+        value={start.month}
+        onChange={(e) => onChange({ ...start, month: Number(e.target.value) }, end)}
+        style={selectStyle}
+      >
+        {MONTH_NAMES.map((m, i) => (
+          <option key={m} value={i}>{m}</option>
+        ))}
+      </select>
+      <select
+        aria-label="Start year"
+        value={start.year}
+        onChange={(e) => onChange({ ...start, year: Number(e.target.value) }, end)}
+        style={selectStyle}
+      >
+        {years.map((y) => (
+          <option key={y} value={y}>{y}</option>
+        ))}
+      </select>
+
+      <span style={labelStyle}>To</span>
+      <select
+        aria-label="End month"
+        value={end.month}
+        onChange={(e) => onChange(start, { ...end, month: Number(e.target.value) })}
+        style={selectStyle}
+      >
+        {MONTH_NAMES.map((m, i) => (
+          <option key={m} value={i}>{m}</option>
+        ))}
+      </select>
+      <select
+        aria-label="End year"
+        value={end.year}
+        onChange={(e) => onChange(start, { ...end, year: Number(e.target.value) })}
+        style={selectStyle}
+      >
+        {years.map((y) => (
+          <option key={y} value={y}>{y}</option>
+        ))}
+      </select>
+    </div>
+  );
+}
+
 // ── Main page ─────────────────────────────────────────────────────────────────
 export default function DashboardPage() {
   const { data: caseStudies, isLoading: loadingCS } = useCaseStudies();
   const { data: insights, isLoading: loadingInsights } = useInsights();
   const { data: unreadCount = 0, isLoading: loadingUnread } = useUnreadEnquiryCount();
-  // Fetch more for chart accuracy
-  const { data: enquiriesPage, isLoading: loadingEnquiries } = useEnquiries({ limit: 100, page: 1 });
+
+  // ── Chart month range ── default: the last 6 months up to the current month.
+  const now = new Date();
+  const defaultEnd = { year: now.getFullYear(), month: now.getMonth() };
+  const defaultStartDate = new Date(now.getFullYear(), now.getMonth() - 5, 1);
+  const defaultStart = { year: defaultStartDate.getFullYear(), month: defaultStartDate.getMonth() };
+
+  const [rangeStart, setRangeStart] = useState(defaultStart);
+  const [rangeEnd, setRangeEnd] = useState(defaultEnd);
+
+  // Ensure start <= end; if a user picks an inverted range we swap for the query.
+  const [orderedStart, orderedEnd] = useMemo(() => {
+    const s = rangeStart.year * 12 + rangeStart.month;
+    const e = rangeEnd.year * 12 + rangeEnd.month;
+    return s <= e ? [rangeStart, rangeEnd] : [rangeEnd, rangeStart];
+  }, [rangeStart, rangeEnd]);
+
+  // Derive ISO from/to covering the whole selected span (first day of start month
+  // → last moment of end month) so the backend gte/lte on submitted_at matches.
+  const fromISO = useMemo(
+    () => new Date(orderedStart.year, orderedStart.month, 1, 0, 0, 0).toISOString(),
+    [orderedStart]
+  );
+  const toISO = useMemo(
+    () => new Date(orderedEnd.year, orderedEnd.month + 1, 0, 23, 59, 59, 999).toISOString(),
+    [orderedEnd]
+  );
+
+  // ── Server-aggregated stats for the selected range — drives ALL charts + counts.
+  const { data: stats, isLoading: loadingStats } = useEnquiryStats({ from: fromISO, to: toISO });
+
+  // Recent-enquiries table + total card: latest submissions (unfiltered).
+  const { data: enquiriesPage, isLoading: loadingEnquiries } = useEnquiries({ limit: 5, page: 1 });
 
   const totalEnquiries = enquiriesPage?.total ?? 0;
-  const allEnquiries = enquiriesPage?.items ?? [];
-  const recentEnquiries = allEnquiries.slice(0, 5);
+  const recentEnquiries = enquiriesPage?.items ?? [];
 
-  const monthlyData = buildMonthlyData(allEnquiries);
-  const budgetData = buildBudgetData(allEnquiries);
+  // Build continuous monthly buckets from the server stats over the selected range.
+  const monthlyData = buildMonthlyData(stats?.monthly ?? [], orderedStart, orderedEnd);
+  const monthlyByStatusData = buildMonthlyByStatus(stats?.monthlyByStatus ?? [], orderedStart, orderedEnd);
+  const budgetData = stats?.budgetDistribution ?? [];
 
-  // Status counts
-  const newCount = allEnquiries.filter((e) => e.status === "new").length;
-  const readCount = allEnquiries.filter((e) => e.status === "read").length;
-  const archivedCount = allEnquiries.filter((e) => e.status === "archived").length;
+  // Status counts (within the selected range) drive the summary strip + funnel.
+  const newCount = stats?.statusCounts.new ?? 0;
+  const readCount = stats?.statusCounts.read ?? 0;
+  const archivedCount = stats?.statusCounts.archived ?? 0;
+  const rangeTotal = stats?.total ?? 0;
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
 
       {/* ── Page header ── */}
-      <div className="page-header">
+      <div className="page-header" style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "16px", flexWrap: "wrap" }}>
         <div>
           <h1 className="page-title">Dashboard</h1>
           <p style={{ fontSize: "13px", color: "var(--text-muted)", marginTop: "2px" }}>
             {new Date().toLocaleDateString("en-IN", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}
           </p>
         </div>
+        {/* Global date range — drives every chart + range totals below */}
+        <MonthRangeSelector
+          start={rangeStart}
+          end={rangeEnd}
+          onChange={(s, e) => { setRangeStart(s); setRangeEnd(e); }}
+          onReset={() => { setRangeStart(defaultStart); setRangeEnd(defaultEnd); }}
+        />
       </div>
 
       {/* ── Stat cards ── */}
@@ -149,11 +331,19 @@ export default function DashboardPage() {
           borderRadius: "var(--radius-lg)",
           padding: "24px",
         }}>
-          <SectionHeader icon={<BarChart2 size={15} />} title="Enquiries — Last 6 Months" />
-          {loadingEnquiries ? (
+          <SectionHeader
+            icon={<BarChart2 size={15} />}
+            title="Enquiries over time"
+            action={
+              <span style={{ fontSize: "12px", color: "var(--text-muted)", fontVariantNumeric: "tabular-nums" }}>
+                {rangeTotal} total
+              </span>
+            }
+          />
+          {loadingStats ? (
             <ChartSkeleton />
           ) : monthlyData.length === 0 ? (
-            <EmptyChart message="No enquiries yet" />
+            <EmptyChart message="No enquiries in this range" />
           ) : (
             <ResponsiveContainer width="100%" height={200}>
               <BarChart data={monthlyData} margin={{ top: 4, right: 4, left: -20, bottom: 0 }}>
@@ -185,10 +375,10 @@ export default function DashboardPage() {
           padding: "24px",
         }}>
           <SectionHeader icon={<PieIcon size={15} />} title="Budget Distribution" />
-          {loadingEnquiries ? (
+          {loadingStats ? (
             <ChartSkeleton />
           ) : budgetData.length === 0 ? (
-            <EmptyChart message="No budget data yet" />
+            <EmptyChart message="No budget data in this range" />
           ) : (
             <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
               <ResponsiveContainer width="50%" height={180}>
@@ -232,27 +422,64 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* ── Enquiry status summary ── */}
-      {!loadingEnquiries && totalEnquiries > 0 && (
+      {/* ── Status breakdown over time (stacked) ── */}
+      <div style={{
+        backgroundColor: "var(--bg-surface)",
+        border: "1px solid var(--border-subtle)",
+        borderRadius: "var(--radius-lg)",
+        padding: "24px",
+      }}>
+        <SectionHeader icon={<BarChart2 size={15} />} title="Enquiries by status over time" />
+        {loadingStats ? (
+          <ChartSkeleton />
+        ) : monthlyByStatusData.length === 0 ? (
+          <EmptyChart message="No enquiries in this range" />
+        ) : (
+          <ResponsiveContainer width="100%" height={220}>
+            <BarChart data={monthlyByStatusData} margin={{ top: 4, right: 4, left: -20, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--border-subtle)" vertical={false} />
+              <XAxis dataKey="month" tick={{ fontSize: 11, fill: "var(--text-muted)" }} axisLine={false} tickLine={false} />
+              <YAxis allowDecimals={false} tick={{ fontSize: 11, fill: "var(--text-muted)" }} axisLine={false} tickLine={false} />
+              <Tooltip cursor={{ fill: "var(--bg-surface-hover)" }} contentStyle={{
+                backgroundColor: "var(--bg-surface-raised)", border: "1px solid var(--border-default)",
+                borderRadius: "var(--radius-md)", fontSize: "12px",
+              }} />
+              <Legend wrapperStyle={{ fontSize: "12px" }} />
+              <Bar dataKey="new" stackId="s" fill={STATUS_COLORS.new} radius={[0, 0, 0, 0]} maxBarSize={48} name="New" />
+              <Bar dataKey="read" stackId="s" fill={STATUS_COLORS.read} maxBarSize={48} name="Read" />
+              <Bar dataKey="archived" stackId="s" fill={STATUS_COLORS.archived} radius={[4, 4, 0, 0]} maxBarSize={48} name="Archived" />
+            </BarChart>
+          </ResponsiveContainer>
+        )}
+      </div>
+
+      {/* ── Conversion funnel (range) — new → read → archived ── */}
+      {!loadingStats && rangeTotal > 0 && (
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "12px" }}>
           {[
-            { label: "New", value: newCount, color: "var(--status-new)" },
-            { label: "Read", value: readCount, color: "var(--status-info)" },
-            { label: "Archived", value: archivedCount, color: "var(--status-neutral)" },
-          ].map(({ label, value, color }) => (
-            <div key={label} style={{
-              backgroundColor: "var(--bg-surface)",
-              border: "1px solid var(--border-subtle)",
-              borderRadius: "var(--radius-lg)",
-              padding: "16px 20px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}>
-              <span style={{ fontSize: "13px", color: "var(--text-muted)", fontWeight: 500 }}>{label}</span>
-              <span style={{ fontSize: "22px", fontWeight: 700, color, fontVariantNumeric: "tabular-nums" }}>{value}</span>
-            </div>
-          ))}
+            { label: "New", value: newCount, color: STATUS_COLORS.new },
+            { label: "Read", value: readCount, color: STATUS_COLORS.read },
+            { label: "Archived", value: archivedCount, color: STATUS_COLORS.archived },
+          ].map(({ label, value, color }) => {
+            const pct = rangeTotal > 0 ? Math.round((value / rangeTotal) * 100) : 0;
+            return (
+              <div key={label} style={{
+                backgroundColor: "var(--bg-surface)",
+                border: "1px solid var(--border-subtle)",
+                borderRadius: "var(--radius-lg)",
+                padding: "16px 20px",
+              }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "10px" }}>
+                  <span style={{ fontSize: "13px", color: "var(--text-muted)", fontWeight: 500 }}>{label}</span>
+                  <span style={{ fontSize: "20px", fontWeight: 700, color, fontVariantNumeric: "tabular-nums" }}>{value}</span>
+                </div>
+                <div style={{ height: "6px", borderRadius: "999px", backgroundColor: "var(--bg-surface-hover)", overflow: "hidden" }}>
+                  <div style={{ width: `${pct}%`, height: "100%", backgroundColor: color, transition: "width 300ms ease-out" }} />
+                </div>
+                <p style={{ fontSize: "11px", color: "var(--text-muted)", margin: "6px 0 0", fontVariantNumeric: "tabular-nums" }}>{pct}% of range</p>
+              </div>
+            );
+          })}
         </div>
       )}
 

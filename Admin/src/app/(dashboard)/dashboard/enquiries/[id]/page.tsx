@@ -1,11 +1,12 @@
 "use client";
 
 import { useParams, useRouter } from "next/navigation";
-import { useEnquiry, useUpdateEnquiryStatus, useDeleteEnquiry } from "@/lib/queries/enquiries.queries";
+import { useEnquiry, useUpdateEnquiryStatus, useDeleteEnquiry, useReplyToEnquiry } from "@/lib/queries/enquiries.queries";
+import { useMe } from "@/lib/queries/auth.queries";
 import { ConfirmDeleteDialog } from "@/components/ConfirmDeleteDialog";
 import { StatusBadge } from "@/components/StatusBadge";
 import { useState } from "react";
-import { Trash2, Mail, ArrowLeft, Clock } from "lucide-react";
+import { Trash2, Mail, ArrowLeft, Clock, Send } from "lucide-react";
 import { format } from "date-fns";
 
 type Status = "new" | "read" | "archived";
@@ -21,7 +22,13 @@ export default function EnquiryDetailPage() {
   const { data: enq, isLoading } = useEnquiry(id);
   const statusMutation = useUpdateEnquiryStatus();
   const deleteMutation = useDeleteEnquiry();
+  const replyMutation = useReplyToEnquiry();
+  const { data: me } = useMe();
+  const isAdmin = (me?.role ?? "admin") === "admin";
   const [showDelete, setShowDelete] = useState(false);
+  const [replyOpen, setReplyOpen] = useState(false);
+  const [replySubject, setReplySubject] = useState("");
+  const [replyMessage, setReplyMessage] = useState("");
 
   if (isLoading) {
     return (
@@ -66,9 +73,11 @@ export default function EnquiryDetailPage() {
             </span>
           </div>
         </div>
-        <button className="btn btn-danger" style={{ gap: "6px", flexShrink: 0 }} onClick={() => setShowDelete(true)}>
-          <Trash2 size={13} /> Delete
-        </button>
+        {isAdmin && (
+          <button className="btn btn-danger" style={{ gap: "6px", flexShrink: 0 }} onClick={() => setShowDelete(true)}>
+            <Trash2 size={13} /> Delete
+          </button>
+        )}
       </div>
 
       {/* ── Status control ── */}
@@ -241,15 +250,105 @@ export default function EnquiryDetailPage() {
         </div>
       </div>
 
-      {/* ── Reply button ── */}
-      <a
-        href={`mailto:${enq.email}?subject=Re: Your enquiry to SCARA`}
-        className="btn btn-secondary"
-        style={{ display: "inline-flex", alignItems: "center", gap: "8px", textDecoration: "none", marginBottom: "12px" }}
+      {/* ── Reply composer ── */}
+      <div
+        style={{
+          backgroundColor: "var(--bg-surface)",
+          border: "1px solid var(--border-subtle)",
+          borderRadius: "var(--radius-lg)",
+          overflow: "hidden",
+          marginBottom: "24px",
+        }}
       >
-        <Mail size={14} />
-        Reply via Email
-      </a>
+        <div
+          style={{
+            padding: "12px 20px",
+            borderBottom: replyOpen ? "1px solid var(--border-subtle)" : "none",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <span style={{ fontSize: "11px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em", color: "var(--text-muted)" }}>
+            Reply
+          </span>
+          {!replyOpen && (
+            <button
+              className="btn btn-secondary"
+              style={{ gap: "8px", fontSize: "13px" }}
+              onClick={() => {
+                setReplyOpen(true);
+                setReplySubject(`Re: Your enquiry to SCARA`);
+              }}
+            >
+              <Mail size={14} /> Compose reply
+            </button>
+          )}
+        </div>
+
+        {replyOpen && (
+          <div style={{ padding: "20px", display: "flex", flexDirection: "column", gap: "14px" }}>
+            <p style={{ fontSize: "12px", color: "var(--text-muted)", margin: 0 }}>
+              Sending to{" "}
+              <span style={{ color: "var(--status-info)", fontFamily: "var(--font-geist-mono)" }}>{enq.email}</span>
+              . Their reply will come back to the team inbox.
+            </p>
+            <div>
+              <label className="form-label" htmlFor="reply-subject">Subject</label>
+              <input
+                id="reply-subject"
+                className="input-base"
+                value={replySubject}
+                onChange={(e) => setReplySubject(e.target.value)}
+                placeholder="Subject"
+                disabled={replyMutation.isPending}
+              />
+            </div>
+            <div>
+              <label className="form-label" htmlFor="reply-message">Message</label>
+              <textarea
+                id="reply-message"
+                className="input-base"
+                value={replyMessage}
+                onChange={(e) => setReplyMessage(e.target.value)}
+                placeholder={`Hi ${enq.name},\n\n…`}
+                rows={7}
+                style={{ resize: "vertical", lineHeight: "1.6" }}
+                disabled={replyMutation.isPending}
+              />
+            </div>
+            <div style={{ display: "flex", gap: "8px", justifyContent: "flex-end" }}>
+              <button
+                className="btn btn-ghost"
+                style={{ fontSize: "13px" }}
+                onClick={() => { setReplyOpen(false); setReplyMessage(""); }}
+                disabled={replyMutation.isPending}
+              >
+                Cancel
+              </button>
+              <button
+                className="btn btn-primary"
+                style={{ gap: "8px", fontSize: "13px" }}
+                disabled={replyMutation.isPending || !replySubject.trim() || !replyMessage.trim()}
+                onClick={() => {
+                  replyMutation.mutate(
+                    { id: enq.id, subject: replySubject.trim(), message: replyMessage.trim() },
+                    {
+                      onSuccess: () => {
+                        setReplyOpen(false);
+                        setReplyMessage("");
+                      },
+                    }
+                  );
+                }}
+              >
+                <Send size={14} />
+                {replyMutation.isPending ? "Sending…" : "Send reply"}
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
 
       <ConfirmDeleteDialog
         open={showDelete}

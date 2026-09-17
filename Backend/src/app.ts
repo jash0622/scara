@@ -12,6 +12,7 @@ import caseStudiesRoutes from "./routes/caseStudies.routes";
 import insightsRoutes from "./routes/insights.routes";
 import enquiriesRoutes from "./routes/enquiries.routes";
 import uploadRoutes from "./routes/upload.routes";
+import auditRoutes from "./routes/audit.routes";
 
 const app = express();
 
@@ -70,6 +71,7 @@ app.use("/api/case-studies", caseStudiesRoutes);
 app.use("/api/insights", insightsRoutes);
 app.use("/api/enquiries", enquiriesRoutes);
 app.use("/api/upload", uploadRoutes);
+app.use("/api/audit", auditRoutes);
 
 // ── 404 handler ───────────────────────────────────────────────────────────────
 app.use((_req: Request, res: Response) => {

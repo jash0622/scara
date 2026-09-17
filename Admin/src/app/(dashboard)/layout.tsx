@@ -1,37 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { Sidebar } from "@/components/Sidebar";
 import { Topbar } from "@/components/Topbar";
 import RouteProgressBar from "@/components/RouteProgressBar";
 
-const STORAGE_KEY = "scara_sidebar_collapsed";
-const SIDEBAR_FULL = "240px";
-const SIDEBAR_RAIL = "64px";
+const SIDEBAR_WIDTH = "240px";
 
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [collapsed, setCollapsed] = useState(false);
-
-  useEffect(() => {
-    function sync() {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      setCollapsed(stored === "true");
-    }
-    sync();
-    window.addEventListener("storage", sync);
-    window.addEventListener("focus", sync);
-    return () => {
-      window.removeEventListener("storage", sync);
-      window.removeEventListener("focus", sync);
-    };
-  }, []);
-
-  const sidebarWidth = collapsed ? SIDEBAR_RAIL : SIDEBAR_FULL;
-
   return (
     <div
       style={{
@@ -46,15 +25,13 @@ export default function DashboardLayout({
       <div
         style={{
           flex: 1,
-          marginLeft: sidebarWidth,
-          transition: "margin-left 180ms cubic-bezier(0.4,0,0.2,1)",
+          marginLeft: SIDEBAR_WIDTH,
           display: "flex",
           flexDirection: "column",
           minWidth: 0,
-          willChange: "margin-left",
         }}
       >
-        <Topbar sidebarWidth={sidebarWidth} />
+        <Topbar sidebarWidth={SIDEBAR_WIDTH} />
 
         <main
           style={{

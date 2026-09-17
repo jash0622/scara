@@ -108,8 +108,26 @@ export type ApiResponse<T> = ApiSuccess<T> | ApiError;
 export interface EnquiryFilters {
   page?: number;
   limit?: number;
-  status?: "new" | "read" | "archived";
+  /** Comma-separated statuses, e.g. "new,read". Empty = all. */
+  status?: string;
   budget?: string;
+  /** Free-text search across name / email / company. */
+  q?: string;
+  from?: string;
+  to?: string;
+}
+
+// ── Enquiry stats (server-aggregated) ─────────────────────────────────────────
+
+export interface EnquiryStats {
+  total: number;
+  statusCounts: { new: number; read: number; archived: number };
+  budgetDistribution: { name: string; value: number }[];
+  monthly: { year: number; month: number; count: number }[];
+  monthlyByStatus: { year: number; month: number; new: number; read: number; archived: number }[];
+}
+
+export interface EnquiryStatsFilters {
   from?: string;
   to?: string;
 }

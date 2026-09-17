@@ -4,10 +4,18 @@ import { env } from "../config/env";
 import { logger } from "../utils/logger";
 import { ConfirmationEmail } from "../emails/ConfirmationEmail";
 import { InternalNotificationEmail } from "../emails/InternalNotificationEmail";
+import { ReplyEmail } from "../emails/ReplyEmail";
 
 export interface ConfirmationEmailParams {
   name: string;
   email: string;
+}
+
+export interface ReplyEmailParams {
+  to: string;
+  name: string;
+  subject: string;
+  message: string;
 }
 
 export interface InternalNotificationParams {
@@ -34,6 +42,30 @@ export async function sendConfirmationEmail(params: ConfirmationEmailParams): Pr
   });
 
   logger.info({ id: result.data?.id, to: params.email }, "Confirmation email sent");
+}
+
+/**
+ * Send a direct reply email to an enquirer from the admin panel.
+ * Replies land back in the internal inbox via reply_to. Throws on failure so
+ * the caller can surface the error to the admin UI.
+ */
+export async function sendReplyEmail(params: ReplyEmailParams): Promise<void> {
+  const html = await render(ReplyEmail({ name: params.name, message: params.message }));
+
+  const result = await resendClient.emails.send({
+    from: env.EMAIL_FROM,
+    to: params.to,
+    subject: params.subject,
+    html,
+    reply_to: env.EMAIL_INTERNAL_TO,
+  });
+
+  if (result.error) {
+    logger.error({ error: result.error, to: params.to }, "Reply email failed");
+    throw new Error(result.error.message ?? "Failed to send reply email");
+  }
+
+  logger.info({ id: result.data?.id, to: params.to }, "Reply email sent");
 }
 
 /**

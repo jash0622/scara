@@ -10,6 +10,8 @@ const LABELS: Record<string, string> = {
   "case-studies": "Case Studies",
   insights: "Insights",
   enquiries: "Enquiries",
+  activity: "Activity",
+  account: "Account",
   new: "New",
 };
 

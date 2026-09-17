@@ -48,10 +48,24 @@ export interface EnquiryRow {
   submitted_at: string;
 }
 
+export type AdminRole = "admin" | "editor";
+
 export interface AdminUserRow {
   id: string;
   username: string;
   password_hash: string;
+  role: AdminRole;
+  created_at: string;
+}
+
+export interface AuditLogRow {
+  id: string;
+  actor: string;        // admin username
+  actor_id: string | null;
+  action: string;       // e.g. "enquiry.status", "enquiry.delete", "auth.password"
+  entity: string;       // e.g. "enquiry", "admin"
+  entity_id: string | null;
+  meta: Record<string, unknown> | null;
   created_at: string;
 }
 
@@ -127,6 +141,7 @@ export interface PaginatedResult<T> {
 export interface AdminPayload {
   username: string;
   sub: string; // admin user id
+  role: AdminRole;
 }
 
 // ── Express request augmentation ──────────────────────────────────────────────

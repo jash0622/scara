@@ -156,3 +156,50 @@ export async function uploadToS3(
 export async function deleteS3Object(url: string): Promise<void> {
   await api.delete("/api/upload", { url });
 }
+
+/**
+ * Download a CSV export from a backend endpoint that returns raw text/csv.
+ * apiFetch always JSON-parses, so this does a raw fetch with the auth header
+ * and triggers a browser download of the resulting blob.
+ */
+export async function downloadCsv(
+  path: string,
+  params: Record<string, string | number | boolean | undefined | null> = {},
+  filename = "export.csv"
+): Promise<void> {
+  const token = getToken();
+
+  // Build the URL the same way apiFetch does.
+  let fullUrl: string;
+  const entries = Object.entries(params).filter(([, v]) => v !== undefined && v !== null);
+  if (API_BASE) {
+    const url = new URL(`${API_BASE}${path}`);
+    entries.forEach(([k, v]) => url.searchParams.set(k, String(v)));
+    fullUrl = url.toString();
+  } else {
+    const qs = entries.length
+      ? "?" + entries.map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(String(v))}`).join("&")
+      : "";
+    fullUrl = `${path}${qs}`;
+  }
+
+  const res = await fetch(fullUrl, {
+    method: "GET",
+    credentials: "include",
+    headers: token ? { Authorization: `Bearer ${token}` } : {},
+  });
+
+  if (!res.ok) {
+    throw new Error(`Export failed (${res.status})`);
+  }
+
+  const blob = await res.blob();
+  const objectUrl = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = objectUrl;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(objectUrl);
+}

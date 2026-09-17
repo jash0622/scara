@@ -1,10 +1,18 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, forwardRef } from 'react';
 import { Gamepad2, Tv, Cpu } from 'lucide-react';
 
-function TiltCard({ children, className }: { children: React.ReactNode; className?: string }) {
-  const ref = useRef<HTMLDivElement>(null);
+type TiltCardProps = {
+  children: React.ReactNode;
+  className?: string;
+} & React.HTMLAttributes<HTMLDivElement>;
+
+const TiltCard = forwardRef<HTMLDivElement, TiltCardProps>(function TiltCard(
+  { children, className, ...rest },
+  forwardedRef
+) {
+  const ref = useRef<HTMLDivElement | null>(null);
   const rafRef = useRef<number | null>(null);
   const rectRef = useRef<DOMRect | null>(null);
 
@@ -41,17 +49,22 @@ function TiltCard({ children, className }: { children: React.ReactNode; classNam
 
   return (
     <div
-      ref={ref}
+      ref={(node) => {
+        ref.current = node;
+        if (typeof forwardedRef === 'function') forwardedRef(node);
+        else if (forwardedRef) (forwardedRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+      }}
       onMouseEnter={onEnter}
       onMouseMove={onMove}
       onMouseLeave={onLeave}
       className={className}
       style={{ touchAction: 'pan-y', willChange: 'transform' }}
+      {...rest}
     >
       {children}
     </div>
   );
-}
+});
 
 const CARDS = [
   {
@@ -85,11 +98,13 @@ const CARDS = [
 
 export default function ArchitectureCards() {
   return (
+    <>
     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-      {CARDS.map(({ img, badge, badgeStyle, title, body, border, Icon }) => (
+      {CARDS.map(({ img, badge, badgeStyle, title, body, border, Icon }, i) => (
         <TiltCard
           key={title}
-          className={`group relative rounded-2xl border ${border} p-8 space-y-6 cursor-default hover:border-scara-green transition-colors overflow-hidden`}
+          data-arch-dir={i % 2 === 0 ? 'left' : 'right'}
+          className={`arch-card group relative rounded-2xl border ${border} p-8 space-y-6 cursor-default hover:border-scara-green transition-colors overflow-hidden`}
         >
           {/*
             Single background layer using CSS multi-background:
@@ -104,8 +119,6 @@ export default function ArchitectureCards() {
                 linear-gradient(rgba(0,0,0,0.62), rgba(0,0,0,0.62)),
                 url('${img}') center/cover no-repeat
               `,
-              // Promote to its own GPU layer so scroll never repaints the image
-              transform: 'translateZ(0)',
               backfaceVisibility: 'hidden',
             }}
           />
@@ -132,5 +145,39 @@ export default function ArchitectureCards() {
         </TiltCard>
       ))}
     </div>
+
+    {/*
+      Mobile-only reveal. Uses native CSS scroll-driven animation
+      (animation-timeline: view()) — runs on the compositor, perfectly smooth,
+      no JS, no observer, no flash. Guarded by @supports so unsupported browsers
+      simply show the cards normally (no hiding, no jank). Desktop untouched.
+    */}
+    <style jsx global>{`
+      @media (max-width: 767px) {
+        @supports (animation-timeline: view()) {
+          .arch-card {
+            opacity: 0;
+            animation: arch-enter-left linear both;
+            animation-timeline: view();
+            /* Play the reveal while the card travels through the lower portion
+               of the viewport, finishing before it reaches the middle. */
+            animation-range: entry 0% cover 40%;
+          }
+          .arch-card[data-arch-dir='right'] {
+            animation-name: arch-enter-right;
+          }
+        }
+      }
+
+      @keyframes arch-enter-left {
+        from { opacity: 0; transform: translate3d(-56px, 0, 0); }
+        to   { opacity: 1; transform: translate3d(0, 0, 0); }
+      }
+      @keyframes arch-enter-right {
+        from { opacity: 0; transform: translate3d(56px, 0, 0); }
+        to   { opacity: 1; transform: translate3d(0, 0, 0); }
+      }
+    `}</style>
+    </>
   );
 }

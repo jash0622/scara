@@ -10,9 +10,13 @@ function LinkedInIcon() {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72" width="26" height="26" aria-hidden="true">
       <rect width="72" height="72" rx="10" fill="#1a1a1a" />
-      <circle cx="19" cy="19" r="5.5" fill="white" />
-      <rect x="14" y="28" width="10" height="30" fill="white" />
-      <path d="M36 28h9v4h.1c1.3-2.3 4.3-4.8 8.9-4.8C63.5 27.2 66 33 66 40.5V58h-10V42.3c0-3.7-.1-8.5-5.2-8.5-5.2 0-6 4.1-6 8.2V58H36V28z" fill="white" />
+      {/* Glyph shifted left by 4 so left/right margins inside the badge are equal
+          (original glyph spans x:14–66 → left gap 14 vs right gap 6; -4 makes both 10). */}
+      <g transform="translate(-4 0)">
+        <circle cx="19" cy="19" r="5.5" fill="white" />
+        <rect x="14" y="28" width="10" height="30" fill="white" />
+        <path d="M36 28h9v4h.1c1.3-2.3 4.3-4.8 8.9-4.8C63.5 27.2 66 33 66 40.5V58h-10V42.3c0-3.7-.1-8.5-5.2-8.5-5.2 0-6 4.1-6 8.2V58H36V28z" fill="white" />
+      </g>
     </svg>
   );
 }

@@ -16,6 +16,9 @@ export function requireAuth(req: Request, res: Response, next: NextFunction): vo
 
   try {
     const payload = jwt.verify(token, env.JWT_SECRET) as AdminPayload;
+    // Tokens issued before roles existed won't carry one — default to "admin"
+    // so a single-admin setup keeps full access.
+    if (!payload.role) payload.role = "admin";
     (req as AuthenticatedRequest).admin = payload;
     next();
   } catch (err) {
@@ -25,4 +28,23 @@ export function requireAuth(req: Request, res: Response, next: NextFunction): vo
       sendError(res, "Invalid token", "INVALID_TOKEN", 401);
     }
   }
+}
+
+/**
+ * Guard a route so only the given role(s) may proceed. Must run AFTER requireAuth.
+ * Example: router.delete("/:id", requireAuth, requireRole("admin"), remove)
+ */
+export function requireRole(...roles: Array<"admin" | "editor">) {
+  return (req: Request, res: Response, next: NextFunction): void => {
+    const admin = (req as AuthenticatedRequest).admin;
+    if (!admin) {
+      sendError(res, "Not authenticated", "UNAUTHORIZED", 401);
+      return;
+    }
+    if (!roles.includes(admin.role)) {
+      sendError(res, "You don't have permission to perform this action", "FORBIDDEN", 403);
+      return;
+    }
+    next();
+  };
 }
