@@ -245,7 +245,7 @@ export default function CaseStudyModal({ caseStudy, allCaseStudies, onClose, onS
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setSelectedLightboxImage(null)}
-            className="fixed inset-0 z-[250] flex items-center justify-center bg-scara-black/95 p-4"
+            className="fixed inset-0 z-[1000] flex items-center justify-center bg-scara-black/95 p-4"
           >
             <img
               src={selectedLightboxImage}

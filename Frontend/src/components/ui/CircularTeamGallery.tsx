@@ -209,16 +209,24 @@ export default function CircularTeamGallery() {
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
+    let wheelSnapTimer: ReturnType<typeof setTimeout> | null = null;
     const onWheel = (e: WheelEvent) => {
       if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
         e.preventDefault();
         scrollTo(targetScrollRef.current + e.deltaX * 1.2);
+        // Trackpads emit a burst of wheel events then stop — there's no "end"
+        // event, so debounce a snap once the scrolling settles.
+        if (wheelSnapTimer) clearTimeout(wheelSnapTimer);
+        wheelSnapTimer = setTimeout(() => snapToNearest(targetScrollRef.current), 140);
       }
       // vertical scroll: do nothing — let it bubble to Lenis/browser
     };
     el.addEventListener('wheel', onWheel, { passive: false });
-    return () => el.removeEventListener('wheel', onWheel);
-  }, [scrollTo]);
+    return () => {
+      el.removeEventListener('wheel', onWheel);
+      if (wheelSnapTimer) clearTimeout(wheelSnapTimer);
+    };
+  }, [scrollTo, snapToNearest]);
 
   useEffect(() => {
     return () => {
