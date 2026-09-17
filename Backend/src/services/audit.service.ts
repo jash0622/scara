@@ -50,8 +50,10 @@ export async function listAuditLog(
     .range(offset, offset + limit - 1);
 
   if (error) {
-    logger.error({ error }, "listAuditLog failed");
-    throw new Error(error.message);
+    // If the audit_log table doesn't exist yet (migration not run), degrade
+    // gracefully to an empty feed instead of 500-ing the whole page.
+    logger.warn({ error }, "listAuditLog failed — returning empty (table may be missing)");
+    return { items: [], total: 0, page, limit, totalPages: 0 };
   }
 
   const total = count ?? 0;
