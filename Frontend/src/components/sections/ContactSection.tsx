@@ -376,7 +376,7 @@ export default function ContactSection() {
         </div>
 
         {/* Footer */}
-        <div className="relative border-t border-scara-grey/15 pt-2 overflow-hidden mt-14 sm:mt-0">
+        <div className="relative border-t border-scara-grey/15 pt-1 sm:pt-2 overflow-hidden mt-14 sm:mt-0">
 
           {/* Ticker */}
           <div className="relative w-full overflow-hidden border-b border-scara-green/15 py-2 mt-0">
@@ -446,9 +446,9 @@ export default function ContactSection() {
           <TorchLogo />
 
           {/* GG Space credit — tighter to logo */}
-          <div className="border-t border-scara-grey/10 pt-2 pb-5 sm:pb-2 text-center -mt-4 sm:-mt-8">
+          <div className="border-t border-scara-grey/10 pt-2 pb-5 sm:pb-2 text-center mt-3 sm:-mt-8">
             <p className="font-sub text-[8px] sm:text-[10px] text-scara-grey/60 uppercase tracking-widest">
-              Design and Created by GG Space
+              Designed and Created by GG Space
             </p>
           </div>
 
