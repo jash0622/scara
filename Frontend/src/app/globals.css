@@ -23,13 +23,14 @@ html {
   color: #ffffff;
   font-family: var(--font-poppins);
   scroll-behavior: smooth;
-  overflow-x: hidden;
 }
 
 body {
   background-color: #000000;
   color: #ffffff;
-  overflow-x: hidden;
+  /* `clip` contains horizontal overflow WITHOUT creating a scroll container,
+     so it does NOT break `position: sticky` on descendants (unlike `hidden`). */
+  overflow-x: clip;
   width: 100%;
   max-width: 100%;
   position: relative;
