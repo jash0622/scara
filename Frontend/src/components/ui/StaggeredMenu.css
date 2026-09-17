@@ -354,9 +354,9 @@
     padding-right: 0;
   }
 
-  /* Nudge the leading numbers up slightly so they align with the letters */
+  /* Nudge the leading numbers slightly down for alignment with the letters */
   .sm-panel-list[data-numbering] .sm-panel-item::after {
-    margin-top: 0.15em;
+    margin-top: 0.35em;
   }
 
   .sm-socials {

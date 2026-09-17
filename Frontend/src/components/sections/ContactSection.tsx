@@ -446,7 +446,7 @@ export default function ContactSection() {
           <TorchLogo />
 
           {/* GG Space credit — tighter to logo */}
-          <div className="border-t border-scara-grey/10 pt-2 pb-8 sm:pb-2 text-center -mt-4 sm:-mt-8">
+          <div className="border-t border-scara-grey/10 pt-2 pb-5 sm:pb-2 text-center -mt-4 sm:-mt-8">
             <p className="font-sub text-[8px] sm:text-[10px] text-scara-grey/60 uppercase tracking-widest">
               Design and Created by GG Space
             </p>
