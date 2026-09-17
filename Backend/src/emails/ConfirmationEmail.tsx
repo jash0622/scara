@@ -50,7 +50,7 @@ const styles = {
   } as React.CSSProperties,
 
   logoImage: {
-    height: "34px",
+    height: "52px",
     width: "auto",
     display: "inline-block",
     border: "0",
@@ -176,7 +176,7 @@ export function ConfirmationEmail({ name }: ConfirmationEmailProps) {
                 <Img
                   src={`${FRONTEND_URL}/logo-scara.png`}
                   alt="SCARA"
-                  height={34}
+                  height={52}
                   style={styles.logoImage}
                 />
               </Link>
