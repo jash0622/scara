@@ -10,9 +10,9 @@ export const viewport = {
 };
 
 export const metadata: Metadata = {
-  title: 'SCARA — Global Creative Agency | Sports, Gaming & Culture',
+  title: 'SCARA — Global Creative Agency | Sports, Gaming, Music & Culture',
   description:
-    'Scara is a global culture-first creative agency operating across Mumbai, Istanbul, and UAE for brands like Konami, Samsung, Unilever, WPP, and Supercell.',
+    'Scara is a global culture-first creative agency operating across India, Turkey, Dubai & MENA and Africa for brands like Konami, Samsung, Unilever, WPP, and Supercell.',
   keywords: [
     'Scara',
     'Creative Agency',
