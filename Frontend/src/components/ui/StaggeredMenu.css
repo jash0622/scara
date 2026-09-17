@@ -10,7 +10,9 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
+  /* 100% (not 100vw) so it never exceeds the visible width — 100vw includes the
+     scrollbar and causes a sliver of horizontal overflow that cut the menu. */
+  width: 100%;
   height: 100vh;
   z-index: 130;   /* above the fixed navbar (z-100) */
   overflow: hidden;

@@ -23,14 +23,18 @@ html {
   color: #ffffff;
   font-family: var(--font-poppins);
   scroll-behavior: smooth;
+  /* `clip` contains horizontal overflow WITHOUT creating a scroll container,
+     so it does NOT break `position: sticky` (unlike overflow-x: hidden).
+     overflow-y stays visible so vertical scroll / sticky pin is untouched. */
+  overflow-x: clip;
+  overflow-y: visible;
 }
 
 body {
   background-color: #000000;
   color: #ffffff;
-  /* `clip` contains horizontal overflow WITHOUT creating a scroll container,
-     so it does NOT break `position: sticky` on descendants (unlike `hidden`). */
   overflow-x: clip;
+  overflow-y: visible;
   width: 100%;
   max-width: 100%;
   position: relative;
@@ -41,6 +45,17 @@ body {
 
 * {
   cursor: none !important;
+}
+
+/* Safety guard: nothing may be wider than the viewport on small screens.
+   Fixes right-side cut-off without touching layout on desktop. */
+@media (max-width: 640px) {
+  #__next,
+  main,
+  section {
+    max-width: 100%;
+    overflow-x: clip;
+  }
 }
 
 /* Hide default scrollbar for studio feel */
