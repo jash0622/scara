@@ -96,14 +96,14 @@ export const SCARA_TEAM: TeamMember[] = [
   },
   {
     name: 'Mazher Ramzanali',
-    role: 'Business Head, Scara Live',
+    role: 'Creative Lead, Scara Live',
     bio: '15+ years in branding, culture and sponsorship.',
     image: '/team member/Mazher .png',
     linkedinUrl: 'https://www.linkedin.com/in/mazherramzanali',
   },
   {
     name: 'Santosh P',
-    role: 'Co-founder, Scara Live',
+    role: 'Marketing and Ticketing Strategy, Scara Live',
     bio: '16+ years building live experiences and entertainment.',
     image: '/team member/santosh.png',
     linkedinUrl: 'https://www.linkedin.com/in/santoshp0',
@@ -211,7 +211,6 @@ export const SCARA_CLIENTS = [
 // ── Client logos (logo loop) ──────────────────────────────────────────────────
 
 export const SCARA_CLIENT_LOGOS = [
-  { src: '/clients/brand logos 1.png', alt: 'SCARA client and brand partner logo' },
   { src: '/clients/brand logos 2.png', alt: 'SCARA client and brand partner logo' },
   { src: '/clients/brand logos 3.png', alt: 'SCARA client and brand partner logo' },
   { src: '/clients/brand logos 4.png', alt: 'SCARA client and brand partner logo' },
