@@ -206,7 +206,7 @@ export default function ContactSection() {
             <div className="rounded-2xl border border-scara-grey/20 bg-scara-card-dark p-6 space-y-3">
               <div className="flex items-center gap-2 font-sub text-xs font-bold text-scara-green uppercase">
                 <MapPin className="h-4 w-4" />
-                <span>// MUMBAI OFFICE</span>
+                <span>// INDIA OFFICE</span>
               </div>
               <p className="font-body text-xs text-scara-grey leading-relaxed">
                 <strong>SCARA GAMING PRIVATE LIMITED</strong> <br />
